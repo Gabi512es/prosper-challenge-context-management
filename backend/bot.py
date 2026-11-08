@@ -12,37 +12,28 @@
 #
 
 import os
+from uuid import uuid4
 from pathlib import Path
+from pipecat.transcriptions.language import Language
+from pipecat.turns.user_turn_strategies import UserTurnStrategies
+from voice_support import RealWordsStartStrategy, InterruptedSilenceRecovery, tool_trace_wrapper
 
-from dotenv import load_dotenv
 from loguru import logger
 
 from pipecat.audio.vad.silero import SileroVADAnalyzer
-from pipecat.pipeline.pipeline import Pipeline
-from pipecat.pipeline.worker import PipelineParams, PipelineWorker
-from pipecat.processors.aggregators.llm_context import LLMContext
 from pipecat.processors.aggregators.llm_response_universal import (
-    LLMContextAggregatorPair,
     LLMUserAggregatorParams,
 )
 from pipecat.runner.types import RunnerArguments
 from pipecat.runner.utils import create_transport
 from pipecat.services.elevenlabs.stt import ElevenLabsRealtimeSTTService
 from pipecat.services.elevenlabs.tts import ElevenLabsTTSService
-from pipecat.services.openai.llm import OpenAILLMService
 from pipecat.transports.base_transport import BaseTransport, TransportParams
 from pipecat.workers.runner import WorkerRunner
-from pipecat_flows import FlowManager
 
 from agent_builder import AgentBuilder
-
-# Load .env next to this file, so the bot runs the same from the repo root or backend/.
-load_dotenv(Path(__file__).parent / ".env", override=True)
-
-
-# The agent this bot runs. Point this at any agent JSON (the Phase 2 Copilot
-# would generate one and drop it here).
-AGENT_FLOW = Path(__file__).parent / "example_flow.json"
+from agent_runtime import build_agent_runtime
+from scheduling_runtime import load_selected_scheduling_agent
 
 
 transport_params = {
@@ -54,65 +45,48 @@ async def run_bot(
     transport: BaseTransport, runner_args: RunnerArguments, builder: AgentBuilder
 ) -> None:
     config = builder.config
+    call_id = runner_args.session_id or str(uuid4())
+    builder.set_function_handler_wrapper(tool_trace_wrapper(
+        call_id, builder, Path(__file__).parent / "logs" / "voice-tools.jsonl"))
     logger.info(f"Starting '{config.name}' with {len(config.nodes)} nodes")
 
-    stt = ElevenLabsRealtimeSTTService(api_key=os.environ["ELEVENLABS_API_KEY"])
+    stt = ElevenLabsRealtimeSTTService(api_key=os.environ["ELEVENLABS_API_KEY"],
+        settings=ElevenLabsRealtimeSTTService.Settings(language=Language.EN))
     tts = ElevenLabsTTSService(
         api_key=os.environ["ELEVENLABS_API_KEY"],
         settings=ElevenLabsTTSService.Settings(voice=config.voice_id),
     )
-    llm = OpenAILLMService(api_key=os.environ["OPENAI_API_KEY"], model=config.model)
-
-    context = LLMContext()
-    context_aggregator = LLMContextAggregatorPair(
-        context,
-        user_params=LLMUserAggregatorParams(vad_analyzer=SileroVADAnalyzer()),
-    )
-
-    pipeline = Pipeline(
-        [
-            transport.input(),
-            stt,
-            context_aggregator.user(),
-            llm,
-            tts,
-            transport.output(),
-            context_aggregator.assistant(),
-        ]
-    )
-
-    worker = PipelineWorker(
-        pipeline,
-        params=PipelineParams(enable_metrics=True, enable_usage_metrics=True),
+    runtime = build_agent_runtime(
+        builder=builder,
+        user_params=LLMUserAggregatorParams(vad_analyzer=SileroVADAnalyzer(),
+            user_turn_strategies=UserTurnStrategies(start=[RealWordsStartStrategy(min_words=2)])),
+        input_processors=[transport.input(), stt, InterruptedSilenceRecovery()],
+        output_processors=[tts, transport.output()],
+        transport=transport,
+        call_id=call_id,
         idle_timeout_secs=runner_args.pipeline_idle_timeout_secs,
     )
-
-    flow_manager = FlowManager(
-        llm=llm,
-        context_aggregator=context_aggregator,
-        worker=worker,
-        transport=transport,
-    )
+    logger.info(f"Per-turn metrics enabled | call_id={runtime.call_id}")
 
     @transport.event_handler("on_client_connected")
     async def on_client_connected(transport, client):
         logger.info("Client connected — starting flow at initial node")
-        await flow_manager.initialize(builder.build_initial_node())
+        await runtime.initialize()
 
     @transport.event_handler("on_client_disconnected")
     async def on_client_disconnected(transport, client):
         logger.info("Client disconnected")
-        await worker.cancel()
+        await runtime.worker.cancel()
 
     runner = WorkerRunner(handle_sigint=runner_args.handle_sigint)
-    await runner.add_workers(worker)
+    await runner.add_workers(runtime.worker)
     await runner.run()
 
 
 async def bot(runner_args: RunnerArguments):
     """Entry point invoked by the Pipecat dev runner (and Pipecat Cloud)."""
     transport = await create_transport(runner_args, transport_params)
-    builder = AgentBuilder.from_json(AGENT_FLOW)
+    builder, _engine = load_selected_scheduling_agent()
     await run_bot(transport, runner_args, builder)
 
 

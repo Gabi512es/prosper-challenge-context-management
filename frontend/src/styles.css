@@ -1,0 +1,44 @@
+:root { font-family: Inter, ui-sans-serif, system-ui, sans-serif; color: #17211d; background: #f5f7f5; }
+* { box-sizing: border-box; }
+body { margin: 0; }
+button, input, select, textarea { font: inherit; }
+button { border: 1px solid #cad2cd; border-radius: 7px; background: white; padding: 7px 10px; cursor: pointer; }
+button:hover { border-color: #718079; }
+button:disabled { opacity: .45; cursor: default; }
+input, select, textarea { width: 100%; border: 1px solid #ccd5d0; border-radius: 6px; padding: 7px; background: white; }
+textarea { resize: vertical; }
+label { display: grid; gap: 5px; font-size: 12px; color: #53615a; margin-bottom: 10px; }
+header { height: 58px; display: flex; align-items: center; justify-content: space-between; padding: 0 16px; border-bottom: 1px solid #dfe5e1; background: white; }
+header strong { font-size: 17px; }
+header span { margin-left: 16px; color: #6f7e76; font-size: 12px; }
+.toolbar, .agent-actions, .row { display: flex; align-items: center; gap: 7px; }
+.primary { color: white; background: #226b4b; border-color: #226b4b; }
+.call { color: white; background: #0a8560; border-color: #0a8560; }
+.danger { color: #a22d2d; width: 100%; margin-top: 12px; }
+.error-panel { padding: 8px 16px; color: #8b2222; background: #fff0f0; border-bottom: 1px solid #efc9c9; font-size: 13px; white-space: pre-wrap; }
+main { display: grid; grid-template-columns: 245px minmax(420px, 1fr) 360px; height: calc(100vh - 58px); }
+aside { background: white; overflow: auto; }
+.agents-panel { border-right: 1px solid #dfe5e1; padding: 13px; }
+.inspector-panel { border-left: 1px solid #dfe5e1; padding: 13px; }
+.panel-title, .subhead { font-weight: 650; font-size: 13px; margin-bottom: 10px; color: #26372f; }
+.subhead { margin-top: 17px; }
+.subhead.row { justify-content: space-between; }
+.agent-actions { margin-bottom: 12px; }
+.agent-list { display: grid; gap: 6px; }
+.agent-list button { display: grid; text-align: left; gap: 3px; }
+.agent-list small { color: #748078; }
+.active-agent { border-color: #24845f; background: #edf8f2; }
+.agent-settings { border-top: 1px solid #e6ebe8; margin-top: 15px; padding-top: 15px; }
+.canvas-panel { min-width: 0; }
+.react-flow__node { min-width: 150px; padding: 12px; border: 1px solid #aebbb4; border-radius: 9px; background: white; box-shadow: 0 2px 8px #17211d12; text-align: center; }
+.react-flow__node.terminal-node { border-style: double; border-width: 3px; }
+.react-flow__node.selected-node { border-color: #0a8560; box-shadow: 0 0 0 2px #0a856033; }
+.react-flow__edge-text { font-size: 10px; }
+.checkbox { display: flex; grid-template-columns: unset; flex-direction: row; align-items: center; gap: 7px; }
+.checkbox input { width: auto; }
+.tool-grid { display: grid; gap: 3px; }
+.card { border: 1px solid #e0e6e2; border-radius: 8px; padding: 9px; margin-bottom: 9px; background: #fafcfb; }
+.card .row { justify-content: space-between; margin-bottom: 7px; }
+.card .row select { width: auto; }
+.node-editor > .danger { margin-bottom: 24px; }
+@media (max-width: 1050px) { main { grid-template-columns: 210px 1fr 310px; } }

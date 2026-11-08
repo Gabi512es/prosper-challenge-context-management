@@ -1,0 +1,69 @@
+{
+  "name": "Catalog Scheduler Copy",
+  "initial_node": "scheduling",
+  "nodes": [
+    {
+      "name": "scheduling",
+      "task_messages": [
+        {
+          "role": "developer",
+          "content": "Start the call by saying exactly: \"Hello, this is the edited test agent.\" Then continue as usual."
+        }
+      ],
+      "role_message": null,
+      "edges": [
+        {
+          "function": "request_human_transfer",
+          "description": "Stop automated scheduling when the patient asks for a person, human agent, representative, or transfer, or explicitly accepts a human-help offer. Never call this automatically after another tool fails.",
+          "target": "human_handoff",
+          "properties": {
+            "human_transfer_requested": {
+              "type": "boolean",
+              "enum": [
+                true
+              ],
+              "description": "Always true for this handoff."
+            },
+            "reason": {
+              "type": "string",
+              "description": "Brief reason the patient requested human help."
+            }
+          },
+          "required": [
+            "human_transfer_requested",
+            "reason"
+          ]
+        }
+      ],
+      "functions": [
+        "resolve_options",
+        "get_details",
+        "find_slots",
+        "book_appointment"
+      ],
+      "pre_actions": [],
+      "post_actions": [],
+      "end": false,
+      "auto_end": true
+    },
+    {
+      "name": "human_handoff",
+      "task_messages": [
+        {
+          "role": "developer",
+          "content": "Acknowledge the request for human help and stop the automated scheduling flow. Explain that this prototype cannot complete a live transfer, so clinic staff must follow up. Do not claim that a live connection or booking occurred."
+        }
+      ],
+      "role_message": null,
+      "edges": [],
+      "functions": [],
+      "pre_actions": [],
+      "post_actions": [],
+      "end": true,
+      "auto_end": false
+    }
+  ],
+  "persona": "You are a concise healthcare scheduling assistant. Responses are spoken aloud, so use one or two short sentences without lists or emojis. Never invent catalog facts, availability, eligibility, or IDs. The Python tools are authoritative. If a caller describes a possible medical emergency, stop scheduling, tell them to call emergency services right now, and give no medical advice. If asked whether you are a person or AI, honestly say you are an AI assistant the first time asked; never pretend to be human or invent a backstory.",
+  "voice_id": "21m00Tcm4TlvDq8ikWAM",
+  "model": "gpt-4o"
+}

@@ -1,0 +1,331 @@
+# Decision log
+
+## 2026-11-07: persist Pipecat metrics with an observer
+
+Observed in the first manual browser call:
+
+- The playground reported aggregate OpenAI TTFB of 622.2 ms, prompt usage of 5,686 tokens, completion usage of 187 tokens, and total usage of 5,873 tokens.
+- It also displayed aggregate ElevenLabs STT and TTS TTFB plus TTS character usage.
+- The UI did not expose durable per-call rows, graph node attribution, the configured model, or cached tokens.
+- Installed Pipecat 1.4.0 emits `TTFBMetricsData`, `ProcessingMetricsData`, and `LLMUsageMetricsData`. The OpenAI service passes through cached-token usage when OpenAI supplies it.
+
+Choice: attach a pipeline observer that combines the three LLM metric frames and appends one JSONL line per model call. Use the runner session ID as `call_id`, record the active graph node, keep full processing latency and TTFB separate, and write unavailable usage as `null` rather than zero. Logs contain no prompts, transcripts, tool arguments, or keys.
+
+Reason: the observer uses Pipecat's measured data without adding a processor to the audio path, and the JSONL output is suitable for later evaluation and cost analysis.
+
+Live validation: the first logged browser call produced 11 real LLM processing attempts across four nodes. OpenAI reported usage for 9 attempts: 5,425 prompt tokens, 188 completion tokens, and 0 cached tokens. Two interrupted or otherwise incomplete attempts had processing metrics but no final usage report, so their token fields remain `null`. Mean processing latency across the 11 real attempts was 810.1 ms; mean TTFB across the 10 attempts that reached first byte was 771.1 ms. Pipecat also emitted one synthetic zero-valued startup metrics frame; the observer now filters that frame rather than counting it as a turn.
+
+## 2026-11-07: catalog measurement with the configured model tokenizer
+
+The configured model is `gpt-4o`. With `tiktoken` 0.14.0,
+`encoding_for_model("gpt-4o")` resolves to `o200k_base`.
+
+- Source size: 45,661 characters and 45,661 UTF-8 bytes.
+- Raw formatted `catalog.json`: 12,924 tokens.
+- The same JSON serialized compactly: 8,252 tokens.
+- All 82 appointment type names: 368 tokens as a compact JSON array, or 365 as a newline-delimited list.
+
+The raw-catalog estimate in AGENTS.md is confirmed. The names-only estimate is
+not: it is about 365 to 368 tokens, not about 1,000 tokens. Structural checks
+also confirmed all other section 3 counts and edge cases: 8 locations, 50
+providers, 82 appointment types, 6 policies, 34 multi-location providers, 31
+partially capability-gated provider/type pairs, no fully unbookable gated pair,
+and exactly the 8 listed appointment types with no provider. There are no
+dangling location or appointment-type references. The checks also reproduced
+215 cross-specialty provider/type pairs, 36 referral-required types, 31
+existing-patient-only types, 11 providers not accepting new patients, all
+three duplicated full names, and the listed surname collisions: Nguyen 8,
+Chen 7, Sato 6, and Patel 5.
+
+## 2026-11-07: installed Flows context behavior
+
+Installed `pipecat-ai-flows` 1.4.0 supports global and per-node context
+strategies: `APPEND`, `RESET`, and `RESET_WITH_SUMMARY`. The default is
+`APPEND`. Append transitions use `LLMMessagesAppendFrame`; reset variants use
+`LLMMessagesUpdateFrame`. Role instructions are updated separately through a
+persistent LLM settings frame, so a message reset does not clear the active
+role instruction.
+
+`RESET_WITH_SUMMARY` is deprecated for removal in 2.0.0. Its installed
+implementation has a five-second summarization timeout and falls back to
+`APPEND`. Pipecat 1.4.0 instead provides native context summarization frames
+and optional automatic summarization on the assistant aggregator, disabled by
+default.
+
+The standalone `pipecat_flows` package also emits a deprecation notice in favor
+of `pipecat.flows`. In this installed environment, the working Flows module is
+still the standalone package, so changing import paths in this step would not
+be a safe mechanical migration.
+
+The current declarative agent schema does not expose `context_strategy`, so the
+example voice and text agents both use Flows' default `APPEND`. This runner step
+does not expand the schema. Context-strategy selection belongs with the later
+catalog architecture and evaluation design.
+
+## 2026-11-07: one shared runtime for voice and text
+
+Voice and text now call the same runtime factory. They share the actual
+`AgentBuilder`, prompts, transition handlers, tool handlers, model settings,
+FlowManager, empty initial context, session state, APPEND context behavior, and
+metrics observer. Voice adds WebRTC, ElevenLabs STT/TTS, and VAD. Text supplies
+explicit turn-boundary and transcription frames and collects text after the
+LLM. It does not create a startup user message.
+
+A text turn completes only after any model-requested tools finish, the node
+transition completes, and a subsequent tool-free assistant response has passed
+into the shared assistant context. This keeps scripted patient messages from
+overlapping tool execution or follow-up generation. Every underlying model
+call, including post-tool calls, remains visible to the existing JSONL metrics
+observer.
+
+Offline validation covers state population through the real transition
+handlers and the post-tool completion boundary. The opt-in OpenAI integration
+check is labeled as paid and variable. Its first run completed the example
+booking through the expected four nodes, preserved the supplied facts, produced
+the correct confirmation, contained no startup user message, and wrote one
+metrics record for each of its seven model calls. This validates the runner
+infrastructure only; it is not evidence that the scheduling approach handles
+the real catalog.
+
+## 2026-11-07: eval attribution and compact type index
+
+After the shared-runtime voice refactor passed a user-run voice call, JSONL
+records gained `run_id`, `patient_turn`, and `trigger`. Trigger values are
+`startup`, `patient`, or `tool_result`; tool-result calls retain the patient
+turn that caused the tool. A supplied eval `run_id` selects
+`backend/logs/evals/<run_id>.jsonl`, so calls in one eval run append to one file
+and separate runs do not mix. Missing usage remains `null` with
+`usage_status="unavailable"`.
+
+Using `tiktoken` 0.14.0 and the configured `gpt-4o` model's `o200k_base`
+encoding, compact JSON for all 82 appointment types measured:
+
+- `id+name`: 3,774 characters and 1,026 tokens.
+- `id+name+specialty`: 5,855 characters and 1,559 tokens.
+
+Choice: use `id+name` for the proposed cached type index. Specialty costs 533
+additional tokens and cannot be used as a compatibility rule because the
+catalog has 215 cross-specialty provider/type pairs. Specialty remains
+available from authoritative tool results.
+
+## 2026-11-07: pinned development scenarios and pure scheduling core
+
+`backend/evals/dev_scenarios.json` is copied from the user-authored JSON source
+without changing its data. It contains 12 development cases only. The loader
+computes Git's blob SHA directly from the current catalog bytes and refuses to
+load unless it equals the file's pinned
+`8e5091080383d598ae18acce084c7dcd6522ab14`. Availability fixtures are treated
+as complete, closed worlds. No held-out dataset is read or inferred.
+
+The v1 scheduling core is plain Python with no Pipecat or LLM imports. It loads
+and validates the catalog, preserves ambiguous identities, applies catalog
+relations and policies, searches and globally ranks fixture slots, invalidates
+stale selections and confirmations, and performs idempotent booking with final
+revalidation. DEV-012, DEV-004, and DEV-008 are the first proof cases. The
+catalog's eight providerless appointment types remain explicitly unbookable.
+
+The opt-in OpenAI text integration passed those three cases in one eval run.
+DEV-012 created the expected `dev012-s1` booking, DEV-004 created no booking,
+and DEV-008 retained the corrected `loc_000` location while clearing the stale
+slot and confirmation. The run logged 17 individual model calls across three
+sessions: 3 startup, 7 patient-triggered, and 7 tool-result-triggered calls.
+OpenAI reported prompt, cached, and completion usage for every call in this
+run; the logger would preserve any missing values as `null`.
+
+## 2026-11-07: visible text faults and opening-hours enforcement
+
+Development scenarios may optionally declare session-local `error` and
+`slot_taken` faults. The text runner wraps the same real tool handler exposed to
+the model, so structured failures remain in the conversation context. A
+slot-taken write permanently removes that fixture slot; later searches and
+booking revalidation both observe the removal.
+
+Availability fixtures remain closed worlds but are not sufficient authority to
+offer a slot. The core also parses each location's catalog hours and requires
+the entire slot interval to fit on an open day. Outside-hours fixture entries
+are counted in the `find_slots` exclusion result, never offered, and rejected
+again at selection and booking. General tool shutdowns cannot be reported as
+success, and an explicit request for a human transitions to a terminal handoff
+state without falsely claiming that the prototype completed a live transfer.
+
+Catalog opening hours are local wall-clock hours. The current catalog does not
+carry an IANA timezone field, so the core compares them with the wall-clock date
+and time on each offset-aware fixture slot; the supplied `-08:00` slots therefore
+represent Los Angeles standard time directly. The interval is closed at the end:
+a slot ending exactly at `17:00` is allowed, while one ending at `17:05` is not.
+Production data should add an explicit `America/Los_Angeles` field so offsets can
+be derived and daylight-saving transitions validated rather than trusted.
+
+The first paid regression exposed an ambiguity in the model-facing
+`resolve_options.name` property: the model used it for an appointment name.
+The adapter now exposes `patient_name` and maps it to the core's patient state.
+A subsequent paid run of DEV-012, DEV-004, and DEV-008 passed. Human handoff is
+terminal to the agent but does not emit Pipecat's immediate end action, allowing
+the final limitation and handoff explanation to reach output first.
+
+## 2026-11-08: catalog-first resolution and authoritative booking state
+
+Pre-fix transcripts showed that the booking failures were not merely model
+variance. The model sometimes received a patient's name and date of birth in
+conversation, then called `find_slots` without first persisting those facts
+through `resolve_options`. Slot search allowed the incomplete state, but the
+booking tool's final revalidation correctly rejected it as `missing_identity`.
+The agent then offered a human handoff. A separate provider-resolution defect
+treated practitioner nouns such as “pediatrician” as unequal to catalog labels
+such as `Pediatrics`.
+
+Choice: session state, not conversation text, remains authoritative. Slot search
+now requires persisted identity; after identity is supplied, the agent must call
+`resolve_options` before `find_slots`. Catalog entities are resolved before name
+and date-of-birth collection, and no-match results explicitly direct the agent
+to explain the missing provider or service first. Specialty matching derives
+ordinary practitioner nouns from catalog specialty labels without embedding
+scenario identities or catalog IDs.
+
+“Any clinician” and “any location” are represented by explicit scope flags,
+rather than by silently missing filters. When a selected location is blocked by
+provider coverage or a required capability, the resolver returns catalog-valid
+alternative locations for the same provider and appointment type. The agent may
+offer only those returned alternatives. Catalog-information questions resolve
+the named entity and then use `get_details`; they do not enter the booking fact
+collection flow.
+
+The final three-run development matrix passed 34 of 36 runs. All 12 expected
+bookings across DEV-001, DEV-002, DEV-009, and DEV-012 completed. The two
+remaining failures disagreed with their sibling runs: one model response failed
+to map an explicitly named consultation to the exact type index, and one
+prematurely selected a service for an intentionally ambiguous request before
+handoff. Those are retained as observed variability rather than hidden by
+scenario-specific rules.
+
+## 2026-11-08: one scorer for both arms and complete explanation checks
+
+Choice: `backend/evals/scorer.py` is the single deterministic scorer for every
+evaluation arm. Reports record scorer version `dev-v3-explanations`; proposed
+and full-catalog baseline runners must import `evaluate_run` from this module,
+not copy assertion logic. This keeps arm comparisons from drifting because of
+different scoring code.
+
+Scorer changes, with no scenario or expected-outcome edits:
+
+- DEV-007 adds `undocumented_distinction_explained`. It requires both ambiguous
+  service names and an explicit statement that the catalog does not document,
+  specify, or distinguish their clinical difference. A handoff alone is not an
+  explanation.
+- DEV-008 adds `corrected_location_explained`. It derives the final location and
+  required capability from scenario facts plus the catalog, then requires the
+  assistant to identify that location, the capability, and its absence.
+- DEV-010 retains the separate phone and hours assertions and adds
+  `location_details_explained`, requiring the named location and both facts in
+  the answer.
+- DEV-011 retains unknown-provider acknowledgement and non-invention checks and
+  adds `unknown_provider_explained`, requiring the response to identify the
+  requested unknown provider rather than refer only to an unspecified entity.
+- Typography normalization remains limited to case-folding and straightening
+  apostrophes. It does not add semantic synonyms or change scenario facts.
+
+Reason: the earlier scorer checked core state well but could pass a response
+that reached the correct no-booking outcome without communicating the expected
+reason. Offline positive and negative tests now exercise each new explanation
+assertion. The development scenario JSON remains unchanged.
+
+## 2026-11-08: editable JSON graph and local next-call selection
+
+Choice: the scheduling graph is persisted in
+`backend/agents/catalog_scheduler.json` and both the voice entrypoint and the
+text scheduling runner compile it with `AgentBuilder`. The four scheduling
+operations remain non-transition functions in a session-local registry; JSON
+nodes reference those functions by name. Transition handlers, prompts, model
+configuration, node tools, and context behavior therefore come from the same
+saved graph in both paths. The Python scheduling engine remains the shared
+authoritative implementation behind the tools.
+
+The editor uses the existing `AgentConfig` plus `AgentBuilder` validation before
+an atomic save. It additionally rejects duplicate node names, duplicate edge
+function names within a node, unknown targets, unregistered tool names, and
+edge/tool name collisions. The React Flow UI is deliberately limited to agent,
+node, edge, message, and attached-tool editing; catalog management, auth, and
+layout persistence are outside this prototype.
+
+Choice for **Test call**: save the graph, write its agent id to the local
+next-call selection file, and open the existing Pipecat client. Every newly
+connected voice session reads that selection and the JSON from disk and creates
+fresh state plus a fresh tool registry. This reuses the already-working WebRTC
+client and voice pipeline, so the editor does not need a second call transport
+or changes to the prebuilt client. The selection is intentionally process-global
+and suitable only for this single-user local prototype; concurrent or hosted
+use would require a per-session signed agent id.
+
+A paid four-scenario smoke run after the JSON conversion passed DEV-001,
+DEV-009, and DEV-012. DEV-003 still showed the previously observed model
+variance: the model asked for clarification instead of mapping the caller's
+explicit knee MRI wording. The smoke run also exposed a general resolution
+order defect: resolving type after location could silently clear an incompatible
+location. Explicit selections are now retained so policy evaluation can return
+the capability block and valid alternatives, with an offline regression test.
+The remaining DEV-003 variance was not hidden with scenario-specific prompt or
+code changes.
+
+## 2026-11-08: proposed-v2 after real voice failures
+
+Observed: the handoff prompt instructed staff follow-up although no callback
+record exists. Removed this instruction and prohibited callback promises in the
+shared saved agent. Blocking reasons and catalog clinic phones are returned in
+tool results. Complete offers and confirmations must include service, provider,
+location, date and time; identity read-back requires a spoken DOB confirmation.
+Booking replies recap, offer further help, then close on caller completion.
+These conversational requirements remain model-driven and require voice review.
+
+Shared find_slots now returns at most three deterministic alternative previews,
+each changing exactly one of location, provider, or date range (14 extra days).
+Soft constraints rank before hard constraints, then location/provider/date range,
+then start and slot id. Every preview requires consent and does not authorize a
+booking: the request must be updated and searched again. Patient eligibility,
+catalog relationships and opening hours remain enforced. No catalog repairs.
+
+Voice and interactive demo generate seed-42 synthetic availability covering all
+760 valid provider/location/type combinations in the next two weeks, with local
+America/Los_Angeles dates and explicit offsets. Evaluation code continues to use
+only each scenario's complete closed-world fixture. Slots are synthetic and do
+not represent a real calendar.
+
+Installed Pipecat 1.4 provides ElevenLabs realtime Settings.language and
+MinWordsUserTurnStartStrategy. Voice pins Language.EN, uses a word-filtered
+minimum of two words during bot speech (one word when idle), replacing the
+default VAD-triggered interruption start. A 2.5-second recovery prompt handles
+interruption without a recent real transcript; real speech cancels it. This
+requires live acoustic validation and can delay a one-word interruption.
+Voice tool traces record call id, node, name, arguments, actual result/error,
+timestamp and duration in ignored logs/voice-tools.jsonl. These logs include
+patient data and should stay local.
+
+Scorer version dev-v4-voice-gaps is shared by both arms. Added general checks for
+location on time-bearing slot offers, no callback promise (no callback recording
+exists), and a question or explicit next step after no-availability wording.
+These are deterministic language heuristics, not proof of semantic completeness;
+seeded bad examples are tested. Existing scenario assertions remain in force.
+Scripted patients now acknowledge DOB read-back without changing scenario facts,
+fixtures or expected outcomes. Reports tag this architecture proposed-v2.
+
+First proposed-v2 matrix: 23/36 passed, 186 model calls, $0.85666250 using
+the recorded dated gpt-4o rates. DEV-008 passed 2/3. Inspection showed contact
+results supplied phone but no hours, and the model answered from that partial
+result rather than calling get_details. Contact results now include catalog
+hours. General prompts reinforce immediate provider resolution, preserving
+clinical ambiguity, and returning valid capability alternatives. Handoff
+instructions explicitly forbid invented numbers and notifications. The scorer
+now accepts "unable to provide" as an absence explanation and distinguishes
+denial of a recorded callback from a positive callback promise. The original
+failed matrix is retained at dev-matrix-20261108-122031-20e4ff.results.json.
+
+Final matrix: 192 model calls, $0.988365, 30/36 under the first vocabulary
+pass, 32/36 after correcting two DEV-008 scorer false negatives for "does not
+offer" and "cannot perform" imaging. Original raw report remains unchanged;
+proposed-v2-rescored.json records the two corrections and recomputed agreement.
+DEV-002, 003, 006 and 007 each retain one failure. All three new general checks
+passed in the final matrix. DEV-008 passed 3/3 after the vocabulary correction,
+but this does not establish voice reliability. Total paid cost of both matrices
+was $1.84502750. Live interruption, speech recognition, DOB confirmation and
+closing still require the user's acoustic retest. The selected next-call agent
+was an older test copy; selection now points to the updated catalog_scheduler,
+without altering that user-created copy.

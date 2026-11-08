@@ -1,0 +1,505 @@
+{
+  "schema_version": "0.1",
+  "created_at": "2026-11-07",
+  "dataset_role": "development_only",
+  "execution_status": "not_run",
+  "catalog": {
+    "url": "https://github.com/Prosper-Technologies/prosper-challenge-context-management/blob/main/backend/data/catalog.json",
+    "blob_sha": "8e5091080383d598ae18acce084c7dcd6522ab14"
+  },
+  "contract": {
+    "integration": "Declarative draft. Adapt the runner and assertion mapping; this is not an executable harness.",
+    "language": "English",
+    "default_patient_behavior": "If asked for identity, provide only the synthetic name and DOB. Reveal patient facts when asked. Never invent extra preferences or accept a substitute unless the scenario permits it.",
+    "identity_is_synthetic": true,
+    "referral_on_file": "Accepted from mock fixture state; not verified against an EHR.",
+    "confirmation": "Patient agrees only after matching read-back. Do not pass evaluator expectations to agent context.",
+    "availability": "For each scenario, listed fixtures are the complete availability universe; unlisted combinations have no slots. Empty fixtures mean no availability is required for the intended outcome.",
+    "timezone": "America/Los_Angeles",
+    "slot_horizon": "2026-11-10",
+    "synchronization": "XLSX and JSON are snapshots. Regenerate JSON after changing scenarios; no automatic synchronization.",
+    "holdout": "All supplied cases are development cases. Create and freeze a separate final set.",
+    "grading": "Log assertions cover payload/state. Read transcripts for explanations, clarification and unsupported claims. Booking cases require at least one completed booking; no-booking cases fail on any completed booking. Score invalid attempts separately."
+  },
+  "scenarios": [
+    {
+      "id": "DEV-001",
+      "split": "development",
+      "category": "Valid booking",
+      "opening": "I'd like a flu shot with Dr. Maria Garcia, the pediatrician at Mission Bay. I'm a new patient.",
+      "patient_facts": {
+        "name": "Alex Morgan",
+        "date_of_birth": "1990-04-12",
+        "synthetic": true,
+        "is_new_patient": true,
+        "referral_on_file": false,
+        "provider_id": "prov_002",
+        "location_id": "loc_000",
+        "appointment_type_id": "appt_011"
+      },
+      "reply_rules": "Confirm the first matching offered slot only after an accurate read-back. Reject other providers, sites or services.",
+      "expected_outcome": "book",
+      "expected": {
+        "booking": {
+          "provider_id": "prov_002",
+          "location_id": "loc_000",
+          "appointment_type_id": "appt_011"
+        },
+        "confirmation_required": true
+      },
+      "forbidden": [
+        "Wrong entity or service",
+        "False refusal because provider specialty is Pediatrics"
+      ],
+      "source_refs": [
+        "prov_002",
+        "loc_000",
+        "appt_011"
+      ],
+      "notes": "Explicit appointment_type_ids govern compatibility, not a specialty-only filter.",
+      "availability_fixture": [
+        {
+          "slot_id": "dev001-s1",
+          "provider_id": "prov_002",
+          "location_id": "loc_000",
+          "appointment_type_id": "appt_011",
+          "start": "2026-11-10T09:00:00-08:00",
+          "end": "2026-11-10T09:10:00-08:00"
+        }
+      ],
+      "review_status": "Draft"
+    },
+    {
+      "id": "DEV-002",
+      "split": "development",
+      "category": "Duplicate provider name",
+      "opening": "I'd like an annual physical with Dr. Maria Garcia.",
+      "patient_facts": {
+        "name": "Alex Morgan",
+        "date_of_birth": "1990-04-12",
+        "synthetic": true,
+        "is_new_patient": true,
+        "referral_on_file": false,
+        "intended_provider_id": "prov_003",
+        "intended_location_id": "loc_005",
+        "appointment_type_id": "appt_002"
+      },
+      "reply_rules": "When asked which Maria Garcia, specify the Family Medicine NP. When asked where, choose Midtown. Confirm an accurate matching read-back.",
+      "expected_outcome": "book",
+      "expected": {
+        "booking": {
+          "provider_id": "prov_003",
+          "location_id": "loc_005",
+          "appointment_type_id": "appt_002"
+        },
+        "provider_identity_resolved_before_booking": true,
+        "confirmation_required": true
+      },
+      "forbidden": [
+        "Select prov_002 without resolving identity",
+        "Invent a unique match from the name alone"
+      ],
+      "source_refs": [
+        "prov_002",
+        "prov_003",
+        "loc_005",
+        "appt_002"
+      ],
+      "notes": "Do not require one exact clarifying sentence.",
+      "availability_fixture": [
+        {
+          "slot_id": "dev002-s1",
+          "provider_id": "prov_003",
+          "location_id": "loc_005",
+          "appointment_type_id": "appt_002",
+          "start": "2026-11-10T10:00:00-08:00",
+          "end": "2026-11-10T10:30:00-08:00"
+        }
+      ],
+      "review_status": "Draft"
+    },
+    {
+      "id": "DEV-003",
+      "split": "development",
+      "category": "Location capability gate",
+      "opening": "I'm an existing patient with a referral on file. I need a knee MRI with Linda Ramirez in radiology, at Mission Bay only.",
+      "patient_facts": {
+        "name": "Alex Morgan",
+        "date_of_birth": "1990-04-12",
+        "synthetic": true,
+        "is_new_patient": false,
+        "referral_on_file": true,
+        "provider_id": "prov_014",
+        "location_id": "loc_000",
+        "appointment_type_id": "appt_065",
+        "location_is_hard_constraint": true
+      },
+      "reply_rules": "If offered another location, decline it. Ask why Mission Bay cannot be used. End after an accurate explanation.",
+      "expected_outcome": "no_booking",
+      "expected": {
+        "bookings": 0,
+        "explanation": "Mission Bay lacks imaging; this provider has a compatible imaging location at Downtown."
+      },
+      "forbidden": [
+        "Book at loc_000",
+        "Change location without agreement",
+        "Claim this provider offers no MRI anywhere"
+      ],
+      "source_refs": [
+        "prov_014",
+        "loc_000",
+        "loc_004",
+        "appt_065"
+      ],
+      "notes": "",
+      "availability_fixture": [],
+      "review_status": "Draft"
+    },
+    {
+      "id": "DEV-004",
+      "split": "development",
+      "category": "New-patient type restriction",
+      "opening": "I'm a new patient. I have a referral on file and need a knee MRI with Linda Ramirez in radiology at Downtown.",
+      "patient_facts": {
+        "name": "Alex Morgan",
+        "date_of_birth": "1990-04-12",
+        "synthetic": true,
+        "is_new_patient": true,
+        "referral_on_file": true,
+        "provider_id": "prov_014",
+        "location_id": "loc_004",
+        "appointment_type_id": "appt_065"
+      },
+      "reply_rules": "If offered a different appointment type, decline. End after the agent explains the new-patient restriction.",
+      "expected_outcome": "no_booking",
+      "expected": {
+        "bookings": 0,
+        "explanation": "appt_065 does not allow new patients, although prov_014 accepts them."
+      },
+      "forbidden": [
+        "Treat provider acceptance as sufficient",
+        "Change patient status",
+        "Invent an exception"
+      ],
+      "source_refs": [
+        "prov_014",
+        "loc_004",
+        "appt_065"
+      ],
+      "notes": "",
+      "availability_fixture": [],
+      "review_status": "Draft"
+    },
+    {
+      "id": "DEV-005",
+      "split": "development",
+      "category": "New-patient provider restriction",
+      "opening": "I'm new to the clinic and have a referral on file. I want a cardiology consultation with Dr. David Chen at Downtown. Only that doctor, please.",
+      "patient_facts": {
+        "name": "Alex Morgan",
+        "date_of_birth": "1990-04-12",
+        "synthetic": true,
+        "is_new_patient": true,
+        "referral_on_file": true,
+        "provider_id": "prov_000",
+        "location_id": "loc_004",
+        "appointment_type_id": "appt_020",
+        "provider_is_hard_constraint": true
+      },
+      "reply_rules": "Decline alternative doctors. End after the provider restriction is explained.",
+      "expected_outcome": "no_booking",
+      "expected": {
+        "bookings": 0,
+        "explanation": "prov_000 is not accepting new patients; appt_020 itself allows them."
+      },
+      "forbidden": [
+        "Book requested provider",
+        "Incorrectly say cardiology consultation excludes all new patients",
+        "Silently substitute provider"
+      ],
+      "source_refs": [
+        "prov_000",
+        "loc_004",
+        "appt_020"
+      ],
+      "notes": "",
+      "availability_fixture": [],
+      "review_status": "Draft"
+    },
+    {
+      "id": "DEV-006",
+      "split": "development",
+      "category": "Missing referral",
+      "opening": "I want a dermatology consultation with Dr. Daniel Chen at Downtown. I'm an existing patient, but I do not have a referral on file.",
+      "patient_facts": {
+        "name": "Alex Morgan",
+        "date_of_birth": "1990-04-12",
+        "synthetic": true,
+        "is_new_patient": false,
+        "referral_on_file": false,
+        "provider_id": "prov_001",
+        "location_id": "loc_004",
+        "appointment_type_id": "appt_026"
+      },
+      "reply_rules": "Decline any different service. End after referral prerequisite is explained.",
+      "expected_outcome": "no_booking",
+      "expected": {
+        "bookings": 0,
+        "explanation": "appt_026 requires a referral on file before booking."
+      },
+      "forbidden": [
+        "Book despite missing referral",
+        "Treat a promise to obtain a referral as one already on file",
+        "Substitute screening without agreement"
+      ],
+      "source_refs": [
+        "prov_001",
+        "loc_004",
+        "appt_026"
+      ],
+      "notes": "",
+      "availability_fixture": [],
+      "review_status": "Draft"
+    },
+    {
+      "id": "DEV-007",
+      "split": "development",
+      "category": "Undocumented service distinction",
+      "opening": "I need a full skin check, but I don't know the exact appointment name.",
+      "patient_facts": {
+        "name": "Alex Morgan",
+        "date_of_birth": "1990-04-12",
+        "synthetic": true,
+        "is_new_patient": true,
+        "referral_on_file": false,
+        "ambiguous_type_ids": [
+          "appt_027",
+          "appt_028"
+        ]
+      },
+      "reply_rules": "If asked to choose between Skin Cancer Screening and Full Body Skin Exam, say you cannot choose and want staff to confirm the intended service. Do not authorize a specific service.",
+      "expected_outcome": "clarify_or_handoff",
+      "expected": {
+        "bookings": 0,
+        "ambiguity_preserved": true,
+        "explanation": "The catalog does not document a clinical distinction between these two services."
+      },
+      "forbidden": [
+        "Invent eligibility, insurance or clinical differences",
+        "Choose arbitrarily",
+        "Book before service is resolved"
+      ],
+      "source_refs": [
+        "appt_027",
+        "appt_028"
+      ],
+      "notes": "Manual transcript review required. Similar names alone do not establish interchangeability.",
+      "availability_fixture": [],
+      "review_status": "Draft"
+    },
+    {
+      "id": "DEV-008",
+      "split": "development",
+      "category": "Correction invalidates slot",
+      "opening": "I'm an existing patient with a referral on file. I need a knee MRI with Linda Ramirez in radiology at Downtown.",
+      "patient_facts": {
+        "name": "Alex Morgan",
+        "date_of_birth": "1990-04-12",
+        "synthetic": true,
+        "is_new_patient": false,
+        "referral_on_file": true,
+        "provider_id": "prov_014",
+        "initial_location_id": "loc_004",
+        "final_location_id": "loc_000",
+        "appointment_type_id": "appt_065"
+      },
+      "reply_rules": "Immediately after the first matching slot offer, BEFORE any confirmation, say: Actually, Mission Bay only. I cannot go downtown. Decline all other locations. Never confirm the old slot.",
+      "expected_outcome": "no_booking",
+      "expected": {
+        "bookings": 0,
+        "old_slot_invalidated_after_correction": true,
+        "confirmation_invalidated_after_correction": true,
+        "explanation": "Requested final location lacks imaging."
+      },
+      "forbidden": [
+        "Book the earlier Downtown slot",
+        "Ignore correction",
+        "Carry forward obsolete confirmation"
+      ],
+      "source_refs": [
+        "prov_014",
+        "loc_004",
+        "loc_000",
+        "appt_065"
+      ],
+      "notes": "Correction trigger is slot offer, not a fixed turn number.",
+      "availability_fixture": [
+        {
+          "slot_id": "dev008-s1",
+          "provider_id": "prov_014",
+          "location_id": "loc_004",
+          "appointment_type_id": "appt_065",
+          "start": "2026-11-10T11:00:00-08:00",
+          "end": "2026-11-10T11:45:00-08:00"
+        }
+      ],
+      "review_status": "Draft"
+    },
+    {
+      "id": "DEV-009",
+      "split": "development",
+      "category": "Soonest across eligible options",
+      "opening": "I'm a new patient and need a flu shot. Any clinician and any site are fine. Please book the earliest available appointment.",
+      "patient_facts": {
+        "name": "Alex Morgan",
+        "date_of_birth": "1990-04-12",
+        "synthetic": true,
+        "is_new_patient": true,
+        "referral_on_file": false,
+        "appointment_type_id": "appt_011",
+        "preference": "soonest",
+        "provider_preference": null,
+        "location_preference": null
+      },
+      "reply_rules": "Accept the earliest eligible slot after accurate read-back. If offered only a later slot, ask once whether an earlier option exists.",
+      "expected_outcome": "book",
+      "expected": {
+        "booking": {
+          "slot_id": "dev009-early",
+          "provider_id": "prov_016",
+          "location_id": "loc_005",
+          "appointment_type_id": "appt_011"
+        },
+        "confirmation_required": true,
+        "global_slot_ranking": true
+      },
+      "forbidden": [
+        "Return first provider match as globally earliest",
+        "Claim unspecified slots exist"
+      ],
+      "source_refs": [
+        "prov_002",
+        "prov_003",
+        "prov_016",
+        "loc_000",
+        "loc_005",
+        "appt_011"
+      ],
+      "notes": "Closed-world fixture: these are the only available slots; all other combinations have none.",
+      "availability_fixture": [
+        {"slot_id": "dev009-late", "provider_id": "prov_002", "location_id": "loc_000", "appointment_type_id": "appt_011", "start": "2026-11-10T10:30:00-08:00", "end": "2026-11-10T10:40:00-08:00"},
+        {"slot_id": "dev009-mid", "provider_id": "prov_003", "location_id": "loc_005", "appointment_type_id": "appt_011", "start": "2026-11-10T09:00:00-08:00", "end": "2026-11-10T09:10:00-08:00"},
+        {"slot_id": "dev009-early", "provider_id": "prov_016", "location_id": "loc_005", "appointment_type_id": "appt_011", "start": "2026-11-10T08:30:00-08:00", "end": "2026-11-10T08:40:00-08:00"}
+      ],
+      "review_status": "Draft"
+    },
+    {
+      "id": "DEV-010",
+      "split": "development",
+      "category": "Factual FAQ",
+      "opening": "What are the hours and phone number for Mission District Family Clinic? I don't want to book.",
+      "patient_facts": {
+        "name": "Alex Morgan",
+        "date_of_birth": "1990-04-12",
+        "synthetic": true
+      },
+      "reply_rules": "Do not enter a booking flow. End after the requested information is provided.",
+      "expected_outcome": "answer_only",
+      "expected": {
+        "bookings": 0,
+        "required_facts": {
+          "location_id": "loc_001",
+          "hours": "Mon-Fri 8:00-17:00",
+          "phone": "(415) 555-4657"
+        }
+      },
+      "forbidden": [
+        "Collect unnecessary patient identity",
+        "Book an appointment",
+        "Invent opening hours or phone"
+      ],
+      "source_refs": [
+        "loc_001"
+      ],
+      "notes": "Allow equivalent spoken formatting for hours and phone.",
+      "availability_fixture": [],
+      "review_status": "Draft"
+    },
+    {
+      "id": "DEV-011",
+      "split": "development",
+      "category": "Unknown provider",
+      "opening": "I want an appointment only with Dr. Zephyr Imaginary. I don't want another clinician.",
+      "patient_facts": {
+        "name": "Alex Morgan",
+        "date_of_birth": "1990-04-12",
+        "synthetic": true,
+        "is_new_patient": true,
+        "provider_name": "Dr. Zephyr Imaginary",
+        "provider_is_hard_constraint": true
+      },
+      "reply_rules": "If asked to spell the name, repeat it. Decline alternatives. Accept staff follow-up as an unresolved request.",
+      "expected_outcome": "no_booking",
+      "expected": {
+        "bookings": 0,
+        "unknown_entity_acknowledged": true
+      },
+      "forbidden": [
+        "Invent provider or ID",
+        "Treat no match as no availability",
+        "Silently choose a similarly named provider"
+      ],
+      "source_refs": [],
+      "notes": "Unknown provider name is synthetic and deliberately absent from the catalog.",
+      "availability_fixture": [],
+      "review_status": "Draft"
+    },
+    {
+      "id": "DEV-012",
+      "split": "development",
+      "category": "Valid referral-gated booking",
+      "opening": "I'm an existing patient with a referral already on file. I need a knee MRI with Linda Ramirez in radiology at Downtown.",
+      "patient_facts": {
+        "name": "Alex Morgan",
+        "date_of_birth": "1990-04-12",
+        "synthetic": true,
+        "is_new_patient": false,
+        "referral_on_file": true,
+        "provider_id": "prov_014",
+        "location_id": "loc_004",
+        "appointment_type_id": "appt_065"
+      },
+      "reply_rules": "Confirm the matching offered slot after accurate read-back. Do not change provider, site or service.",
+      "expected_outcome": "book",
+      "expected": {
+        "booking": {
+          "provider_id": "prov_014",
+          "location_id": "loc_004",
+          "appointment_type_id": "appt_065"
+        },
+        "confirmation_required": true
+      },
+      "forbidden": [
+        "False refusal despite all catalog prerequisites being met",
+        "Book wrong MRI body part"
+      ],
+      "source_refs": [
+        "prov_014",
+        "loc_004",
+        "appt_065"
+      ],
+      "notes": "Referral status is accepted from fixture state for this mock; this is not real EHR verification.",
+      "availability_fixture": [
+        {
+          "slot_id": "dev012-s1",
+          "provider_id": "prov_014",
+          "location_id": "loc_004",
+          "appointment_type_id": "appt_065",
+          "start": "2026-11-10T13:00:00-08:00",
+          "end": "2026-11-10T13:45:00-08:00"
+        }
+      ],
+      "review_status": "Draft"
+    }
+  ]
+}

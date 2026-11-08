@@ -140,7 +140,12 @@ class Catalog:
             result["specialty"] = item.specialty
         if entity == "provider":
             result["title"] = item.title
-            result["location_ids"] = list(item.location_ids)
+            # Names travel with IDs: given IDs alone, the model guessed names and
+            # once told a patient that a provider did not practice where she does.
+            result["locations"] = [
+                {"id": location_id, "name": self.locations_by_id[location_id].name}
+                for location_id in item.location_ids
+            ]
         return result
 
     def _collection(self, entity: str):

@@ -30,8 +30,16 @@ class TurnMetricsObserver(BaseObserver):
         node_name: Callable[[], str | None],
         default_model: str,
         output_path: Path,
+        session_metadata: dict | None = None,
     ):
         super().__init__()
+        # Which saved agent revision and availability source produced this call.
+        # Unknown stays null rather than being guessed.
+        metadata = session_metadata or {}
+        self._session_metadata = {
+            key: metadata.get(key)
+            for key in ("agent_id", "agent_revision", "availability_mode")
+        }
         self._call_id = call_id
         self._run_id = run_id
         self._node_name = node_name
@@ -118,6 +126,7 @@ class TurnMetricsObserver(BaseObserver):
             "timestamp": datetime.now(timezone.utc).isoformat(),
             "run_id": self._run_id,
             "call_id": self._call_id,
+            **self._session_metadata,
             "turn": self._turn_index,
             "patient_turn": pending["patient_turn"],
             "trigger": pending["trigger"],

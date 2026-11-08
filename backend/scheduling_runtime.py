@@ -33,7 +33,8 @@ def load_selected_scheduling_agent(
         else DEFAULT_DEMO_AVAILABILITY_PATH
     )
     session_now = now or datetime.now(timezone.utc)
-    availability = (json.loads(slot_path.read_text()) if availability_path or configured_availability
+    from_file = bool(availability_path or configured_availability)
+    availability = (json.loads(slot_path.read_text()) if from_file
                     else generate_demo_availability(catalog, session_now))
     engine = SchedulingEngine(
         catalog,
@@ -41,6 +42,11 @@ def load_selected_scheduling_agent(
         now=session_now,
     )
     return (
-        build_scheduling_agent(engine, catalog, flow_path=selected_path),
+        build_scheduling_agent(
+            engine,
+            catalog,
+            flow_path=selected_path,
+            availability_mode=f"file:{slot_path.name}" if from_file else "demo_generated",
+        ),
         engine,
     )

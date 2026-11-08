@@ -1,5 +1,7 @@
 """Load the scheduling JSON graph and bind its pure-Python tool registry."""
 
+import hashlib
+import json
 from pathlib import Path
 
 from pipecat_flows import FlowsFunctionSchema
@@ -25,14 +27,26 @@ def build_scheduling_agent(
     catalog: Catalog,
     *,
     flow_path: Path = DEFAULT_SCHEDULING_AGENT_PATH,
+    availability_mode: str,
 ) -> AgentBuilder:
-    """Load an editable JSON graph and bind session-local scheduling tools."""
+    """Load an editable JSON graph and bind session-local scheduling tools.
+
+    The JSON bytes are read once, so the logged revision is exactly the graph
+    that was compiled even if the editor saves a new version concurrently.
+    """
     if engine.catalog is not catalog:
         raise ValueError("The scheduling engine and agent registry must share one catalog.")
-    return AgentBuilder.from_json(
-        flow_path,
+    raw = Path(flow_path).read_bytes()
+    builder = AgentBuilder.from_dict(
+        json.loads(raw),
         function_registry=build_scheduling_tool_registry(engine),
     )
+    builder.session_metadata = {
+        "agent_id": Path(flow_path).stem,
+        "agent_revision": hashlib.sha256(raw).hexdigest(),
+        "availability_mode": availability_mode,
+    }
+    return builder
 
 
 def build_scheduling_tool_registry(

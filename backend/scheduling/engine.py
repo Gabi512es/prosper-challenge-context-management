@@ -423,24 +423,40 @@ class SchedulingEngine:
             "location_missing_capability",
             "provider_not_at_location",
         }:
-            alternatives = self._valid_alternative_locations()
+            alternatives, pending = self._valid_alternative_locations()
             if alternatives:
                 enriched["alternatives"] = alternatives
+                if pending:
+                    # Site capability does not depend on these facts, but booking
+                    # at an alternative still does; they must be collected first.
+                    enriched["alternatives_pending_patient_facts"] = pending
         return enriched
 
-    def _valid_alternative_locations(self) -> list[dict]:
+    def _valid_alternative_locations(self) -> tuple[list[dict], list[str]]:
+        """Return capability-valid sites plus patient facts still unknown.
+
+        Unknown patient facts do not hide alternatives. A known patient fact
+        that blocks this provider/type everywhere does, since no site helps.
+        """
         appointment_type = self._appointment_type()
         provider = self._provider()
         facts = self.state.patient_facts
         if not appointment_type or not provider:
-            return []
+            return [], []
         if appointment_type.id not in provider.appointment_type_ids:
-            return []
-        if facts.is_new_patient:
+            return [], []
+        pending = []
+        if facts.is_new_patient is None:
             if not appointment_type.new_patients_allowed or not provider.accepting_new_patients:
-                return []
-        if appointment_type.requires_referral and facts.referral_on_file is not True:
-            return []
+                pending.append("is_new_patient")
+        elif facts.is_new_patient:
+            if not appointment_type.new_patients_allowed or not provider.accepting_new_patients:
+                return [], []
+        if appointment_type.requires_referral:
+            if facts.referral_on_file is None:
+                pending.append("referral_on_file")
+            elif not facts.referral_on_file:
+                return [], []
         alternatives = []
         for location_id in provider.location_ids:
             if location_id == self.state.location_id:
@@ -452,7 +468,7 @@ class SchedulingEngine:
             ):
                 continue
             alternatives.append(self.catalog.summary("location", location_id))
-        return sorted(alternatives, key=lambda item: (item["name"], item["id"]))
+        return sorted(alternatives, key=lambda item: (item["name"], item["id"])), pending
 
     def _current_snapshot(self, slot_id: str) -> ConfirmationSnapshot:
         facts = self.state.patient_facts

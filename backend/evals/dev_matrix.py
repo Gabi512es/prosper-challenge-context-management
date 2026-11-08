@@ -158,6 +158,7 @@ async def run_matrix(repetitions: int, concurrency: int) -> tuple[dict, Path]:
             result = await run_dev_case(scenario["id"], run_id=run_id)
             scored = evaluate_run(scenario, result)
             scored["repetition"] = repetition
+            scored["agent"] = result.agent
             print(
                 f"{scenario['id']} run {repetition}: "
                 f"{'PASS' if scored['passed'] else 'FAIL'}",
@@ -203,6 +204,9 @@ async def run_matrix(repetitions: int, concurrency: int) -> tuple[dict, Path]:
         for item in scored_runs
         if item["usage"]["cost_usd"] is not None
     ]
+    agent_versions = sorted(
+        {json.dumps(item["agent"], sort_keys=True) for item in scored_runs}
+    )
     report = {
         "run_id": run_id,
         "created_at": datetime.now(timezone.utc).isoformat(),
@@ -210,6 +214,8 @@ async def run_matrix(repetitions: int, concurrency: int) -> tuple[dict, Path]:
         "repetitions": repetitions,
         "model": "gpt-4o",
         "arm": "proposed-v2",
+        # One entry when every run used the same saved agent revision.
+        "agent_versions": [json.loads(item) for item in agent_versions],
         "scorer_version": SCORER_VERSION,
         "pricing": {
             "as_of": PRICE_DATE,

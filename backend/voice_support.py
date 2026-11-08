@@ -14,10 +14,34 @@ from pipecat.processors.frame_processor import FrameProcessor
 from pipecat.turns.user_start import MinWordsUserTurnStartStrategy
 
 
+# Hesitation and backchannel sounds carry no answer. Everything else, including
+# one-word replies such as "No", "Stop", "Yes" or "Midtown", is a real answer.
+FILLER_WORDS = frozenset(
+    {"uh", "um", "umm", "uhm", "er", "erm", "ah", "eh", "hm", "hmm", "mm", "mmm", "mhm", "huh"}
+)
+
+
+# Used by bot.py. Any higher value silently drops shorter replies while the
+# agent is speaking, because Pipecat resets the aggregation below the threshold.
+VOICE_MIN_WORDS = 1
+
+
+def real_words(text: str) -> list[str]:
+    words = re.findall(r"[A-Za-z]+(?:'[A-Za-z]+)?", text)
+    return [word for word in words if word.casefold() not in FILLER_WORDS]
+
+
 class RealWordsStartStrategy(MinWordsUserTurnStartStrategy):
+    """Start a user turn on real words only.
+
+    Below ``min_words`` Pipecat resets the user aggregation, which discards the
+    transcript, so the voice entrypoint uses ``VOICE_MIN_WORDS`` (1): a single real word
+    interrupts, while punctuation noise and filler sounds never do.
+    """
+
     async def _handle_transcription(self, frame):
         clean = copy.copy(frame)
-        clean.text = " ".join(re.findall(r"[A-Za-z]+(?:'[A-Za-z]+)?", frame.text))
+        clean.text = " ".join(real_words(frame.text))
         return await super()._handle_transcription(clean)
 
 
@@ -64,7 +88,11 @@ def tool_trace_wrapper(call_id, builder, output_path: Path):
                 raise
             finally:
                 output_path.parent.mkdir(parents=True, exist_ok=True)
+                metadata = getattr(builder, "session_metadata", None) or {}
                 row = dict(timestamp=datetime.now(timezone.utc).isoformat(), call_id=call_id,
+                    agent_id=metadata.get("agent_id"),
+                    agent_revision=metadata.get("agent_revision"),
+                    availability_mode=metadata.get("availability_mode"),
                     node=builder.current_node, tool=name, arguments=args,
                     result=result[0] if isinstance(result, tuple) else result,
                     error=error, latency_ms=round((monotonic()-started)*1000, 3))

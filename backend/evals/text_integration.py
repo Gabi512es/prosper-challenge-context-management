@@ -22,6 +22,7 @@ class ScenarioTextRun:
     context_messages: list[dict]
     engine: SchedulingEngine
     error: str | None = None
+    agent: dict | None = None
 
 
 @dataclass
@@ -166,8 +167,9 @@ async def run_dev_case(scenario_id: str, *, run_id: str) -> ScenarioTextRun:
         scenario["availability_fixture"],
         now=datetime.fromisoformat("2026-11-07T00:00:00-08:00"),
     )
+    builder = build_scheduling_agent(engine, catalog, availability_mode="eval_fixture")
     session = TextAgentSession(
-        builder=build_scheduling_agent(engine, catalog),
+        builder=builder,
         run_id=run_id,
         faults=scenario.get("faults", []),
         on_slot_taken=engine.mark_slot_unavailable,
@@ -211,6 +213,7 @@ async def run_dev_case(scenario_id: str, *, run_id: str) -> ScenarioTextRun:
         context_messages=context_messages,
         engine=engine,
         error=error,
+        agent=dict(builder.session_metadata),
     )
 
 

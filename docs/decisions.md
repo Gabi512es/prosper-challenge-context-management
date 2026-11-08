@@ -314,8 +314,12 @@ result rather than calling get_details. Contact results now include catalog
 hours. General prompts reinforce immediate provider resolution, preserving
 clinical ambiguity, and returning valid capability alternatives. Handoff
 instructions explicitly forbid invented numbers and notifications. The scorer
-now accepts "unable to provide" as an absence explanation and distinguishes
-denial of a recorded callback from a positive callback promise. The original
+now accepts "unable to provide" as an absence explanation. (Corrected
+2026-11-08: this entry previously said the scorer also distinguishes denial of a
+recorded callback from a positive callback promise. It does not. The callback
+check is a keyword pattern; it fires on negations such as "I can't promise
+staff will call you" and misses promises such as "they'll be in touch". See the
+review entry below.) The original
 failed matrix is retained at dev-matrix-20261108-122031-20e4ff.results.json.
 
 Final matrix: 192 model calls, $0.988365, 30/36 under the first vocabulary
@@ -329,3 +333,132 @@ was $1.84502750. Live interruption, speech recognition, DOB confirmation and
 closing still require the user's acoustic retest. The selected next-call agent
 was an older test copy; selection now points to the updated catalog_scheduler,
 without altering that user-created copy.
+
+## 2026-11-08: review fixes after agent handoff (no paid calls)
+
+Offline review of the final proposed-v2 matrix traces and the code. No model
+calls, no scenario or fixture changes. `make test`: 62 tests, 60 passed, 2 paid
+checks skipped.
+
+**Voice: short answers were dropped while the agent spoke.** Observed in code,
+not acoustically. With `min_words=2`, Pipecat 1.4's
+`MinWordsUserTurnStartStrategy` resets the user aggregation when a transcript
+has fewer words than the threshold during bot speech, which discards it. "No",
+"Stop" or "Midtown" said during a slot read-back was therefore lost, not
+delayed. Choice: `VOICE_MIN_WORDS = 1`, counting only real words; punctuation
+noise and filler sounds (um, uh, hmm, mm, mhm, huh) never start a turn. Risk to
+check by ear: a backchannel "yeah" or "okay" now interrupts a read-back, and
+"huh?" is ignored. Tests cover one-word answers and fillers during bot speech.
+
+**False location claim (DEV-002 r2).** Provider candidates carried only
+`location_ids`. In a turn with no tool call the model told the patient that
+Family Medicine Maria Garcia (prov_003) practices at Mission District, North
+Beach and North Gate, "not Midtown". Her catalog sites are North Beach, Midtown
+and Richmond, so a valid booking was refused. Choice: provider summaries now
+return `locations` as `{id, name}` pairs instead of bare IDs. A general persona
+rule was added: a catalog fact (a provider's sites or services, a location's
+capabilities, phone or hours, availability) is stated only when it appears in a
+tool result earlier in the conversation; names come from returned pairs, never
+from IDs or list order. DEV-007 r2 also made a claim in a turn without a tool
+call. The rule is model-driven; only the tool contract is enforced in code.
+
+**Capability alternatives no longer wait for patient facts (DEV-003 r2).**
+The model did not persist the referral the patient stated. The resolver
+returned no alternative sites until referral status was known, so Downtown was
+never mentioned. A site's capability does not depend on patient facts. Choice:
+capability-valid alternatives are returned with
+`alternatives_pending_patient_facts` listing unknown facts that still gate
+booking. A known fact that blocks the provider/type everywhere (no referral,
+new patient not allowed) still returns no alternatives, since no site helps.
+
+**Session identity in logs.** Text evals always loaded `catalog_scheduler.json`,
+while voice loads the agent in `active_agent.txt`. No log tied a session to a
+graph version. Choice: the scheduling loader reads the JSON bytes once and
+records `agent_id` (file stem), `agent_revision` (SHA-256 of those bytes) and
+`availability_mode` (`eval_fixture`, `demo_generated`, or `file:<name>`). These
+fields are written on every `turns.jsonl` / eval JSONL row and every
+`voice-tools.jsonl` row. Each scored run and the matrix report header
+(`agent_versions`) carry them too. Unknown values stay null. Matching revisions
+show that voice and text ran the same graph.
+
+**Remaining development failures (final matrix).** DEV-002 r2: false statement,
+fixed above in the tool contract. DEV-003 r2: incomplete explanation, no false
+claim, addressed above. DEV-006 r2: the clearly named service was not resolved
+and the patient was asked to confirm it. This unnecessary clarification is a
+documented limitation, not tuned. DEV-007 r2: suggested one of two
+undistinguished services without a tool call and never said the catalog does
+not document the difference. No callback was promised. None of the four
+created a wrong booking.
+
+**Coverage of three conversational requirements.**
+(a) Location in every slot offer: automated in text evals
+(`slot_offers_include_location`), manual for voice. Known misfires: short
+names such as "the Midtown location" fail because every distinctive word of the
+full name is required. Any catalog location satisfies the check, even the wrong
+one. Offers without am/pm are not detected. Clinic hours worded with "available"
+count as offers.
+(b) No unrecorded callback promise: automated in text, manual for voice.
+"Follow-up appointment" (hyphenated) does not fire. "Follow up visit", "your
+visit will follow up" ("it" is matched inside "visit") and negations do fire.
+"You'll get a call from our team" and "they'll be in touch" are missed.
+(c) Block explained with a fitting next step: block explanations are checked
+only by per-scenario keywords. The general next-step check fires only on
+no-availability wording and accepts any question mark. Whether the next step
+fits is not covered: manual review. Respecting a refused alternative under a
+hard constraint is also not covered, because scripted runs stop at the first
+block. DEV-008 r1 re-offered Downtown right after "I cannot go downtown". A
+`dev-v5` scorer fixing (a) and (b) is deferred.
+
+**Old matrix under the current scorer.** `backend/evals/rescore_saved.py`
+rescored `dev-matrix-20261107-193131-c96e6c.results.json` (originally 34/36,
+before scorer versions were recorded) under `dev-v4-voice-gaps` with no model
+calls. Output:
+`backend/logs/evals/dev-matrix-20261107-193131-c96e6c.rescored-dev-v4.json`.
+Result: 24/36, or 26/36 after correcting the two location-check misfires
+(DEV-002 r1 and r3 named "the Midtown location"), against 32/36 for proposed-v2.
+Eight runs were flagged for a slot offer without a location: six genuine
+omissions and the two misfires. All three DEV-007 runs failed the
+catalog-distinction explanation, and two of them also promised a staff
+follow-up ("They will follow up with you"). The DEV-006 r3 runner failure was already in the original 34/36.
+Caveats: transcript-based assertions are recomputed with current code, but
+state-based ones reuse the values saved by the original run, because engine
+state is not persisted. The same script reproduces proposed-v2's 32/36 exactly.
+The old run used older prompts and a scripted patient that did not acknowledge
+DOB read-back, so this compares versions under one scorer, not identical
+conversations.
+
+**Baseline plan (not built).** For identical recovery behaviour, the baseline
+arm will bind the same `build_scheduling_tool_registry` and engine. Its
+`resolve_options` will run in an ID-only mode: it accepts `appointment_type_id`,
+`provider_id`, `location_id`, patient facts, scope flags and hard constraints,
+and rejects every `*_query` and `provider_specialty` field. It still performs
+validation, invalidation, block reasons and capability alternatives. Unchanged
+`find_slots` provides the slot alternatives and `book_appointment` the final
+guard. The only difference is that the baseline reads the full catalog in
+context instead of searching it. `dev_matrix.py` needs an `--arm` option, and
+both arms keep the same scorer version.
+
+## Frozen evaluation files
+
+Two evaluation sets are kept outside the repository until the final run. Their
+SHA-256 hashes are recorded here so they can't be changed without it being
+visible.
+
+- Held-out set (`prosper_heldout_scenarios.json`): 16 scenarios. SHA-256:
+  `d41abdad3defe405a48becc55a97d4d153c3c3b27a4eff5f5518db8a2dedd1b6`
+- Robustness set (`prosper_robustness_scenarios.json`): 8 scenarios. SHA-256:
+  `c5de085b51996c51afaa9dbc3b40c392452d0eec28760b422ced2a6f74aa6c19`
+
+Recorded on 2026-11-08. The coding agents did not read either file during
+development.
+
+## Time spent (build only, excluding preparation)
+
+Active time measured with a timer. Coding agents also ran in the background between sessions; that compute time is not counted.
+
+- Steps 1 and 2 (setup, metrics and text runner; design v1 and scheduling core): 1h00, Nov 7
+- Steps 3 and 4 (DEV evaluation and root-cause fixes, 26/36 to 34/36; graph editor and JSON agent): 2h00, Nov 7
+- Step 5 (real voice testing and fixes, in progress): 1h44 so far, Nov 8
+- Total so far: 4h44
+
+Work continued with Claude Code during Step 5, after reaching usage limits on Codex.

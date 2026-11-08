@@ -104,6 +104,7 @@ def build_agent_runtime(
                 node_name=lambda: builder.current_node,
                 default_model=builder.config.model,
                 output_path=metrics_log,
+                session_metadata=getattr(builder, "session_metadata", None),
             )
         ],
         conversation_id=call_id,

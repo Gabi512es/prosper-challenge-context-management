@@ -16,7 +16,8 @@ from uuid import uuid4
 from pathlib import Path
 from pipecat.transcriptions.language import Language
 from pipecat.turns.user_turn_strategies import UserTurnStrategies
-from voice_support import RealWordsStartStrategy, InterruptedSilenceRecovery, tool_trace_wrapper
+from voice_support import (RealWordsStartStrategy, InterruptedSilenceRecovery, VOICE_MIN_WORDS,
+    tool_trace_wrapper)
 
 from loguru import logger
 
@@ -59,7 +60,7 @@ async def run_bot(
     runtime = build_agent_runtime(
         builder=builder,
         user_params=LLMUserAggregatorParams(vad_analyzer=SileroVADAnalyzer(),
-            user_turn_strategies=UserTurnStrategies(start=[RealWordsStartStrategy(min_words=2)])),
+            user_turn_strategies=UserTurnStrategies(start=[RealWordsStartStrategy(min_words=VOICE_MIN_WORDS)])),
         input_processors=[transport.input(), stt, InterruptedSilenceRecovery()],
         output_processors=[tts, transport.output()],
         transport=transport,

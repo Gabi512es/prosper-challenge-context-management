@@ -20,7 +20,7 @@ class SchedulingAgentAdapterTest(unittest.IsolatedAsyncioTestCase):
             [],
             now=datetime.fromisoformat("2026-11-07T00:00:00-08:00"),
         )
-        builder = build_scheduling_agent(engine, catalog)
+        builder = build_scheduling_agent(engine, catalog, availability_mode="eval_fixture")
         node = builder.build_initial_node()
         resolver = next(
             function for function in node["functions"] if function.name == "resolve_options"
@@ -36,7 +36,7 @@ class SchedulingAgentAdapterTest(unittest.IsolatedAsyncioTestCase):
             [],
             now=datetime.fromisoformat("2026-11-07T00:00:00-08:00"),
         )
-        builder = build_scheduling_agent(engine, catalog)
+        builder = build_scheduling_agent(engine, catalog, availability_mode="eval_fixture")
         node = builder.build_initial_node()
         functions = {function.name: function for function in node["functions"]}
 
@@ -70,7 +70,7 @@ class SchedulingAgentAdapterTest(unittest.IsolatedAsyncioTestCase):
             [],
             now=datetime.fromisoformat("2026-11-07T00:00:00-08:00"),
         )
-        builder = build_scheduling_agent(engine, catalog)
+        builder = build_scheduling_agent(engine, catalog, availability_mode="eval_fixture")
         node = builder.build_initial_node()
         functions = {function.name: function for function in node["functions"]}
         manager = SimpleNamespace(state={})
@@ -107,7 +107,7 @@ class SchedulingAgentAdapterTest(unittest.IsolatedAsyncioTestCase):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "edited.json"
             path.write_text(json.dumps(data))
-            builder = build_scheduling_agent(engine, catalog, flow_path=path)
+            builder = build_scheduling_agent(engine, catalog, flow_path=path, availability_mode="eval_fixture")
 
         self.assertEqual(
             builder.build_initial_node()["task_messages"][0]["content"],

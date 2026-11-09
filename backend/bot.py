@@ -61,7 +61,7 @@ async def run_bot(
         builder=builder,
         user_params=LLMUserAggregatorParams(vad_analyzer=SileroVADAnalyzer(),
             user_turn_strategies=UserTurnStrategies(start=[RealWordsStartStrategy(min_words=VOICE_MIN_WORDS)])),
-        input_processors=[transport.input(), stt, InterruptedSilenceRecovery()],
+        input_processors=[transport.input(), stt],
         output_processors=[tts, transport.output()],
         transport=transport,
         call_id=call_id,

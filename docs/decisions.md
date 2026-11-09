@@ -462,3 +462,65 @@ Active time measured with a timer. Coding agents also ran in the background betw
 - Total so far: 4h44
 
 Work continued with Claude Code during Step 5, after reaching usage limits on Codex.
+
+## 2026-11-09: voice trace review and code-owned booking read-back
+
+All three supplied session traces used catalog_scheduler_test revision e3822739.
+That copy's handoff task still instructed staff follow-up. Both saved handoff
+tasks are corrected. A transition guard now checks the actual last patient
+transcript for a human request, rather than trusting the model's boolean.
+Call 2 (29ec30f7) handed off with reason "Patient prefers to book with
+cardiologist", which is not a human request. Call 3 (df88c81d) never persisted
+Midtown; its resolver first selected loc_002 (North Beach). It has exactly one
+book_appointment trace and one booking ID. Duplicate speech is not evidence of
+two bookings. No client event logs were attached, so precise audio/completion
+timing cannot be reconstructed from tool traces alone.
+
+Shared scheduling_dialogue.py now observes final patient transcripts before
+aggregation. Explicit location names override model-supplied location IDs;
+stated specialty disambiguates cached provider candidates. Code renders offers
+and final recaps from the engine's names, DOB, weekday/date/time. The adapter no
+longer manufactures a confirmation inside book_appointment: a rendered read-back
+and subsequent affirmative patient turn are required; correction/interruption
+invalidates consent. Raw core confirmation methods remain available to unit tests.
+
+OpenAI parallel_tool_calls is disabled. Installed Flows runs inference after
+each non-transition result; parallel resolver calls were observed in calls 2/3.
+BookingSpeech suppresses pre-tool prose and retains one code-owned offer until
+the final assistant response. The independent silent-cutoff TTS processor is
+removed from voice wiring to eliminate its separate speech source; the class
+remains available but unused. Wait/stop produces a change question, not a recap.
+Speech is buffered to response completion, adding latency; acoustic delivery
+and interruptions still need a real voice test. No paid calls were made.
+
+Prompt counts (characters, excluding JSON syntax): canonical persona 1373 to
+1065; all task contents 7667 to 6992. Test copy persona 530 unchanged; tasks
+325 to 251. Removed redundant model-owned offer/confirmation/closing directions.
+New offline regressions cover specialty disambiguation, false handoff, transcript
+Midtown precedence, read-back consent, wait and idempotent booking.
+
+## 2026-11-09: offline negation, conflict and consent follow-up
+
+The previous location loop treated every mentioned site as positive and chose
+by catalog iteration order. It now excludes negated clauses, distinguishes
+Mission Bay from Mission District, and asks on multiple positive sites. A
+transcript/model location mismatch returns location_conflict without applying
+the model update; find_slots and booking remain blocked until the caller names
+the location again. BookingSpeech emits the clarification from code. This is
+bounded lexical parsing, not general natural-language understanding.
+
+Handoff checks request verbs rather than bare mentions. Tests accept "can I talk
+to someone?" and "I'd like to speak to a person", and reject the front-desk
+anecdote. Consent uses an explicit phrase allowlist with a correction/negation
+veto: yes, yeah/sure, that's fine and okay/book it are covered; no, wait and
+actually never authorize booking. Consent still requires a prior matching
+read-back. No silent-cutoff speaker is wired: noise/fillers should not interrupt,
+but if a false real-word transcript causes a cut-off, there is no automatic
+recovery speech; the session waits for patient input or its idle timeout.
+
+Offline suite: 69 collected, 67 passed, 2 paid checks skipped. No paid calls.
+Buffering delays TTS submission from first token to model-response completion.
+Historical voice model timings (128 nonempty calls with both metrics) show a
+116 ms median and 210 ms p90 for processing latency minus TTFB. These pre-change
+timings estimate generation-tail overhead, not measured additional audio latency;
+TTS already buffers text and tool calls are included in this aggregate.

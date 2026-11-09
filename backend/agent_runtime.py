@@ -21,6 +21,7 @@ from pipecat_flows import FlowManager
 
 from agent_builder import AgentBuilder
 from metrics_logging import TurnMetricsObserver
+from scheduling_dialogue import PatientInput, BookingSpeech
 
 
 BACKEND_DIR = Path(__file__).parent
@@ -80,7 +81,7 @@ def build_agent_runtime(
 
     llm = OpenAILLMService(
         api_key=os.environ["OPENAI_API_KEY"],
-        settings=OpenAILLMService.Settings(model=builder.config.model),
+        settings=OpenAILLMService.Settings(model=builder.config.model, extra={"parallel_tool_calls": False}),
     )
     context = LLMContext()
     context_aggregator = LLMContextAggregatorPair(context, user_params=user_params)
@@ -88,8 +89,10 @@ def build_agent_runtime(
     pipeline = Pipeline(
         [
             *(input_processors or []),
+            *([PatientInput(builder.dialogue)] if hasattr(builder, "dialogue") else []),
             context_aggregator.user(),
             llm,
+            *([BookingSpeech(builder.dialogue)] if hasattr(builder, "dialogue") else []),
             *(output_processors or []),
             context_aggregator.assistant(),
         ]

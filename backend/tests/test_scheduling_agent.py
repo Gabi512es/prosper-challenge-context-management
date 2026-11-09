@@ -74,6 +74,7 @@ class SchedulingAgentAdapterTest(unittest.IsolatedAsyncioTestCase):
         node = builder.build_initial_node()
         functions = {function.name: function for function in node["functions"]}
         manager = SimpleNamespace(state={})
+        builder.dialogue.patient("I want a human representative")
 
         result, next_node = await functions["request_human_transfer"].handler(
             {

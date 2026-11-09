@@ -10,6 +10,7 @@ from agent_builder import AgentBuilder
 from scheduling import SchedulingEngine
 from scheduling.catalog import Catalog
 from scheduling.engine import SchedulingError
+from scheduling_dialogue import SchedulingDialogue
 
 
 BACKEND_DIR = Path(__file__).parent
@@ -46,15 +47,32 @@ def build_scheduling_agent(
         "agent_revision": hashlib.sha256(raw).hexdigest(),
         "availability_mode": availability_mode,
     }
+    builder.dialogue = engine.dialogue
+    builder.transition_guard = lambda name: name != "request_human_transfer" or engine.dialogue.handoff_requested()
     return builder
 
 
 def build_scheduling_tool_registry(
     engine: SchedulingEngine,
 ) -> dict[str, FlowsFunctionSchema]:
+    if not hasattr(engine, "dialogue"):
+        engine.dialogue = SchedulingDialogue(engine)
     async def resolve_options(args: dict, flow_manager):
         try:
             updates = dict(args)
+            if engine.dialogue.location:
+                requested = updates.get("location_id")
+                if updates.get("location_query"):
+                    matches = engine.catalog.search("location", updates["location_query"])
+                    requested = matches[0]["id"] if len(matches) == 1 else None
+                if requested and requested != engine.dialogue.location:
+                    name = engine.catalog.locations_by_id[engine.dialogue.location].name
+                    engine.dialogue.location_conflict = f"I heard {name}, but the requested location differs. Which location would you like?"
+                    return {"status": "clarify", "code": "location_conflict", "message": engine.dialogue.location_conflict}
+                updates["location_id"] = engine.dialogue.location
+                updates.pop("location_query", None)
+            if engine.dialogue.specialty:
+                updates["provider_specialty"] = engine.dialogue.specialty
             if "patient_name" in updates:
                 updates["name"] = updates.pop("patient_name")
             return engine.resolve_options(updates)
@@ -69,15 +87,23 @@ def build_scheduling_tool_registry(
 
     async def find_slots(args: dict, flow_manager):
         try:
-            return engine.find_slots(args.get("horizon_days", 7))
+            if engine.dialogue.location_conflict:
+                return {"status": "clarify", "code": "location_conflict"}
+            result = engine.find_slots(args.get("horizon_days", 7))
+            if result.get("slots"):
+                engine.dialogue.pending = ("offer", result["slots"][0])
+            return result
         except SchedulingError as error:
             return {"status": "error", "code": error.code, "message": str(error)}
 
     async def book_appointment(args: dict, flow_manager):
         try:
-            engine.select_slot(args["slot_id"])
-            engine.confirm_selected_slot()
-            return engine.book_appointment(args["slot_id"])
+            if engine.dialogue.location_conflict:
+                return {"status": "clarify", "code": "location_conflict"}
+            result = engine.book_appointment(args["slot_id"])
+            if result["status"] == "booked":
+                engine.dialogue.pending = ("booked", result["booking"])
+            return result
         except SchedulingError as error:
             return {"status": "error", "code": error.code, "message": str(error)}
 

@@ -51,7 +51,7 @@
       "task_messages": [
         {
           "role": "developer",
-          "content": "Acknowledge the request for human help and stop the automated scheduling flow. Explain that this prototype cannot complete a live transfer, so clinic staff must follow up. Do not claim that a live connection or booking occurred."
+          "content": "This prototype cannot transfer calls or record callbacks. Give the catalog clinic phone from a tool result and ask whether the caller needs anything else."
         }
       ],
       "role_message": null,

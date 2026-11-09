@@ -148,6 +148,9 @@ class AgentBuilder:
 
     def _make_edge_function(self, edge: Edge) -> FlowsFunctionSchema:
         async def handler(args: dict, flow_manager: FlowManager):
+            guard = getattr(self, "transition_guard", None)
+            if guard and not guard(edge.function):
+                return {"status": "error", "code": "explicit_human_request_required"}
             # Persist what the caller gave us so later nodes can use it.
             flow_manager.state.update(args)
             logger.info(f"[{edge.function}] -> {edge.target} | collected: {args}")

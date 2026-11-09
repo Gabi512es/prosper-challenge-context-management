@@ -65,6 +65,8 @@ def build_agent_runtime(
     idle_timeout_secs: float | None = None,
 ) -> AgentRuntime:
     """Build one agent pipeline while allowing only I/O processors to vary."""
+    if {"find_slots", "book_appointment"}.intersection(builder.function_names) and not hasattr(builder, "dialogue"):
+        raise ValueError("Scheduling tools require their policy-bearing registry; refusing an unguarded runtime.")
     call_id = call_id or str(uuid4())
     requested_run_id = run_id or os.getenv("EVAL_RUN_ID")
     run_id = requested_run_id or call_id

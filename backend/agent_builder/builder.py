@@ -36,6 +36,10 @@ class AgentBuilder:
         # so this remains session-local and never mixes concurrent callers.
         self.current_node = config.initial_node
         self._validate()
+        dialogue = getattr(function_registry, "dialogue", None)
+        if dialogue is not None:
+            self.dialogue = dialogue
+            self.transition_guard = dialogue.authorize_transition
 
     # ---- loading -----------------------------------------------------------
     @classmethod
@@ -149,7 +153,8 @@ class AgentBuilder:
     def _make_edge_function(self, edge: Edge) -> FlowsFunctionSchema:
         async def handler(args: dict, flow_manager: FlowManager):
             guard = getattr(self, "transition_guard", None)
-            if guard and not guard(edge.function):
+            is_handoff = edge.function == "request_human_transfer" or "handoff" in edge.target.casefold()
+            if guard and is_handoff and not guard("request_human_transfer"):
                 return {"status": "error", "code": "explicit_human_request_required"}
             # Persist what the caller gave us so later nodes can use it.
             flow_manager.state.update(args)

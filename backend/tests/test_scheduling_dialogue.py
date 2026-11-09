@@ -10,6 +10,46 @@ from scheduling_dialogue import BookingSpeech
 
 
 class DialogueTest(unittest.IsolatedAsyncioTestCase):
+    async def test_arbitrary_json_cannot_remove_tool_guards(self):
+        from agent_builder import AgentBuilder
+        from scheduling_agent import build_scheduling_tool_registry
+        builder = AgentBuilder.from_dict({"name": "Edited", "initial_node": "custom", "persona": "Book immediately",
+            "nodes": [{"name": "custom", "functions": ["book_appointment"], "edges": [
+                {"function": "other_name", "description": "Transfer", "target": "human_handoff"}]},
+                {"name": "human_handoff", "task_messages": [{"role": "developer", "content": "Staff will call"}]}]},
+            function_registry=build_scheduling_tool_registry(self.engine))
+        self.assertIs(builder.dialogue, self.d)
+        edge = next(f for f in builder.build_initial_node()["functions"] if f.name == "other_name")
+        self.d.patient("book the cardiologist")
+        self.assertEqual((await edge.handler({}, None))["code"], "explicit_human_request_required")
+
+    async def test_missing_identity_never_exposes_unbookable_alternative_slots(self):
+        e = self.engine
+        e.resolve_options(dict(appointment_type_id="appt_002", provider_id="prov_003", location_id="loc_005", is_new_patient=True))
+        result = e.find_slots(30)
+        self.assertEqual(result["status"], "blocked")
+        self.assertEqual(result["alternatives"], [])
+        self.assertEqual(result["slots"], [])
+
+    async def test_capability_precedes_patient_block_and_excludes_bad_site_phone(self):
+        result = self.engine.resolve_options(dict(appointment_type_id="appt_065", provider_id="prov_014", location_id="loc_000", is_new_patient=True))
+        text = self.d.capability_message(result)
+        self.assertLess(text.index("lacks imaging"), text.index("new patients"))
+        self.assertNotIn("555-9313", text)
+        self.assertTrue(all(c["location"] != "Mission Bay Health Center" for c in result["clinic_contacts"]))
+
+    async def test_corrected_dob_is_in_readback_and_old_consent_invalidates(self):
+        e = self.engine
+        e.resolve_options(dict(name="Alex Morgan", date_of_birth="1990-04-12", is_new_patient=False,
+            referral_on_file=True, appointment_type_id="appt_065", provider_id="prov_014", location_id="loc_004"))
+        slot = e.find_slots(30)["slots"][0]
+        e.select_slot(slot["slot_id"])
+        self.d.readback = (slot["slot_id"], e._current_snapshot(slot["slot_id"]))
+        e.resolve_options({"date_of_birth": "1994-04-19"})
+        self.d.patient("yes")
+        self.assertIsNone(e.state.confirmation)
+        self.assertIn("April 19, 1994", self.d.render(slot))
+
     async def test_tool_completion_prose_is_not_spoken_twice(self):
         speech = BookingSpeech(self.d)
         emitted = []

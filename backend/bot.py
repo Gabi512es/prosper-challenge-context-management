@@ -35,6 +35,7 @@ from pipecat.workers.runner import WorkerRunner
 from agent_builder import AgentBuilder
 from agent_runtime import build_agent_runtime
 from scheduling_runtime import load_selected_scheduling_agent
+from code_identity import GIT_COMMIT, CODE_VERSION, CODE_REVISION
 
 
 transport_params = {
@@ -50,6 +51,7 @@ async def run_bot(
     builder.set_function_handler_wrapper(tool_trace_wrapper(
         call_id, builder, Path(__file__).parent / "logs" / "voice-tools.jsonl"))
     logger.info(f"Starting '{config.name}' with {len(config.nodes)} nodes")
+    logger.info(f"Voice code | git_commit={GIT_COMMIT} code_version={CODE_VERSION} code_revision={CODE_REVISION}")
 
     stt = ElevenLabsRealtimeSTTService(api_key=os.environ["ELEVENLABS_API_KEY"],
         settings=ElevenLabsRealtimeSTTService.Settings(language=Language.EN))

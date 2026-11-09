@@ -72,6 +72,35 @@ class SchedulingDialogue:
             r"\b(?:want|need|request)\s+(?:a\s+|an\s+)?(?:human|representative|staff member|real person)\b|\btransfer me\b",
             self.patient_text, re.I)) and not bool(re.search(r"\b(?:don't|do not)\s+(?:want|need)\b", self.patient_text, re.I))
 
+    def authorize_transition(self, name):
+        if name != "request_human_transfer":
+            return True
+        if not self.handoff_requested():
+            return False
+        contacts = self.engine._clinic_contacts()
+        message = "This prototype cannot connect a live transfer or record a callback."
+        if contacts:
+            message += f" You can call {contacts[0]['location']} at {contacts[0]['phone']}."
+        self.pending = ("message", message)
+        return True
+
+    def capability_message(self, result):
+        issues = result.get("blocked_options", result.get("issues", []))
+        blocked = next((i for i in issues if i.get("code") == "location_missing_capability"), None)
+        if not blocked:
+            return None
+        site = self.engine._location()
+        service = self.engine._appointment_type()
+        contacts = self.engine._clinic_contacts()
+        message = f"{site.name} cannot provide {service.name} because it lacks {blocked['required_capability']}. "
+        if any(i.get("code") == "new_patient_type_restricted" for i in issues):
+            message += "This service also does not accept new patients. "
+        if contacts:
+            message += f"You can call {contacts[0]['location']} at {contacts[0]['phone']} to discuss options."
+        else:
+            message += "Would you like help finding another service?"
+        return message
+
     def render(self, slot, booked=False):
         e = self.engine
         facts = e.state.patient_facts
@@ -134,7 +163,7 @@ class BookingSpeech(FrameProcessor):
             elif self.d.pending:
                 kind, slot = self.d.pending
                 self.d.pending = None
-                text = self.d.render(slot, booked=kind == "booked")
+                text = slot if kind == "message" else self.d.render(slot, booked=kind == "booked")
                 if kind == "offer":
                     self.d.engine.select_slot(slot["slot_id"])
                     self.d.readback = (slot["slot_id"], self.d.engine._current_snapshot(slot["slot_id"]))

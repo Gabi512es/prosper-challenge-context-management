@@ -7,6 +7,7 @@ import re
 from datetime import datetime, timezone
 from pathlib import Path
 from time import monotonic
+from code_identity import GIT_COMMIT, CODE_VERSION, CODE_REVISION
 
 from pipecat.frames.frames import (InterruptionFrame, TranscriptionFrame,
     InterimTranscriptionFrame, TTSSpeakFrame, EndFrame, CancelFrame)
@@ -90,6 +91,7 @@ def tool_trace_wrapper(call_id, builder, output_path: Path):
                 output_path.parent.mkdir(parents=True, exist_ok=True)
                 metadata = getattr(builder, "session_metadata", None) or {}
                 row = dict(timestamp=datetime.now(timezone.utc).isoformat(), call_id=call_id,
+                    git_commit=GIT_COMMIT, code_version=CODE_VERSION, code_revision=CODE_REVISION,
                     agent_id=metadata.get("agent_id"),
                     agent_revision=metadata.get("agent_revision"),
                     availability_mode=metadata.get("availability_mode"),

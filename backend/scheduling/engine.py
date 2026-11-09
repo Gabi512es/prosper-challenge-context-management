@@ -169,7 +169,7 @@ class SchedulingEngine:
                 "relaxed": [],
                 "slots": [],
                 "issues": issues,
-                "alternatives": self._slot_alternatives(horizon_days, limit),
+                "alternatives": [] if any(i["kind"] == "missing" for i in issues) else self._slot_alternatives(horizon_days, limit),
                 "clinic_contacts": self._clinic_contacts(),
             }
         horizon = self.now + timedelta(days=horizon_days)
@@ -559,6 +559,11 @@ class SchedulingEngine:
 
     def _clinic_contacts(self) -> list[dict]:
         locations = [self._location()] if self._location() else self.catalog.locations
+        service = self._appointment_type()
+        if service and service.required_capability:
+            locations = [loc for loc in locations if service.required_capability in loc.capabilities]
+            if not locations:
+                locations = [loc for loc in self.catalog.locations if service.required_capability in loc.capabilities]
         return [{"location": item.name, "phone": item.phone, "hours": item.hours} for item in locations]
 
     def _present_slot(self, slot: Slot) -> dict:

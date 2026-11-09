@@ -23,6 +23,13 @@ SCHEDULING_TOOL_NAMES = (
 )
 
 
+class SchedulingToolRegistry(dict):
+    """Carries mandatory dialogue policy to every builder using these tools."""
+    def __init__(self, tools, dialogue):
+        super().__init__(tools)
+        self.dialogue = dialogue
+
+
 def build_scheduling_agent(
     engine: SchedulingEngine,
     catalog: Catalog,
@@ -48,7 +55,6 @@ def build_scheduling_agent(
         "availability_mode": availability_mode,
     }
     builder.dialogue = engine.dialogue
-    builder.transition_guard = lambda name: name != "request_human_transfer" or engine.dialogue.handoff_requested()
     return builder
 
 
@@ -75,7 +81,11 @@ def build_scheduling_tool_registry(
                 updates["provider_specialty"] = engine.dialogue.specialty
             if "patient_name" in updates:
                 updates["name"] = updates.pop("patient_name")
-            return engine.resolve_options(updates)
+            result = engine.resolve_options(updates)
+            message = engine.dialogue.capability_message(result)
+            if message:
+                engine.dialogue.pending = ("message", message)
+            return result
         except SchedulingError as error:
             return {"status": "error", "code": error.code, "message": str(error)}
 
@@ -92,6 +102,15 @@ def build_scheduling_tool_registry(
             result = engine.find_slots(args.get("horizon_days", 7))
             if result.get("slots"):
                 engine.dialogue.pending = ("offer", result["slots"][0])
+            else:
+                message = engine.dialogue.capability_message(result)
+                missing = [i["field"] for i in result.get("issues", []) if i["kind"] == "missing"]
+                if missing:
+                    message = message or "Before I can offer bookable slots, please confirm: " + ", ".join(missing).replace("_", " ") + "."
+                if not message and result.get("alternatives"):
+                    sites = list(dict.fromkeys(a["slot"]["location"] for a in result["alternatives"]))
+                    message = "No slots match the current request. Other locations to consider are " + " or ".join(sites[:2]) + ". Would you like to change your constraints and search again?"
+                engine.dialogue.pending = ("message", message or "No matching slots are available. Would you like to change your search constraints?")
             return result
         except SchedulingError as error:
             return {"status": "error", "code": error.code, "message": str(error)}
@@ -107,7 +126,7 @@ def build_scheduling_tool_registry(
         except SchedulingError as error:
             return {"status": "error", "code": error.code, "message": str(error)}
 
-    return {
+    return SchedulingToolRegistry({
         "resolve_options": FlowsFunctionSchema(
             name="resolve_options",
             description=(
@@ -181,4 +200,4 @@ def build_scheduling_tool_registry(
             required=["slot_id"],
             handler=book_appointment,
         ),
-    }
+    }, engine.dialogue)

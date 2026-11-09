@@ -92,10 +92,14 @@ Not built: catalog CRUD, auth, multi-tenancy, real calendar, reschedule/cancel, 
 
 ## 7. Working rules for the agent
 
-- Voice regression gate (user instruction, 2026-11-09): after each code-change
-  batch, run the paid smoke DEV-012, DEV-002, DEV-008 and DEV-009 once each
-  before handing back for voice testing. Report failures and actual cost; this
-  authorizes that smoke, not a paid matrix. Keep scenarios/expected outcomes fixed.
+- API spend rule (user instruction, 2026-11-09): batch fixes, then one smoke
+  only when the booking or resolution code path changed. No paid run after every
+  change, and never for docs, logs, tests or prompt wording alone. Before ANY
+  paid run, provide a cost estimate and wait for the user's explicit go,
+  regardless of amount. A full matrix also requires explicit approval.
+  Approved smokes run each selected case once (usual DEV-012/002/008/009).
+  Report actual cost and failures; keep scenarios and expected outcomes fixed.
+  This rule supersedes earlier spend/smoke policies. See docs/costs.md for the ledger.
 
 - Keep a decision log in `docs/decisions.md`: date, options, choice, reason, the measurement behind it.
 - Measure before claiming. Raw numbers come from logs, never from estimates.

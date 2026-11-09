@@ -54,7 +54,9 @@ cd backend
 LOGURU_LEVEL=WARNING .venv/bin/python -m evals.dev_matrix --repetitions 3 --concurrency 3
 ```
 
-Ask before any paid calls, including text, matrix, or connecting voice.
+Spend rule updated 2026-11-09: estimate before any paid run; wait for the user's
+go above $1. Smoke only after booking/resolution changes, once per selected case.
+A full matrix always requires explicit approval. See `AGENTS.md` and `docs/costs.md`.
 Keys belong only in `backend/.env`, never committed or printed. To build the
 editor: `npm --prefix frontend run build`. Python tests must run via `make test`
 or from `backend`; root unittest discovery without PYTHONPATH fails imports.
@@ -109,7 +111,7 @@ single-user. The baseline comparison and proposed freeze are still outstanding.
   `backend/evals/dev_scenarios.json`; do not seek other eval files or held-out data.
   Loader checks the catalog git blob SHA against the scenario pin and fails on mismatch.
 - Both arms must use the same canonical scorer version. Preserve raw failed runs;
-  disclose scorer corrections. No paid calls without asking. Log decisions in
+  disclose scorer corrections. Follow the spend rule above. Log decisions in
   `docs/decisions.md`. Never repair catalog gaps or silently relax hard constraints.
 - Explicit resolved choices remain in state even when incompatible, so policy
   results explain the block. Alternative previews do not authorize booking;

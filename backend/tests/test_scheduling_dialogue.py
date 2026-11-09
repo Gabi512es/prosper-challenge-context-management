@@ -1,7 +1,7 @@
 import unittest
 from datetime import datetime
 from pathlib import Path
-from pipecat.frames.frames import LLMFullResponseEndFrame, LLMFullResponseStartFrame, LLMTextFrame, TranscriptionFrame
+from pipecat.frames.frames import LLMFullResponseEndFrame, LLMFullResponseStartFrame, LLMTextFrame, TranscriptionFrame, InterruptionFrame
 from pipecat.processors.frame_processor import FrameDirection
 from scheduling import SchedulingEngine, load_catalog
 from scheduling.demo import generate_demo_availability
@@ -10,6 +10,42 @@ from scheduling_dialogue import BookingSpeech, PatientInput
 
 
 class DialogueTest(unittest.IsolatedAsyncioTestCase):
+    async def test_two_phase_accepts_second_slot_and_yes_during_interruption(self):
+        e = self.engine
+        e.resolve_options(dict(name="Alex Morgan", date_of_birth="1990-04-12", is_new_patient=False,
+            referral_on_file=True, appointment_type_id="appt_065", provider_id="prov_014", location_id="loc_004"))
+        slots = e.find_slots(30)["slots"]
+        self.assertGreaterEqual(len(slots), 2)
+        target = slots[1]
+        book = next(f for f in self.builder.build_initial_node()["functions"] if f.name == "book_appointment")
+        first = await book.handler({"slot_id": target["slot_id"]}, None)
+        self.assertEqual(first["status"], "needs_confirmation")
+        self.assertFalse(first["technical_failure"])
+        self.assertFalse(e.bookings)
+        speech = BookingSpeech(self.d)
+        from unittest.mock import AsyncMock
+        speech.push_frame = AsyncMock()
+        await speech.process_frame(LLMFullResponseEndFrame(), FrameDirection.DOWNSTREAM)
+        self.assertIn("a knee MRI", first["readback"])
+        # Either frame ordering: bare interruption carries no veto.
+        await speech.process_frame(InterruptionFrame(), FrameDirection.DOWNSTREAM)
+        self.d.patient("Yeah, so yeah, you can book it")
+        await speech.process_frame(InterruptionFrame(), FrameDirection.DOWNSTREAM)
+        self.assertEqual((await book.handler({"slot_id": target["slot_id"]}, None))["status"], "booked")
+        self.assertEqual(e.bookings[0]["slot_id"], target["slot_id"])
+
+    async def test_missing_consent_reprepares_without_technical_failure(self):
+        e = self.engine
+        e.resolve_options(dict(name="Alex Morgan", date_of_birth="1990-04-12", is_new_patient=False,
+            referral_on_file=True, appointment_type_id="appt_065", provider_id="prov_014", location_id="loc_004"))
+        slot = e.find_slots(30)["slots"][0]
+        book = next(f for f in self.builder.build_initial_node()["functions"] if f.name == "book_appointment")
+        for _ in range(3):
+            result = await book.handler({"slot_id": slot["slot_id"]}, None)
+            self.assertEqual(result["status"], "needs_confirmation")
+            self.assertFalse(result["technical_failure"])
+        self.assertFalse(e.bookings)
+
     async def test_exact_voice_utterance_does_not_match_ent_inside_patient(self):
         from unittest.mock import AsyncMock
         processor = PatientInput(self.d)
@@ -136,8 +172,7 @@ class DialogueTest(unittest.IsolatedAsyncioTestCase):
         slots = e.find_slots(30)["slots"]
         slot = slots[0]
         book = next(f for f in self.builder.build_initial_node()["functions"] if f.name == "book_appointment")
-        self.assertNotEqual((await book.handler({"slot_id": slot["slot_id"]}, None))["status"], "booked")
-        self.d.pending = ("offer", slot)
+        self.assertEqual((await book.handler({"slot_id": slot["slot_id"]}, None))["status"], "needs_confirmation")
         speech = BookingSpeech(self.d)
         emitted = []
         async def capture(frame, direction=FrameDirection.DOWNSTREAM):
@@ -145,7 +180,7 @@ class DialogueTest(unittest.IsolatedAsyncioTestCase):
         speech.push_frame = capture
         await speech.process_frame(LLMFullResponseEndFrame(), FrameDirection.DOWNSTREAM)
         text = emitted[0].text
-        for fact in ("Alex Morgan", "April 12, 1990", "Linda Ramirez", "Downtown", "MRI - Knee", "Shall I book it?"):
+        for fact in ("Alex Morgan", "April 12, 1990", "Linda Ramirez", "Downtown", "a knee MRI", "Shall I book it?"):
             self.assertIn(fact, text)
         self.d.patient("Yes, please book it")
         self.assertEqual((await book.handler({"slot_id": slot["slot_id"]}, None))["status"], "booked")

@@ -593,3 +593,66 @@ Total both smokes $0.49749750. Costs use logged prompt/cached/completion tokens
 and existing dated 2026-11-07 gpt-4o rates, not estimates. Raw reports and JSONL
 are in backend/logs/evals/ with those run IDs. Existing deletion of
 catalog_scheduler_test.json was preserved, not performed by this fix.
+
+## 2026-11-09: two-phase booking and multi-slot demo regression
+
+Observed voice failures: abbf5267 returned confirmation_required after the MRI
+offer; 33382990 requested Midtown but the output layer had selected the first
+North Beach slot, causing slot_not_selected. A bare InterruptionFrame also
+cleared consent regardless of whether its transcript was an affirmative yes.
+
+book_appointment is now a two-phase tool with the same slot_id argument. Phase
+one revalidates the requested slot against session constraints, patient facts,
+opening hours and availability, selects internally, returns a generated readback
+and queues it for speech. Phase two books only after that readback and a later
+affirmative transcript. find_slots speech offers a slot but does not select or
+authorize it. Repeated calls without consent return needs_confirmation and the
+readback again, not a clinic referral. Validation failures return
+validation_required and a fresh-search next step. These protocol results carry
+technical_failure=false and are not technical errors. No numerical retry counter
+existed in the runtime; model instructions previously conflated status:error
+protocol refusals with real failures. Fault injection remains structured error
+output; it is separate from normal consent/selection/validation states.
+
+Interruption frames now cancel buffered text only. The actual patient transcript
+controls consent: veto/correction does not authorize booking; a plain yes across
+interruption frames remains valid. "Yeah, so yeah, you can book it" is accepted.
+Offline test covers both interruption/transcript orderings and choosing the
+second of several slots. Spoken service names generically reverse a spaced
+hyphen descriptor (MRI - Knee -> a knee MRI); no appointment-specific table.
+Code version is scheduling-booking-v4.
+
+Demo generation adds a second occurrence one week later when within the same
+two-week window: 760 valid combinations, 1,520 slots for these runs. Both demo
+smokes returned two eligible slots for the actual requested combination. Fixture
+evaluation still uses only the pinned scenario availability. No scenario or
+expected-outcome changes. `evals.smoke --demo DEV-012 DEV-002` uses generated
+availability with the same patient facts and canonical scorer; it is a separate
+demo integration, not a replacement for the fixture evaluations.
+
+Validation: make test collected 76 tests, 74 passed, 2 paid checks skipped.
+Fixture smoke smoke-20261109-120033-f175d3 passed DEV-012/002/008/009, with
+costs $0.052375/$0.078985/$0.04467250/$0.05815250 (total $0.234185).
+Demo smoke smoke-20261109-120039-2466b7 passed DEV-012/002, costs
+$0.050595/$0.07785750 (total $0.12845250). Total $0.36263750 using logged
+tokens and cached tokens at the recorded 2026-11-07 gpt-4o prices. Raw reports
+and per-model-call JSONL are in backend/logs/evals/ under those run IDs.
+Both demo transcripts show a separate offer, prepared readback with name/DOB,
+patient confirmation, then one booking recap. Real acoustic validation remains
+pending; no voice calls were placed by the coding agent.
+
+## 2026-11-09: API spend policy and retrospective cost ledger
+
+User policy supersedes the previous automatic smoke-after-every-change rule:
+show an estimate before any paid run; above $1 wait for the user's go. Smoke
+only for booking/resolution changes, once per selected case. Full matrices need
+explicit approval at any estimated cost. Documentation changes need no smoke.
+
+Built docs/costs.md offline from all existing usage JSONL, including runs without
+reports and default/voice sessions. Deduplicated by (call_id, turn), zero duplicates.
+1,729 model-call rows, 38 with incomplete usage. Known gpt-4o cost at the recorded
+2026-11-07 prices: eval/text $6.90709250; default/voice OpenAI component
+$0.81677000; combined known subtotal $7.72386250. This is not total billed spend:
+unknown-usage calls, complete voice costs, ElevenLabs and coding-agent usage are
+not measured. Report/rescore copies are not additional calls. No paid API calls,
+runtime code changes or scenario changes were made for this ledger.

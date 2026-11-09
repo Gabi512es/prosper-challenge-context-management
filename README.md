@@ -26,6 +26,13 @@ Remember to update the `.env` file accordingly.
 
 ## Graph editor
 
+The multi-slot demo integration smoke is run from `backend` with
+`LOGURU_LEVEL=WARNING .venv/bin/python -m evals.smoke --demo DEV-012 DEV-002`.
+It makes paid OpenAI calls and uses generated availability; ordinary smoke and
+matrix runs retain closed-world fixtures. Booking uses two calls to the same
+tool: prepare/read back, then book after patient consent. Restart the voice
+process to load code version `scheduling-booking-v4` before testing it.
+
 The current scheduling graph is **Catalog Scheduler proposed-v2**. For a voice
 regression check, restart `make run` after changing Python code, then select this
 agent in the editor and click **Test call**. Older duplicated agents retain their

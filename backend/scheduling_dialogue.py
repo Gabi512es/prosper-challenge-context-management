@@ -26,6 +26,8 @@ class SchedulingDialogue:
             return False
         normalized = re.sub(r"[.,!?]", " ", text)
         normalized = " ".join(normalized.split())
+        if re.fullmatch(r"(?:yeah|yes)(?: so)?(?: yeah| yes)?(?: you can)? book it", normalized):
+            return True
         if re.fullmatch(r"yes i confirm (?:the|that) exact (?:provider|clinician|earliest|slot|location|service|date|time|and| )+ please book it", normalized):
             return True
         return bool(re.fullmatch(r"(?:yes|yeah|correct|i confirm|please book(?: it)?|that's fine|okay,? book it)(?:[, ]+(?:please|sure|book it|please book it|that exact provider, location, service, date, and time))*", text))
@@ -113,9 +115,29 @@ class SchedulingDialogue:
         date = start.strftime("%A %B %d").replace(" 0", " ")
         time = start.strftime("%I:%M %p").lstrip("0")
         intro = "Booked" if booked else "I'll book"
-        return (f"{intro} {slot['service']} for {facts.name}, born {dob}, with {slot['provider']} "
+        return (f"{intro} {self.spoken_service(slot['service'])} for {facts.name}, born {dob}, with {slot['provider']} "
                 f"at {slot['location']}, {date} at {time}. " +
                 ("Is there anything else I can help with?" if booked else "Shall I book it?"))
+
+    @staticmethod
+    def spoken_service(name):
+        parts = re.split(r"\s+-\s+", name, maxsplit=1)
+        phrase = (parts[1].lower() + " " + parts[0]) if len(parts) == 2 else name
+        return ("an " if phrase[0].lower() in "aeiou" else "a ") + phrase
+
+    def prepare_booking(self, slot_id):
+        # Revalidate against the live session and full availability, rather
+        # than requiring a separate model selection or a truncated offer list.
+        self.engine.find_slots(30, limit=len(self.engine._slots))
+        slot = self.engine.select_slot(slot_id)
+        slot = self.engine._present_slot(self.engine._slots[slot_id])
+        # No consent is created here. Only a subsequent patient turn can do so.
+        self.engine.state.confirmation = None
+        self.readback = None
+        text = self.render(slot)
+        self.pending = ("prepare", slot)
+        return {"status": "needs_confirmation", "technical_failure": False,
+                "next_action": "say_readback_and_wait_for_patient", "slot_id": slot_id, "readback": text}
 
 
 class PatientInput(FrameProcessor):
@@ -140,8 +162,8 @@ class BookingSpeech(FrameProcessor):
     async def process_frame(self, frame, direction):
         await super().process_frame(frame, direction)
         if isinstance(frame, InterruptionFrame):
-            self.d.readback = None
-            self.d.engine.state.confirmation = None
+            # Interruption frames carry no semantics. PatientInput decides
+            # consent from the transcript, including affirmative barge-in.
             self.text = []
         if isinstance(frame, LLMFullResponseStartFrame):
             self.text = []
@@ -167,9 +189,13 @@ class BookingSpeech(FrameProcessor):
             elif self.d.pending:
                 kind, slot = self.d.pending
                 self.d.pending = None
-                text = slot if kind == "message" else self.d.render(slot, booked=kind == "booked")
                 if kind == "offer":
-                    self.d.engine.select_slot(slot["slot_id"])
+                    start = datetime.fromisoformat(slot["start"])
+                    text = (f"There is {self.d.spoken_service(slot['service'])} with {slot['provider']} at {slot['location']}, "
+                            f"{start.strftime('%A %B %d at %I:%M %p')}. Would you like this slot?")
+                else:
+                    text = slot if kind == "message" else self.d.render(slot, booked=kind == "booked")
+                if kind == "prepare":
                     self.d.readback = (slot["slot_id"], self.d.engine._current_snapshot(slot["slot_id"]))
             if re.search(r"hold on|connect you|staff.{0,15}follow up|someone.{0,15}reach out", text, re.I):
                 contacts = self.d.engine._clinic_contacts()

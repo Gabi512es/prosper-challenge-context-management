@@ -154,7 +154,7 @@ class _PatientDriver:
         return " I do not have a referral on file."
 
 
-async def run_dev_case(scenario_id: str, *, run_id: str) -> ScenarioTextRun:
+async def run_dev_case(scenario_id: str, *, run_id: str, demo_availability: bool = False) -> ScenarioTextRun:
     """Run one development case without exposing its expected outcome to the agent."""
     dataset = load_dev_scenarios()
     scenarios = {item["id"]: item for item in dataset["scenarios"]}
@@ -162,12 +162,14 @@ async def run_dev_case(scenario_id: str, *, run_id: str) -> ScenarioTextRun:
         raise ValueError(f"Unknown development scenario: {scenario_id}")
     scenario = scenarios[scenario_id]
     catalog = load_catalog(DEFAULT_CATALOG_PATH)
+    now = datetime.fromisoformat("2026-11-07T00:00:00-08:00")
+    from scheduling.demo import generate_demo_availability
     engine = SchedulingEngine(
         catalog,
-        scenario["availability_fixture"],
-        now=datetime.fromisoformat("2026-11-07T00:00:00-08:00"),
+        generate_demo_availability(catalog, now) if demo_availability else scenario["availability_fixture"],
+        now=now,
     )
-    builder = build_scheduling_agent(engine, catalog, availability_mode="eval_fixture")
+    builder = build_scheduling_agent(engine, catalog, availability_mode="demo_generated" if demo_availability else "eval_fixture")
     session = TextAgentSession(
         builder=builder,
         run_id=run_id,

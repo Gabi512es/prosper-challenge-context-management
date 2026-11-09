@@ -49,5 +49,5 @@ class VoiceSupportTest(unittest.IsolatedAsyncioTestCase):
             self.assertEqual(row["arguments"], {"location_query": "Midtown"})
             self.assertEqual(row["result"], {"status": "blocked"})
             self.assertRegex(row["git_commit"], r"^[a-f0-9]{40}$")
-            self.assertEqual(row["code_version"], "scheduling-guards-v3")
+            self.assertEqual(row["code_version"], "scheduling-booking-v4")
             self.assertRegex(row["code_revision"], r"^[a-f0-9]{64}$")

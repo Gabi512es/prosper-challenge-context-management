@@ -30,4 +30,11 @@ def generate_demo_availability(catalog, now: datetime, seed: int = 42) -> list[d
                 slots.append(dict(slot_id=f"demo-{provider.id}-{location_id}-{type_id}", provider_id=provider.id,
                     location_id=location_id, appointment_type_id=type_id, start=start.isoformat(), end=end.isoformat()))
                 cursor = end
-    return slots
+    repeated = []
+    for slot in slots:
+        start = datetime.fromisoformat(slot["start"]) + timedelta(days=7)
+        end = datetime.fromisoformat(slot["end"]) + timedelta(days=7)
+        if end <= local + timedelta(days=14):
+            repeated.append({**slot, "slot_id": slot["slot_id"] + "-week2",
+                             "start": start.isoformat(), "end": end.isoformat()})
+    return slots + repeated

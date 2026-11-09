@@ -119,12 +119,18 @@ def build_scheduling_tool_registry(
         try:
             if engine.dialogue.location_conflict:
                 return {"status": "clarify", "code": "location_conflict"}
-            result = engine.book_appointment(args["slot_id"])
+            slot_id = args["slot_id"]
+            if not any(b["slot_id"] == slot_id for b in engine.bookings) and (
+                engine.state.confirmation is None or engine.state.selected_slot_id != slot_id):
+                return engine.dialogue.prepare_booking(slot_id)
+            result = engine.book_appointment(slot_id)
             if result["status"] == "booked":
                 engine.dialogue.pending = ("booked", result["booking"])
             return result
         except SchedulingError as error:
-            return {"status": "error", "code": error.code, "message": str(error)}
+            engine.dialogue.pending = ("message", "The slot needs revalidation. Please choose a slot from a fresh availability search.")
+            return {"status": "validation_required", "technical_failure": False,
+                    "code": error.code, "message": str(error), "next_action": "find_slots_then_prepare_booking"}
 
     return SchedulingToolRegistry({
         "resolve_options": FlowsFunctionSchema(
@@ -193,8 +199,9 @@ def build_scheduling_tool_registry(
         "book_appointment": FlowsFunctionSchema(
             name="book_appointment",
             description=(
-                "Book an offered slot after explicit patient confirmation. Revalidates the "
-                "current state and is idempotent."
+                "Two-phase booking. Call with the chosen slot id to validate and prepare an exact read-back. "
+                "Say the returned readback and wait for the patient. Call again with the same slot after yes to book. "
+                "needs_confirmation and validation_required are normal protocol steps, never technical failures."
             ),
             properties={"slot_id": {"type": "string"}},
             required=["slot_id"],

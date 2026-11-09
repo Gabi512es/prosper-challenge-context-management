@@ -66,6 +66,12 @@ def build_scheduling_tool_registry(
     async def resolve_options(args: dict, flow_manager):
         try:
             updates = dict(args)
+            if engine.dialogue.location_intent_question:
+                return {"status": "clarify", "message": engine.dialogue.location_intent_question}
+            if engine.dialogue.global_soonest:
+                for key in ("provider_id", "provider_query", "provider_specialty", "location_id", "location_query"):
+                    updates.pop(key, None)
+                updates.update(any_provider=True, any_location=True)
             if engine.dialogue.location:
                 requested = updates.get("location_id")
                 if updates.get("location_query"):
@@ -77,7 +83,7 @@ def build_scheduling_tool_registry(
                     return {"status": "clarify", "code": "location_conflict", "message": engine.dialogue.location_conflict}
                 updates["location_id"] = engine.dialogue.location
                 updates.pop("location_query", None)
-            if engine.dialogue.specialty:
+            if engine.dialogue.specialty and not engine.dialogue.global_soonest:
                 updates["provider_specialty"] = engine.dialogue.specialty
             if "patient_name" in updates:
                 updates["name"] = updates.pop("patient_name")
@@ -85,6 +91,9 @@ def build_scheduling_tool_registry(
             message = engine.dialogue.capability_message(result)
             if message:
                 engine.dialogue.pending = ("message", message)
+            identity_step = engine.dialogue.require_identity() if all(engine.dialogue.identity()) else None
+            if identity_step:
+                result["identity_confirmation"] = identity_step
             return result
         except SchedulingError as error:
             return {"status": "error", "code": error.code, "message": str(error)}
@@ -97,11 +106,21 @@ def build_scheduling_tool_registry(
 
     async def find_slots(args: dict, flow_manager):
         try:
+            if engine.dialogue.location_intent_question:
+                return {"status": "clarify", "message": engine.dialogue.location_intent_question}
+            identity_step = engine.dialogue.require_identity()
+            if identity_step:
+                return identity_step
             if engine.dialogue.location_conflict:
                 return {"status": "clarify", "code": "location_conflict"}
             result = engine.find_slots(args.get("horizon_days", 7))
-            if result.get("slots"):
-                engine.dialogue.pending = ("offer", result["slots"][0])
+            if len(result.get("slots", [])) == 1:
+                result["booking_phase"] = await book_appointment({"slot_id": result["slots"][0]["slot_id"]}, flow_manager)
+            elif result.get("slots"):
+                from datetime import datetime
+                choices = [f"{datetime.fromisoformat(s['start']).strftime('%A %B %d at %I:%M %p')} at {s['location']}" for s in result["slots"][:3]]
+                engine.dialogue.pending = ("options", "; ".join(choices) + ". Which slot would you like?")
+                result["next_action"] = "ask_patient_to_choose_then_call_book_appointment"
             else:
                 message = engine.dialogue.capability_message(result)
                 missing = [i["field"] for i in result.get("issues", []) if i["kind"] == "missing"]
@@ -117,6 +136,11 @@ def build_scheduling_tool_registry(
 
     async def book_appointment(args: dict, flow_manager):
         try:
+            if engine.dialogue.location_intent_question:
+                return {"status": "clarify", "message": engine.dialogue.location_intent_question}
+            identity_step = engine.dialogue.require_identity()
+            if identity_step:
+                return identity_step
             if engine.dialogue.location_conflict:
                 return {"status": "clarify", "code": "location_conflict"}
             slot_id = args["slot_id"]

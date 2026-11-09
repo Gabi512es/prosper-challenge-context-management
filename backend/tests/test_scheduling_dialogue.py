@@ -10,10 +10,143 @@ from scheduling_dialogue import BookingSpeech, PatientInput
 
 
 class DialogueTest(unittest.IsolatedAsyncioTestCase):
+    async def voice_reply(self, text):
+        from unittest.mock import AsyncMock
+        processor = PatientInput(self.d)
+        processor.push_frame = AsyncMock()
+        await processor.process_frame(TranscriptionFrame(text, "", ""), FrameDirection.DOWNSTREAM)
+
+    async def test_soonest_reply_searches_all_providers_and_sites(self):
+        from evals import load_dev_scenarios
+        case = next(s for s in load_dev_scenarios()["scenarios"] if s["id"] == "DEV-009")
+        e = SchedulingEngine(self.catalog, case["availability_fixture"], now=datetime.fromisoformat("2026-11-07T00:00:00-08:00"))
+        self.engine = e
+        self.builder = build_scheduling_agent(e, self.catalog, availability_mode="unit_fixture")
+        self.d = self.builder.dialogue
+        e.resolve_options(dict(name="Alex Morgan", date_of_birth="1990-04-12", is_new_patient=True,
+            referral_on_file=False, appointment_type_id="appt_011", provider_id=case["availability_fixture"][0]["provider_id"]))
+        await self.confirm_identity()
+        await self.voice_reply("whichever is soonest")
+        funcs = {f.name: f for f in self.builder.build_initial_node()["functions"]}
+        # A model cannot accidentally re-narrow the explicitly global scope.
+        await funcs["resolve_options"].handler({"provider_id": case["availability_fixture"][0]["provider_id"]}, None)
+        self.assertTrue(e.state.any_location)
+        self.assertTrue(e.state.any_provider)
+        result = await funcs["find_slots"].handler({"horizon_days": 7}, None)
+        self.assertEqual(result["slots"][0]["slot_id"], "dev009-early")
+
+    async def test_closest_requires_time_or_place_and_no_nearest_claim(self):
+        self.engine.resolve_options(dict(name="Alex Morgan", date_of_birth="1990-04-12", is_new_patient=False,
+            referral_on_file=True, appointment_type_id="appt_065", provider_id="prov_014"))
+        await self.confirm_identity()
+        await self.voice_reply("the closest one")
+        self.assertIn("soonest appointment in time", self.d.location_intent_question)
+        funcs = {f.name: f for f in self.builder.build_initial_node()["functions"]}
+        self.assertEqual((await funcs["find_slots"].handler({"horizon_days": 7}, None))["status"], "clarify")
+        self.assertIsNone(self.engine.state.location_id)
+        await self.voice_reply("the place")
+        self.assertNotIn("neighborhood", self.d.location_intent_question)
+        self.assertIn("can't calculate", self.d.location_intent_question)
+        self.assertIn("Downtown Health Center", self.d.location_intent_question)
+        self.assertNotIn("Mission Bay Health Center", self.d.location_intent_question)
+        self.assertIsNone(self.engine.state.location_id)
+        await self.voice_reply("Downtown please")
+        self.assertIsNone(self.d.location_intent_question)
+        self.assertEqual(self.engine.state.location_id, "loc_004")
+
+    async def test_soonest_does_not_silently_remove_hard_constraints(self):
+        self.engine.resolve_options({"provider_id": "prov_014", "hard_constraints": {"provider": True}})
+        await self.voice_reply("whichever is soonest")
+        self.assertEqual(self.engine.state.provider_id, "prov_014")
+        self.assertEqual(self.d.location_intent_stage, "widen")
+        await self.voice_reply("yes")
+        self.assertTrue(self.engine.state.any_provider)
+        self.assertTrue(self.engine.state.any_location)
+
+    async def test_multiple_slots_are_brief_choices_before_preparation(self):
+        from unittest.mock import AsyncMock
+        self.engine.resolve_options(dict(name="Alex Morgan", date_of_birth="1990-04-12", is_new_patient=False,
+            referral_on_file=True, appointment_type_id="appt_065", provider_id="prov_014", location_id="loc_004"))
+        await self.confirm_identity()
+        funcs = {f.name: f for f in self.builder.build_initial_node()["functions"]}
+        result = await funcs["find_slots"].handler({"horizon_days": 30}, None)
+        self.assertGreater(len(result["slots"]), 1)
+        speech = BookingSpeech(self.d)
+        speech.push_frame = AsyncMock()
+        await speech.process_frame(LLMFullResponseEndFrame(), FrameDirection.DOWNSTREAM)
+        text = speech.push_frame.call_args_list[0].args[0].text
+        self.assertIn("Which slot would you like?", text)
+        self.assertIn("Downtown Health Center", text)
+        self.assertNotIn("born", text)
+        self.assertNotIn("Shall I book", text)
+        self.assertIsNone(self.engine.state.selected_slot_id)
+
+    async def test_identity_then_single_offer_then_short_recap(self):
+        from unittest.mock import AsyncMock
+        e = self.engine
+        e.resolve_options(dict(name="Alex Morgan", date_of_birth="1990-04-12", is_new_patient=False,
+            referral_on_file=True, appointment_type_id="appt_065", provider_id="prov_014", location_id="loc_004"))
+        slot = e.find_slots(30)["slots"][0]
+        # A one-slot unit fixture, separate from the pinned dev scenarios.
+        e = SchedulingEngine(self.catalog, [e._slots[slot["slot_id"]].to_dict()], now=e.now)
+        b = build_scheduling_agent(e, self.catalog, availability_mode="unit_fixture")
+        d = b.dialogue
+        funcs = {f.name: f for f in b.build_initial_node()["functions"]}
+        speech = BookingSpeech(d)
+        speech.push_frame = AsyncMock()
+        await funcs["resolve_options"].handler(dict(patient_name="Alex Morgan", date_of_birth="1990-04-12",
+            is_new_patient=False, referral_on_file=True, appointment_type_id="appt_065", provider_id="prov_014", location_id="loc_004"), None)
+        blocked = await funcs["book_appointment"].handler({"slot_id": slot["slot_id"]}, None)
+        self.assertEqual(blocked["status"], "needs_identity_confirmation")
+        await speech.process_frame(LLMFullResponseEndFrame(), FrameDirection.DOWNSTREAM)
+        texts = lambda: [c.args[0].text for c in speech.push_frame.call_args_list if isinstance(c.args[0], LLMTextFrame)]
+        self.assertEqual(texts(), ["Alex Morgan, born April 12, 1990, is that right?"])
+        d.patient("yes")
+        result = await funcs["find_slots"].handler({"horizon_days": 30}, None)
+        self.assertEqual(result["booking_phase"]["status"], "needs_confirmation")
+        await speech.process_frame(LLMFullResponseEndFrame(), FrameDirection.DOWNSTREAM)
+        self.assertEqual(len(texts()), 2)
+        self.assertIn("a knee MRI", texts()[1])
+        self.assertNotIn("Alex Morgan", texts()[1])
+        self.assertTrue(texts()[1].endswith("Shall I book it?"))
+        d.patient("yes")
+        self.assertEqual((await funcs["book_appointment"].handler({"slot_id": slot["slot_id"]}, None))["status"], "booked")
+        await speech.process_frame(LLMFullResponseEndFrame(), FrameDirection.DOWNSTREAM)
+        self.assertEqual(len(texts()), 3)
+        self.assertTrue(texts()[2].startswith("You're all set for"))
+        self.assertNotIn("MRI", texts()[2])
+        self.assertNotIn("born", texts()[2])
+
+    async def test_identity_correction_requires_new_identity_yes(self):
+        from unittest.mock import AsyncMock
+        funcs = {f.name: f for f in self.builder.build_initial_node()["functions"]}
+        await funcs["resolve_options"].handler({"patient_name": "Alex Morgan", "date_of_birth": "1994-04-12"}, None)
+        await self.confirm_identity()
+        self.d.patient("Actually, my birth year is 1990")
+        corrected = await funcs["resolve_options"].handler({"date_of_birth": "1990-04-12"}, None)
+        self.assertIn("April 12, 1990", corrected["identity_confirmation"]["readback"])
+        self.assertNotEqual(self.d.identity_confirmed, self.d.identity())
+        self.assertIsNone(self.engine.state.confirmation)
+        speech = BookingSpeech(self.d)
+        speech.push_frame = AsyncMock()
+        await speech.process_frame(LLMFullResponseEndFrame(), FrameDirection.DOWNSTREAM)
+        self.d.patient("yes")
+        self.assertEqual(self.d.identity_confirmed, self.d.identity())
+
+    async def confirm_identity(self):
+        self.d.require_identity()
+        from unittest.mock import AsyncMock
+        speech = BookingSpeech(self.d)
+        speech.push_frame = AsyncMock()
+        await speech.process_frame(LLMFullResponseEndFrame(), FrameDirection.DOWNSTREAM)
+        self.d.patient("yes")
+        self.assertEqual(self.d.identity_confirmed, self.d.identity())
+
     async def test_two_phase_accepts_second_slot_and_yes_during_interruption(self):
         e = self.engine
         e.resolve_options(dict(name="Alex Morgan", date_of_birth="1990-04-12", is_new_patient=False,
             referral_on_file=True, appointment_type_id="appt_065", provider_id="prov_014", location_id="loc_004"))
+        await self.confirm_identity()
         slots = e.find_slots(30)["slots"]
         self.assertGreaterEqual(len(slots), 2)
         target = slots[1]
@@ -38,6 +171,7 @@ class DialogueTest(unittest.IsolatedAsyncioTestCase):
         e = self.engine
         e.resolve_options(dict(name="Alex Morgan", date_of_birth="1990-04-12", is_new_patient=False,
             referral_on_file=True, appointment_type_id="appt_065", provider_id="prov_014", location_id="loc_004"))
+        await self.confirm_identity()
         slot = e.find_slots(30)["slots"][0]
         book = next(f for f in self.builder.build_initial_node()["functions"] if f.name == "book_appointment")
         for _ in range(3):
@@ -99,7 +233,7 @@ class DialogueTest(unittest.IsolatedAsyncioTestCase):
         e.resolve_options({"date_of_birth": "1994-04-19"})
         self.d.patient("yes")
         self.assertIsNone(e.state.confirmation)
-        self.assertIn("April 19, 1994", self.d.render(slot))
+        self.assertIn("April 19, 1994", self.d.require_identity()["readback"])
 
     async def test_tool_completion_prose_is_not_spoken_twice(self):
         speech = BookingSpeech(self.d)
@@ -169,6 +303,7 @@ class DialogueTest(unittest.IsolatedAsyncioTestCase):
         e = self.engine
         e.resolve_options(dict(name="Alex Morgan", date_of_birth="1990-04-12", is_new_patient=False,
             referral_on_file=True, appointment_type_id="appt_065", provider_id="prov_014", location_id="loc_004"))
+        await self.confirm_identity()
         slots = e.find_slots(30)["slots"]
         slot = slots[0]
         book = next(f for f in self.builder.build_initial_node()["functions"] if f.name == "book_appointment")
@@ -180,8 +315,10 @@ class DialogueTest(unittest.IsolatedAsyncioTestCase):
         speech.push_frame = capture
         await speech.process_frame(LLMFullResponseEndFrame(), FrameDirection.DOWNSTREAM)
         text = emitted[0].text
-        for fact in ("Alex Morgan", "April 12, 1990", "Linda Ramirez", "Downtown", "a knee MRI", "Shall I book it?"):
+        for fact in ("Linda Ramirez", "Downtown", "a knee MRI", "Shall I book it?"):
             self.assertIn(fact, text)
+        self.assertNotIn("Alex Morgan", text)
+        self.assertNotIn("born", text)
         self.d.patient("Yes, please book it")
         self.assertEqual((await book.handler({"slot_id": slot["slot_id"]}, None))["status"], "booked")
         self.assertEqual((await book.handler({"slot_id": slot["slot_id"]}, None))["status"], "idempotent")

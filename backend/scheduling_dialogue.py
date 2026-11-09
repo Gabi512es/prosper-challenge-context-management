@@ -18,6 +18,69 @@ class SchedulingDialogue:
         self.pending = None
         self.waiting = False
         self.location_conflict = None
+        self.identity_confirmed = None
+        self.identity_readback = None
+        self.location_intent_question = None
+        self.location_intent_stage = None
+        self.global_soonest = False
+
+    def location_reply(self, text):
+        """Handle bounded time/place replies without inventing proximity."""
+        normalized = " ".join(re.findall(r"[a-z]+", text.casefold()))
+        if re.search(r"\b(closest|nearest)\b", normalized) and self.location_intent_stage != "place":
+            self.location_intent_stage = "meaning"
+            self.location_intent_question = "Do you mean the soonest appointment in time, or the nearest clinic geographically?"
+            return
+        if self.location_intent_stage in {"meaning", "place"} and re.search(r"\b(place|geographic|geographically|distance|neighborhood|near me)\b", normalized):
+            self.location_intent_stage = "place"
+        if self.location_intent_stage == "place":
+            # No geocoding/distance service: ask the patient to choose a site.
+            names = sorted({self.engine.catalog.locations_by_id[s.location_id].name
+                for s in self.engine._slots.values()
+                if s.appointment_type_id == self.engine.state.appointment_type_id
+                and (not self.engine.state.provider_id or s.provider_id == self.engine.state.provider_id)
+                and not self.engine._slot_patient_issues(s)
+                and self.engine._slot_within_opening_hours(s)
+                and s.start >= self.engine.now and s.slot_id not in self.engine._unavailable_slot_ids})
+            self.location_intent_question = ("I can't calculate which clinic is nearest. " +
+                ("Available sites for this request are " + ", ".join(names[:4]) + ". Which would you prefer?" if names
+                 else "Please name a preferred clinic so I can check its eligibility and availability."))
+        if normalized in {"whichever is soonest", "whatever is soonest", "the soonest", "soonest", "earliest", "the earliest", "earliest available", "the earliest available", "soonest in time", "earliest in time"} or (self.location_intent_stage == "meaning" and normalized in {"time", "in time", "the time"}):
+            if self.engine.state.hard_constraints.intersection({"provider", "provider_id", "location", "location_id"}):
+                self.location_intent_question = "May I widen your provider and location constraints to find the soonest eligible appointment?"
+                self.location_intent_stage = "widen"
+                return
+            self.enable_global_soonest()
+        elif self.location_intent_stage == "widen" and self.is_affirmative(text):
+            self.engine.state.hard_constraints.difference_update({"provider", "provider_id", "location", "location_id"})
+            self.enable_global_soonest()
+
+    def enable_global_soonest(self):
+        self.global_soonest = True
+        self.location = None
+        self.location_conflict = None
+        self.location_intent_question = None
+        self.location_intent_stage = None
+        self.engine.resolve_options({"any_provider": True, "any_location": True})
+
+    def identity(self):
+        facts = self.engine.state.patient_facts
+        return (facts.name, facts.date_of_birth)
+
+    def require_identity(self):
+        current = self.identity()
+        if self.identity_confirmed == current and all(current):
+            return None
+        self.engine.state.confirmation = None
+        self.readback = None
+        if not all(current):
+            return {"status": "missing_identity", "technical_failure": False,
+                    "next_action": "collect_name_and_date_of_birth"}
+        dob = datetime.fromisoformat(current[1]).strftime("%B %d, %Y").replace(" 0", " ")
+        message = f"{current[0]}, born {dob}, is that right?"
+        self.pending = ("identity", message)
+        return {"status": "needs_identity_confirmation", "technical_failure": False,
+                "readback": message, "next_action": "say_identity_and_wait"}
 
     @staticmethod
     def is_affirmative(text):
@@ -26,6 +89,8 @@ class SchedulingDialogue:
             return False
         normalized = re.sub(r"[.,!?]", " ", text)
         normalized = " ".join(normalized.split())
+        if normalized == "yes my name and date of birth are correct":
+            return True
         if re.fullmatch(r"(?:yeah|yes)(?: so)?(?: yeah| yes)?(?: you can)? book it", normalized):
             return True
         if re.fullmatch(r"yes i confirm (?:the|that) exact (?:provider|clinician|earliest|slot|location|service|date|time|and| )+ please book it", normalized):
@@ -37,13 +102,20 @@ class SchedulingDialogue:
         self.pending = None
         self.waiting = bool(re.search(r"\b(wait|stop|hold on)\b", text, re.I))
         affirmative = self.is_affirmative(text)
-        if self.readback and affirmative and not self.waiting:
+        identity_answer = self.identity_readback is not None
+        if identity_answer and affirmative and self.identity_readback == self.identity():
+            self.identity_confirmed = self.identity()
+        elif identity_answer:
+            self.identity_confirmed = None
+        self.identity_readback = None
+        if self.readback and affirmative and not self.waiting and not identity_answer and self.identity_confirmed == self.identity():
             slot_id, snapshot = self.readback
             if snapshot == self.engine._current_snapshot(slot_id):
                 self.engine.confirm_selected_slot()
         else:
             self.engine.state.confirmation = None
         self.readback = None
+        self.location_reply(text)
         # Negated sites are never positive selections. Multiple positive sites
         # require clarification instead of catalog iteration order choosing one.
         positives = []
@@ -57,6 +129,9 @@ class SchedulingDialogue:
                     positives.append(site.id)
         positives = list(dict.fromkeys(positives))
         if len(positives) == 1:
+            self.global_soonest = False
+            self.location_intent_question = None
+            self.location_intent_stage = None
             self.location = positives[0]
             self.location_conflict = None
             self.engine.resolve_options({"location_id": self.location})
@@ -69,7 +144,7 @@ class SchedulingDialogue:
             self.specialty = next(iter(specialties)) if len(specialties) == 1 else None
         candidates = [item for item in self.engine.state.last_candidates
                       if item.get("entity") == "provider" and item.get("specialty") == self.specialty]
-        if len(candidates) == 1:
+        if len(candidates) == 1 and not self.global_soonest:
             self.engine.resolve_options({"provider_id": candidates[0]["id"]})
 
     def handoff_requested(self):
@@ -108,16 +183,14 @@ class SchedulingDialogue:
         return message
 
     def render(self, slot, booked=False):
-        e = self.engine
-        facts = e.state.patient_facts
-        dob = datetime.fromisoformat(facts.date_of_birth).strftime("%B %d, %Y").replace(" 0", " ")
         start = datetime.fromisoformat(slot["start"])
         date = start.strftime("%A %B %d").replace(" 0", " ")
         time = start.strftime("%I:%M %p").lstrip("0")
-        intro = "Booked" if booked else "I'll book"
-        return (f"{intro} {self.spoken_service(slot['service'])} for {facts.name}, born {dob}, with {slot['provider']} "
-                f"at {slot['location']}, {date} at {time}. " +
-                ("Is there anything else I can help with?" if booked else "Shall I book it?"))
+        if booked:
+            return (f"You're all set for {start.strftime('%A')}, {start.strftime('%B %d').replace(' 0', ' ')} "
+                    f"at {time} at {slot['location']}. Is there anything else I can help with?")
+        return (f"I'll book {self.spoken_service(slot['service'])} with {slot['provider']} "
+                f"at {slot['location']}, {date} at {time}. Shall I book it?")
 
     @staticmethod
     def spoken_service(name):
@@ -126,6 +199,9 @@ class SchedulingDialogue:
         return ("an " if phrase[0].lower() in "aeiou" else "a ") + phrase
 
     def prepare_booking(self, slot_id):
+        identity_step = self.require_identity()
+        if identity_step:
+            return identity_step
         # Revalidate against the live session and full availability, rather
         # than requiring a separate model selection or a truncated offer list.
         self.engine.find_slots(30, limit=len(self.engine._slots))
@@ -179,7 +255,13 @@ class BookingSpeech(FrameProcessor):
                 await self.push_frame(frame, direction)
                 return
             text = "".join(self.text)
-            if self.d.location_conflict:
+            # Identity is spoken immediately once captured, before any offer.
+            if all(self.d.identity()) and self.d.identity_confirmed != self.d.identity():
+                self.d.require_identity()
+            if self.d.location_intent_question:
+                text = self.d.location_intent_question
+                self.d.pending = None
+            elif self.d.location_conflict:
                 text = self.d.location_conflict
                 self.d.pending = None
             elif self.d.waiting:
@@ -189,12 +271,9 @@ class BookingSpeech(FrameProcessor):
             elif self.d.pending:
                 kind, slot = self.d.pending
                 self.d.pending = None
-                if kind == "offer":
-                    start = datetime.fromisoformat(slot["start"])
-                    text = (f"There is {self.d.spoken_service(slot['service'])} with {slot['provider']} at {slot['location']}, "
-                            f"{start.strftime('%A %B %d at %I:%M %p')}. Would you like this slot?")
-                else:
-                    text = slot if kind == "message" else self.d.render(slot, booked=kind == "booked")
+                text = slot if kind in {"message", "identity", "options"} else self.d.render(slot, booked=kind == "booked")
+                if kind == "identity":
+                    self.d.identity_readback = self.d.identity()
                 if kind == "prepare":
                     self.d.readback = (slot["slot_id"], self.d.engine._current_snapshot(slot["slot_id"]))
             if re.search(r"hold on|connect you|staff.{0,15}follow up|someone.{0,15}reach out", text, re.I):

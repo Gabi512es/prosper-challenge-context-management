@@ -3,7 +3,7 @@ import hashlib
 from pathlib import Path
 import subprocess
 
-CODE_VERSION = "scheduling-booking-v4"
+CODE_VERSION = "scheduling-booking-v5"
 ROOT = Path(__file__).resolve().parents[1]
 try:
     GIT_COMMIT = subprocess.check_output(

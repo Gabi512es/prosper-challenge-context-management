@@ -656,3 +656,74 @@ $0.81677000; combined known subtotal $7.72386250. This is not total billed spend
 unknown-usage calls, complete voice costs, ElevenLabs and coding-agent usage are
 not measured. Report/rescore copies are not additional calls. No paid API calls,
 runtime code changes or scenario changes were made for this ledger.
+
+## 2026-11-09: separate identity confirmation and one booking offer
+
+User requested removing repeated full read-backs. Code now confirms the captured
+name and DOB once: "Alex Morgan, born April 12, 1990, is that right?". The
+confirmed identity is a tuple compared with current patient state. Changes to
+either field require a new code-generated identity question and affirmative
+patient response before slot search or booking; identity consent cannot also
+serve as booking consent in the same turn.
+
+For one matching slot, find_slots invokes phase-one booking preparation in code
+and queues the sole offer: service, provider, location, weekday/date/time and
+"Shall I book it?". Name/DOB are not repeated. Model output is replaced by that
+prepared offer. For several slots, code lists up to three brief date/time/site
+choices; book_appointment prepares the chosen slot after selection. One later
+yes books. The recap contains date/time/location and "Is there anything else I
+can help with?", without repeating service, provider or identity. Tool policies
+are shared across JSON agents. Code version scheduling-booking-v5.
+
+Offline tests cover identity capture, corrected DOB requiring another yes,
+blocking booking before identity approval, merged single offer/consent/short
+recap, and brief multi-slot choices. No scenarios, fixtures, scorer or expected
+outcomes changed. No paid run performed: the user requires an estimate and go.
+Estimated usual four-case fixture smoke: $0.30–$0.45, with a $0.50 planning
+allowance, based on the last $0.234185 four-case run plus identity-confirmation
+turns and cache/model variability. This is an estimate, not a measured charge.
+
+## 2026-11-09: soonest versus geographic proximity (offline)
+
+Inspection: core find_slots already ranks all eligible matches by start time
+before truncating, but global search required the model to set both any_provider
+and any_location. No distance/geocoding implementation exists, and the dialogue
+had no guard for "closest". Added bounded transcript handling for "whichever is
+soonest" and similar short time replies: explicitly widen provider/site scope,
+retain service and patient eligibility, and prevent model tool arguments from
+accidentally re-narrowing it. Existing hard provider/site constraints require a
+permission question before widening. Slot ranking remains core code.
+
+"Closest"/"nearest" now asks whether the patient means time or place and blocks
+resolution/search/booking until clarified. Geographic intent asks for the
+neighborhood; a supplied neighborhood is not used to invent distances. Code
+lists up to four sites with eligible available slots for the current request,
+or asks for a preferred clinic if eligibility is not yet known. The patient
+chooses a site. No nearest-site claim or geographic ranking is computed.
+
+Offline tests traverse PatientInput and actual tool handlers: global soonest
+returns DEV-009's earliest eligible slot; closest asks time/place; place asks
+neighborhood and lists capability-valid sites without choosing one; hard
+constraints need permission. make test: 82 collected, 80 passed, 2 paid checks
+skipped. No paid run; four-case smoke still awaits the user's explicit go.
+
+## 2026-11-09: geographic site choice and approved capped smoke
+
+Removed the neighborhood question: geographic proximity immediately says the
+code cannot determine the nearest clinic and lists eligible sites for patient
+choice. Offline suite: 82 collected, 80 passed, 2 paid checks skipped.
+
+User approved one usual four-case smoke with a $0.50 ceiling. Ran once each,
+using a temporary launcher that reserves a conservative uncached input/output
+allowance before every SDK call, settles reported usage, and limits completion
+to 512 tokens; it refuses calls whose reservation exceeds remaining budget.
+No usage means retaining the reservation. No paid retry was performed.
+
+smoke-20261109-122509-3adf22: DEV-012 PASS ($0.0425900), DEV-002 FAIL
+($0.0030900), DEV-008 PASS ($0.0435475), DEV-009 PASS ($0.0650825).
+30 model calls, total recorded cost $0.1543100, equal to launcher accounting,
+below $0.50. DEV-002 timed out during startup: one 14-token model completion
+was logged but no initial assistant response reached the text-session transcript;
+no patient opening or booking was attempted. Cause of that delivery timeout is
+not established. Do not classify it as a demonstrated provider/booking failure,
+nor call the smoke fully passing. Raw report and JSONL are under backend/logs/evals/.

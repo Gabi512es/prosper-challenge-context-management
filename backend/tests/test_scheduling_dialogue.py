@@ -25,28 +25,30 @@ class DialogueTest(unittest.IsolatedAsyncioTestCase):
         self.d = self.builder.dialogue
         e.resolve_options(dict(name="Alex Morgan", date_of_birth="1990-04-12", is_new_patient=True,
             referral_on_file=False, appointment_type_id="appt_011", provider_id=case["availability_fixture"][0]["provider_id"]))
-        await self.confirm_identity()
         await self.voice_reply("whichever is soonest")
         funcs = {f.name: f for f in self.builder.build_initial_node()["functions"]}
+        await funcs["resolve_options"].handler({"location_preference": "time"}, None)
         # A model cannot accidentally re-narrow the explicitly global scope.
         await funcs["resolve_options"].handler({"provider_id": case["availability_fixture"][0]["provider_id"]}, None)
         self.assertTrue(e.state.any_location)
         self.assertTrue(e.state.any_provider)
+        await self.confirm_identity()
         result = await funcs["find_slots"].handler({"horizon_days": 7}, None)
         self.assertEqual(result["slots"][0]["slot_id"], "dev009-early")
 
     async def test_closest_requires_time_or_place_and_no_nearest_claim(self):
         self.engine.resolve_options(dict(name="Alex Morgan", date_of_birth="1990-04-12", is_new_patient=False,
             referral_on_file=True, appointment_type_id="appt_065", provider_id="prov_014"))
-        await self.confirm_identity()
         await self.voice_reply("the closest one")
-        self.assertIn("soonest appointment in time", self.d.location_intent_question)
         funcs = {f.name: f for f in self.builder.build_initial_node()["functions"]}
+        await funcs["resolve_options"].handler({"location_preference": "unclear"}, None)
+        self.assertIn("soonest appointment in time", self.d.location_intent_question)
         self.assertEqual((await funcs["find_slots"].handler({"horizon_days": 7}, None))["status"], "clarify")
         self.assertIsNone(self.engine.state.location_id)
         await self.voice_reply("the place")
+        await funcs["resolve_options"].handler({"location_preference": "place"}, None)
         self.assertNotIn("neighborhood", self.d.location_intent_question)
-        self.assertIn("can't calculate", self.d.location_intent_question)
+        self.assertIn("can't tell", self.d.location_intent_question)
         self.assertIn("Downtown Health Center", self.d.location_intent_question)
         self.assertNotIn("Mission Bay Health Center", self.d.location_intent_question)
         self.assertIsNone(self.engine.state.location_id)
@@ -57,6 +59,8 @@ class DialogueTest(unittest.IsolatedAsyncioTestCase):
     async def test_soonest_does_not_silently_remove_hard_constraints(self):
         self.engine.resolve_options({"provider_id": "prov_014", "hard_constraints": {"provider": True}})
         await self.voice_reply("whichever is soonest")
+        funcs = {f.name: f for f in self.builder.build_initial_node()["functions"]}
+        await funcs["resolve_options"].handler({"location_preference": "time"}, None)
         self.assertEqual(self.engine.state.provider_id, "prov_014")
         self.assertEqual(self.d.location_intent_stage, "widen")
         await self.voice_reply("yes")
@@ -119,6 +123,7 @@ class DialogueTest(unittest.IsolatedAsyncioTestCase):
 
     async def test_identity_correction_requires_new_identity_yes(self):
         from unittest.mock import AsyncMock
+        self.engine.resolve_options(dict(appointment_type_id="appt_065", provider_id="prov_014", location_id="loc_004", is_new_patient=False, referral_on_file=True))
         funcs = {f.name: f for f in self.builder.build_initial_node()["functions"]}
         await funcs["resolve_options"].handler({"patient_name": "Alex Morgan", "date_of_birth": "1994-04-12"}, None)
         await self.confirm_identity()

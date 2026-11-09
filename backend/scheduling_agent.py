@@ -65,9 +65,10 @@ def build_scheduling_tool_registry(
         engine.dialogue = SchedulingDialogue(engine)
     async def resolve_options(args: dict, flow_manager):
         try:
-            updates = dict(args)
-            if engine.dialogue.location_intent_question:
-                return {"status": "clarify", "message": engine.dialogue.location_intent_question}
+            updates, rejected_filters = engine.validate_filters(args)
+            preference = updates.pop("location_preference", None)
+            if preference is not None and preference not in {"time", "place", "unclear"}:
+                return engine.dialogue.set_location_preference(preference)
             if engine.dialogue.global_soonest:
                 for key in ("provider_id", "provider_query", "provider_specialty", "location_id", "location_query"):
                     updates.pop(key, None)
@@ -88,27 +89,57 @@ def build_scheduling_tool_registry(
             if "patient_name" in updates:
                 updates["name"] = updates.pop("patient_name")
             result = engine.resolve_options(updates)
+            if engine.state.location_id:
+                engine.dialogue.location = engine.state.location_id
+                engine.dialogue.location_intent_question = None
+                engine.dialogue.location_intent_stage = None
+            if preference is not None:
+                engine.dialogue.set_location_preference(preference)
+                result = engine.resolve_options()
+                if engine.dialogue.location_intent_question:
+                    result.update(status="clarify", next_action="clarify_location_preference",
+                                  message=engine.dialogue.location_intent_question)
+            result["filter_issues"] = rejected_filters + result["filter_issues"]
+            provider_candidates = [c for c in result["candidates"] if c["entity"] == "provider"]
+            if provider_candidates:
+                names = list(dict.fromkeys(c["name"] for c in provider_candidates))
+                if any(c.get("requires_confirmation") for c in provider_candidates):
+                    engine.dialogue.pending = ("message", "Did you mean " + " or ".join(names) + "?")
+                else:
+                    options = [f"{c['name']}, {c['specialty']} ({c['title']})" for c in provider_candidates]
+                    engine.dialogue.pending = ("message", "Which provider did you mean: " + "; ".join(options) + "?")
+            elif any(err["entity"] == "provider" for err in result["errors"]):
+                engine.dialogue.pending = ("message", "I couldn't find a provider with that name. Could you repeat or spell the first name and surname?")
+            elif "location_id" in result["missing_facts"] and result["eligible_locations"]:
+                engine.dialogue.pending = ("message", engine.dialogue.site_choices())
+            if result["filter_issues"]:
+                fields = ", ".join(issue["filter"].replace("_", " ") for issue in result["filter_issues"])
+                prefix = f"The {fields} filter didn't match and was not applied. "
+                if engine.dialogue.pending and engine.dialogue.pending[0] == "message":
+                    engine.dialogue.pending = ("message", prefix + engine.dialogue.pending[1])
+                else:
+                    engine.dialogue.pending = ("message", prefix + "Which catalog option did you mean?")
             message = engine.dialogue.capability_message(result)
             if message:
                 engine.dialogue.pending = ("message", message)
-            identity_step = engine.dialogue.require_identity() if all(engine.dialogue.identity()) else None
-            if identity_step:
-                result["identity_confirmation"] = identity_step
+            engine.dialogue.last_resolution = result
+            result["dialogue_step"] = engine.dialogue.next_step()
+            if result["dialogue_step"]["stage"] == "identity_confirmation":
+                result["identity_confirmation"] = engine.dialogue.require_identity()
             return result
         except SchedulingError as error:
             return {"status": "error", "code": error.code, "message": str(error)}
 
     async def get_details(args: dict, flow_manager):
         try:
+            engine.dialogue.catalog_answer = True
             return engine.get_details(args["entity"], args["id"])
         except SchedulingError as error:
             return {"status": "error", "code": error.code, "message": str(error)}
 
     async def find_slots(args: dict, flow_manager):
         try:
-            if engine.dialogue.location_intent_question:
-                return {"status": "clarify", "message": engine.dialogue.location_intent_question}
-            identity_step = engine.dialogue.require_identity()
+            identity_step = engine.dialogue.booking_gate()
             if identity_step:
                 return identity_step
             if engine.dialogue.location_conflict:
@@ -136,9 +167,7 @@ def build_scheduling_tool_registry(
 
     async def book_appointment(args: dict, flow_manager):
         try:
-            if engine.dialogue.location_intent_question:
-                return {"status": "clarify", "message": engine.dialogue.location_intent_question}
-            identity_step = engine.dialogue.require_identity()
+            identity_step = engine.dialogue.booking_gate()
             if identity_step:
                 return identity_step
             if engine.dialogue.location_conflict:
@@ -173,6 +202,8 @@ def build_scheduling_tool_registry(
                 "date_of_birth": {"type": "string", "description": "YYYY-MM-DD"},
                 "is_new_patient": {"type": "boolean"},
                 "referral_on_file": {"type": "boolean"},
+                "location_preference": {"type": "string", "enum": ["time", "place", "unclear"],
+                    "description": "Interpret the patient's location preference: time = earliest eligible slot across sites/providers; place = geographic proximity (including 'near me', 'to where I live', 'nearest clinic geographically'); unclear = closest with no time/place meaning. Set this field for a preference reply, including answers to clarification. Code cannot calculate distances."},
                 "hard_constraints": {"type": "object", "properties": {
                     "provider": {"type": "boolean"}, "location": {"type": "boolean"},
                     "date_range": {"type": "boolean"}}},
@@ -180,7 +211,8 @@ def build_scheduling_tool_registry(
                 "appointment_type_query": {"type": "string"},
                 "provider_id": {"type": "string"},
                 "provider_query": {"type": "string"},
-                "provider_specialty": {"type": "string"},
+                "provider_specialty": {"type": "string",
+                    "description": "Only use a catalog specialty explicitly supplied by the patient. Omit if unknown; never infer from the requested service."},
                 "any_provider": {
                     "type": "boolean",
                     "description": "True only when the patient accepts any clinician.",

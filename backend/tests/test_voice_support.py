@@ -21,7 +21,7 @@ class VoiceSupportTest(unittest.IsolatedAsyncioTestCase):
         strategy.trigger_user_turn_started.assert_awaited_once()
 
     async def test_short_real_answer_while_agent_speaks_starts_a_turn(self):
-        for answer in ("No", "Stop.", "Midtown", "Yes!", "no..."):
+        for answer in ("No", "Stop.", "Midtown", "Yes!", "no...", "1991.", "April 12th.", "10:50 AM", "04/12/1991"):
             strategy = RealWordsStartStrategy(min_words=VOICE_MIN_WORDS)
             strategy._bot_speaking = True  # e.g. mid slot read-back
             strategy.trigger_user_turn_started = AsyncMock()
@@ -49,5 +49,5 @@ class VoiceSupportTest(unittest.IsolatedAsyncioTestCase):
             self.assertEqual(row["arguments"], {"location_query": "Midtown"})
             self.assertEqual(row["result"], {"status": "blocked"})
             self.assertRegex(row["git_commit"], r"^[a-f0-9]{40}$")
-            self.assertEqual(row["code_version"], "scheduling-booking-v5")
+            self.assertEqual(row["code_version"], "scheduling-slots-v7")
             self.assertRegex(row["code_revision"], r"^[a-f0-9]{64}$")

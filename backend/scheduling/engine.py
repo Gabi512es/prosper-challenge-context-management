@@ -53,7 +53,7 @@ class SchedulingEngine:
             self.state.confirmation = None
 
     def resolve_options(self, updates: dict | None = None, *, limit: int = 5) -> dict:
-        updates = updates or {}
+        updates, filter_issues = self.validate_filters(updates or {})
         candidates: list[dict] = []
         errors: list[dict] = []
 
@@ -75,7 +75,15 @@ class SchedulingEngine:
                 updates[query_key],
                 specialty=updates.get(f"{entity}_specialty"),
             )
-            if len(matches) == 1:
+            specialty = updates.get(f"{entity}_specialty")
+            if specialty:
+                unfiltered = self.catalog.search(entity, updates[query_key])
+                if unfiltered and not {item["id"] for item in unfiltered}.intersection(item["id"] for item in matches):
+                    filter_issues.append({"code": "filter_no_match", "filter": f"{entity}_specialty",
+                        "value": specialty, "message": "Filter matched none of the named candidates; returned candidates without it.",
+                        "valid_values": self.catalog.filter_values()[f"{entity}_specialty"]})
+                    matches = [{**item, "requires_confirmation": True} for item in unfiltered]
+            if len(matches) == 1 and not matches[0].get("requires_confirmation"):
                 self._set_resolved(state_field, matches[0]["id"])
             elif matches:
                 self._set_resolved(state_field, None)
@@ -147,8 +155,19 @@ class SchedulingEngine:
             "deferred_patient_facts": deferred_patient_facts,
             "blocked_options": blocked,
             "errors": errors,
-            "clinic_contacts": self._clinic_contacts(),
+            "filter_issues": filter_issues,
+            "clinic_contacts": [] if errors or any(c.get("entity") == "provider" for c in candidates) else self._clinic_contacts(),
+            "eligible_locations": self.eligible_locations(),
         }
+
+    def validate_filters(self, updates):
+        accepted = dict(updates)
+        issues = []
+        for field, valid in self.catalog.filter_values().items():
+            if field in accepted and accepted[field] is not None and accepted[field] not in valid:
+                issues.append({"code": "unknown_filter_value", "filter": field, "value": accepted.pop(field),
+                               "valid_values": valid, "message": "Unknown filter rejected; not applied."})
+        return accepted, issues
 
     def get_details(self, entity: str, entity_id: str) -> dict:
         try:
@@ -558,13 +577,36 @@ class SchedulingEngine:
         }
 
     def _clinic_contacts(self) -> list[dict]:
-        locations = [self._location()] if self._location() else self.catalog.locations
+        locations = [self.catalog.locations_by_id[item["id"]] for item in self.eligible_locations()]
+        if self._location() and self._location() in locations:
+            locations = [self._location()]
         service = self._appointment_type()
         if service and service.required_capability:
             locations = [loc for loc in locations if service.required_capability in loc.capabilities]
-            if not locations:
-                locations = [loc for loc in self.catalog.locations if service.required_capability in loc.capabilities]
         return [{"location": item.name, "phone": item.phone, "hours": item.hours} for item in locations]
+
+    def eligible_locations(self) -> list[dict]:
+        """Catalog-valid sites for the resolved provider/service, not distance ranks."""
+        service, provider = self._appointment_type(), self._provider()
+        facts = self.state.patient_facts
+        if not provider and not self.state.any_provider:
+            if self._location() and not service:
+                return [self.catalog.summary("location", self.state.location_id)]
+            return []
+        providers = [provider] if provider else self.catalog.providers
+        sites = set()
+        for item in providers:
+            if service and service.id not in item.appointment_type_ids:
+                continue
+            if facts.is_new_patient and (not item.accepting_new_patients or (service and not service.new_patients_allowed)):
+                continue
+            if service and service.requires_referral and facts.referral_on_file is False:
+                continue
+            for site_id in item.location_ids:
+                site = self.catalog.locations_by_id[site_id]
+                if not service or not service.required_capability or service.required_capability in site.capabilities:
+                    sites.add(site_id)
+        return [self.catalog.summary("location", key) for key in sorted(sites)]
 
     def _present_slot(self, slot: Slot) -> dict:
         return {**slot.to_dict(),

@@ -1,5 +1,6 @@
 """Shared transcript-grounded consent and deterministic booking speech."""
 import re
+from collections import deque
 from datetime import datetime
 
 from pipecat.frames.frames import (TranscriptionFrame, LLMTextFrame,
@@ -23,37 +24,156 @@ class SchedulingDialogue:
         self.location_intent_question = None
         self.location_intent_stage = None
         self.global_soonest = False
+        self.location_clarifications = 0
+        self.last_code_question = None
+        self.question_history = deque(maxlen=6)
+        self.stage = "service"
+        self.partial_birth_date = None
+        self.catalog_answer = False
+        self.last_resolution = None
+
+    def next_step(self):
+        """Single ordered source for the next missing slot; engine owns facts."""
+        state = self.engine.state
+        if self.engine.bookings:
+            stage, question = "complete", None
+        elif not state.appointment_type_id:
+            stage, question = "service", "What appointment service do you need?"
+        elif not state.provider_id and not state.any_provider:
+            stage, question = "provider", "Which provider would you like, or is any eligible clinician fine?"
+            resolution = self.last_resolution or {}
+            candidates = [c for c in resolution.get("candidates", []) if c["entity"] == "provider"]
+            if candidates:
+                if any(c.get("requires_confirmation") for c in candidates):
+                    question = "Did you mean " + " or ".join(dict.fromkeys(c["name"] for c in candidates)) + "?"
+                else:
+                    question = "Which provider did you mean: " + "; ".join(f"{c['name']}, {c['specialty']} ({c['title']})" for c in candidates) + "?"
+            elif any(e["entity"] == "provider" for e in resolution.get("errors", [])):
+                question = "I couldn't find a provider with that name. Could you repeat or spell the first name and surname?"
+        elif (not state.location_id and not state.any_location) or self.location_conflict or self.location_intent_question:
+            stage, question = "location", self.location_conflict or self.location_intent_question or self.site_choices()
+        elif self.engine._policy_issues():
+            issues = self.engine._policy_issues()
+            blocked = [i for i in issues if i["kind"] == "blocked"]
+            stage = "eligibility"
+            question = self.capability_message({"issues": issues}) if blocked else None
+            if not question:
+                question = ("This request is blocked: " + ", ".join(i["code"].replace("_", " ") for i in blocked) + ". Would you like to change the service or provider?" if blocked
+                            else "Please confirm " + ", ".join(i["field"].replace("_", " ") for i in issues) + ".")
+        elif self.partial_birth_date or not all(self.identity()):
+            stage = "identity"
+            question = ("What year were you born?" if self.partial_birth_date else
+                        "What is your full name?" if not self.identity()[0] and self.identity()[1] else
+                        "What is your date of birth?" if self.identity()[0] else "What is your full name and date of birth?")
+        elif self.identity_confirmed != self.identity():
+            stage, question = "identity_confirmation", self.identity_message()
+        elif state.selected_slot_id and state.confirmation is None:
+            stage, question = "consent", None
+        else:
+            stage, question = "offer", None
+        self.stage = stage
+        return {"stage": stage, "question": question}
+
+    def booking_gate(self):
+        step = self.next_step()
+        if step["stage"] in {"offer", "consent", "complete"}:
+            return None
+        if step["stage"] in {"identity", "identity_confirmation"}:
+            return self.require_identity()
+        self.pending = ("message", step["question"])
+        return {"status": "clarify", "technical_failure": False, "dialogue_step": step}
+
+    def identity_message(self):
+        name, birthday = self.identity()
+        dob = datetime.fromisoformat(birthday).strftime("%B %d, %Y").replace(" 0", " ")
+        return f"{name}, born {dob}, is that right?"
+
+    def capture_identity_segment(self, text):
+        # Bounded English month/day fragments; no invented year or inferred DOB.
+        months = "January February March April May June July August September October November December".split()
+        match = re.fullmatch(r"\s*(?:My name is )?([A-Za-z][A-Za-z' -]+),\s*(" + "|".join(months) +
+                             r")\s+(\d{1,2})(?:st|nd|rd|th)?[.! ]*", text, re.I)
+        if match:
+            try:
+                datetime(2000, months.index(match[2].title()) + 1, int(match[3]))
+            except ValueError:
+                return
+            self.engine.resolve_options({"name": match[1].strip()})
+            self.partial_birth_date = (months.index(match[2].title()) + 1, int(match[3]))
+            self.identity_confirmed = None
+        elif self.partial_birth_date and re.fullmatch(r"\s*\d{4}[.! ]*", text):
+            year = int(re.search(r"\d{4}", text)[0])
+            try:
+                birthday = datetime(year, *self.partial_birth_date).date()
+            except ValueError:
+                return
+            if birthday <= self.engine.now.date():
+                self.engine.resolve_options({"date_of_birth": birthday.isoformat()})
+                self.partial_birth_date = None
+                self.identity_confirmed = None
 
     def location_reply(self, text):
-        """Handle bounded time/place replies without inventing proximity."""
-        normalized = " ".join(re.findall(r"[a-z]+", text.casefold()))
-        if re.search(r"\b(closest|nearest)\b", normalized) and self.location_intent_stage != "place":
-            self.location_intent_stage = "meaning"
-            self.location_intent_question = "Do you mean the soonest appointment in time, or the nearest clinic geographically?"
-            return
-        if self.location_intent_stage in {"meaning", "place"} and re.search(r"\b(place|geographic|geographically|distance|neighborhood|near me)\b", normalized):
-            self.location_intent_stage = "place"
-        if self.location_intent_stage == "place":
-            # No geocoding/distance service: ask the patient to choose a site.
-            names = sorted({self.engine.catalog.locations_by_id[s.location_id].name
-                for s in self.engine._slots.values()
-                if s.appointment_type_id == self.engine.state.appointment_type_id
-                and (not self.engine.state.provider_id or s.provider_id == self.engine.state.provider_id)
-                and not self.engine._slot_patient_issues(s)
-                and self.engine._slot_within_opening_hours(s)
-                and s.start >= self.engine.now and s.slot_id not in self.engine._unavailable_slot_ids})
-            self.location_intent_question = ("I can't calculate which clinic is nearest. " +
-                ("Available sites for this request are " + ", ".join(names[:4]) + ". Which would you prefer?" if names
-                 else "Please name a preferred clinic so I can check its eligibility and availability."))
-        if normalized in {"whichever is soonest", "whatever is soonest", "the soonest", "soonest", "earliest", "the earliest", "earliest available", "the earliest available", "soonest in time", "earliest in time"} or (self.location_intent_stage == "meaning" and normalized in {"time", "in time", "the time"}):
+        """Only explicit yes to a scope-change question is handled here."""
+        if self.location_intent_stage == "widen" and self.is_affirmative(text):
+            self.engine.state.hard_constraints.difference_update({"provider", "provider_id", "location", "location_id"})
+            self.enable_global_soonest()
+
+    def site_choices(self):
+        names = [item["name"] for item in self.engine.eligible_locations()]
+        if names:
+            return "Eligible sites are " + ", ".join(names[:4]) + ". Which would you prefer?"
+        return "Please confirm the provider and service so I can list their eligible sites."
+
+    def set_location_preference(self, preference):
+        if preference not in {"time", "place", "unclear"}:
+            return {"status": "clarify", "code": "invalid_location_preference",
+                    "message": "location_preference must be time, place or unclear"}
+        if self.engine.state.location_id:
+            self.location_intent_question = None
+            self.location_intent_stage = None
+            return None
+        if preference == "time":
             if self.engine.state.hard_constraints.intersection({"provider", "provider_id", "location", "location_id"}):
                 self.location_intent_question = "May I widen your provider and location constraints to find the soonest eligible appointment?"
                 self.location_intent_stage = "widen"
-                return
-            self.enable_global_soonest()
-        elif self.location_intent_stage == "widen" and self.is_affirmative(text):
-            self.engine.state.hard_constraints.difference_update({"provider", "provider_id", "location", "location_id"})
-            self.enable_global_soonest()
+            else:
+                self.enable_global_soonest()
+        elif preference == "place":
+            self.location_intent_stage = "place"
+            self.location_intent_question = "I can't tell which clinic is nearest. " + self.site_choices()
+        else:
+            self.location_clarifications += 1
+            self.location_intent_stage = "meaning"
+            self.location_intent_question = ("Do you mean the soonest appointment in time, or the nearest clinic geographically?"
+                if self.location_clarifications == 1 else self.site_choices())
+        return None
+
+    def avoid_repeated_question(self, text):
+        if "?" not in text:
+            self.last_code_question = None
+            return text
+        if text in self.question_history:
+            step = self.next_step()
+            alternatives = {
+                "location": self.site_choices(),
+                "identity": "Please give just the birth year." if self.partial_birth_date else "Please provide the missing name or birth date.",
+                "identity_confirmation": self.identity_message().replace("is that right?", "are these details correct?") if all(self.identity()) else "Please confirm your identity.",
+                "provider": "Please spell the provider's first name and surname, or say any eligible provider.",
+                "service": "Please name the service you want to schedule.",
+            }
+            alternative = alternatives.get(step["stage"], text)
+            if alternative == text or alternative in self.question_history:
+                contacts = self.engine._clinic_contacts()
+                alternative = (f"You can call {contacts[0]['location']} at {contacts[0]['phone']} for help choosing. Would you like that number repeated?"
+                               if contacts else "I couldn't narrow the request. Would you like to change the provider or service?")
+            if alternative in self.question_history:
+                alternative = "I need the missing detail to proceed. You can provide it or ask to speak with a person."
+            if alternative == self.last_code_question:
+                return ""
+            text = alternative
+        self.last_code_question = text
+        self.question_history.append(text)
+        return text
 
     def enable_global_soonest(self):
         self.global_soonest = True
@@ -68,6 +188,9 @@ class SchedulingDialogue:
         return (facts.name, facts.date_of_birth)
 
     def require_identity(self):
+        if self.partial_birth_date:
+            self.pending = ("message", "What year were you born?")
+            return {"status": "missing_identity", "technical_failure": False, "next_action": "collect_birth_year"}
         current = self.identity()
         if self.identity_confirmed == current and all(current):
             return None
@@ -76,8 +199,7 @@ class SchedulingDialogue:
         if not all(current):
             return {"status": "missing_identity", "technical_failure": False,
                     "next_action": "collect_name_and_date_of_birth"}
-        dob = datetime.fromisoformat(current[1]).strftime("%B %d, %Y").replace(" 0", " ")
-        message = f"{current[0]}, born {dob}, is that right?"
+        message = self.identity_message()
         self.pending = ("identity", message)
         return {"status": "needs_identity_confirmation", "technical_failure": False,
                 "readback": message, "next_action": "say_identity_and_wait"}
@@ -98,6 +220,7 @@ class SchedulingDialogue:
         return bool(re.fullmatch(r"(?:yes|yeah|correct|i confirm|please book(?: it)?|that's fine|okay,? book it)(?:[, ]+(?:please|sure|book it|please book it|that exact provider, location, service, date, and time))*", text))
 
     def patient(self, text):
+        self.catalog_answer = False
         self.patient_text = text
         self.pending = None
         self.waiting = bool(re.search(r"\b(wait|stop|hold on)\b", text, re.I))
@@ -115,6 +238,7 @@ class SchedulingDialogue:
         else:
             self.engine.state.confirmation = None
         self.readback = None
+        self.capture_identity_segment(text)
         self.location_reply(text)
         # Negated sites are never positive selections. Multiple positive sites
         # require clarification instead of catalog iteration order choosing one.
@@ -132,6 +256,7 @@ class SchedulingDialogue:
             self.global_soonest = False
             self.location_intent_question = None
             self.location_intent_stage = None
+            self.location_clarifications = 0
             self.location = positives[0]
             self.location_conflict = None
             self.engine.resolve_options({"location_id": self.location})
@@ -199,7 +324,7 @@ class SchedulingDialogue:
         return ("an " if phrase[0].lower() in "aeiou" else "a ") + phrase
 
     def prepare_booking(self, slot_id):
-        identity_step = self.require_identity()
+        identity_step = self.booking_gate()
         if identity_step:
             return identity_step
         # Revalidate against the live session and full availability, rather
@@ -255,19 +380,17 @@ class BookingSpeech(FrameProcessor):
                 await self.push_frame(frame, direction)
                 return
             text = "".join(self.text)
-            # Identity is spoken immediately once captured, before any offer.
-            if all(self.d.identity()) and self.d.identity_confirmed != self.d.identity():
-                self.d.require_identity()
-            if self.d.location_intent_question:
-                text = self.d.location_intent_question
-                self.d.pending = None
-            elif self.d.location_conflict:
-                text = self.d.location_conflict
-                self.d.pending = None
-            elif self.d.waiting:
+            active = bool(self.d.engine.state.appointment_type_id or self.d.engine.state.provider_id or any(self.d.identity())) and not self.d.catalog_answer
+            step = self.d.next_step() if active else {"stage": "idle", "question": None}
+            if self.d.waiting:
                 text = "Of course. What would you like to change?"
                 self.d.waiting = False
                 self.d.pending = None
+            elif step["question"]:
+                text = step["question"]
+                self.d.pending = None
+                if step["stage"] == "identity_confirmation":
+                    self.d.identity_readback = self.d.identity()
             elif self.d.pending:
                 kind, slot = self.d.pending
                 self.d.pending = None
@@ -276,11 +399,20 @@ class BookingSpeech(FrameProcessor):
                     self.d.identity_readback = self.d.identity()
                 if kind == "prepare":
                     self.d.readback = (slot["slot_id"], self.d.engine._current_snapshot(slot["slot_id"]))
+            elif active and step["stage"] == "offer":
+                text = "Your details are confirmed. I'll check the available appointments."
             if re.search(r"hold on|connect you|staff.{0,15}follow up|someone.{0,15}reach out", text, re.I):
                 contacts = self.d.engine._clinic_contacts()
                 text = "No transfer or callback is recorded. " + " ".join(
                     f"You can call {c['location']} at {c['phone']}." for c in contacts[:1])
             if text:
+                revised = self.d.avoid_repeated_question(text)
+                if revised != text:
+                    self.d.readback = None
+                    same_identity = (step["stage"] == "identity_confirmation" and
+                                     revised.startswith(self.d.identity_message().rsplit(", is that right?", 1)[0]))
+                    self.d.identity_readback = self.d.identity() if same_identity else None
+                text = revised
                 await self.push_frame(LLMTextFrame(text))
             self.text = []
         await self.push_frame(frame, direction)

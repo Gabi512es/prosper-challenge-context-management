@@ -727,3 +727,225 @@ was logged but no initial assistant response reached the text-session transcript
 no patient opening or booking was attempted. Cause of that delivery timeout is
 not established. Do not classify it as a demonstrated provider/booking failure,
 nor call the smoke fully passing. Raw report and JSONL are under backend/logs/evals/.
+
+## 2026-11-09: tolerant provider lookup, scoped sites and bounded recovery
+
+Observed call B a8aecc8a: "maria m garcia" with specialty "family medicine
+nurse practitioner" returned unknown_provider; "maria garcia" then resolved
+prov_003, but clinic_contacts still contained all eight locations. Provider name
+normalization now removes titles/credentials, single-letter initials and adjacent
+stutter prefixes, then matches first name and surname. Duplicate full names
+remain ambiguous unless specialty disambiguates them. Approximate name fallback
+returns up to three candidates at SequenceMatcher similarity >=0.65, explicitly
+marked suggestion/requires_confirmation; even a single suggestion never resolves
+the provider automatically. Other catalog entities retain exact matching behavior.
+
+Resolver now returns eligible_locations, computed by joining the resolved
+provider, service, provider sites, required capabilities and known patient policy
+facts. Unknown provider or unconfirmed provider suggestions return no contact
+phone; resolved provider/service contacts use the same scoped join. Code-generated
+name/site questions use these results, not all catalog sites. No catalog repairs.
+
+Removed transcript keyword interpretation of time/place proximity. The model
+fills resolve_options.location_preference, a closed enum (time, place, unclear).
+Tool description explicitly classifies "near me", "to where I live" and "nearest
+clinic geographically" as place. Code validates the enum, asks time/place once
+for unclear, then lists scoped sites on another unclear result. Place lists sites
+without distance claims or a neighborhood question; time enables global eligible
+slot search, subject to explicit permission for hard-constraint widening. Repeated
+"nearest" in patient speech cannot reset this code state. Interpreting meaning
+into the closed field remains a model task and is not established by offline tests.
+
+A generic output guard prevents the same question being spoken consecutively:
+switch to eligible site choices, then a scoped clinic contact when available.
+If a replacement changes an identity/booking question, pending consent markers
+are cleared so a yes to the replacement cannot approve an unspoken read-back.
+Code version scheduling-recovery-v6. Offline tests traverse PatientInput plus
+actual tools, cover stutters/initials/titles, specialty disambiguation, fuzzy
+suggestions, no unrelated phones, scoped sites, enum validation, repeated place
+answers and the generic repeat guard. make test: 87 collected, 85 passed, two
+paid integrations skipped. No scenario, expected outcome or scorer changed.
+
+No paid calls. Proposed one usual four-case smoke (DEV-012/002/008/009, once
+each) estimated $0.30–$0.45, $0.50 planning allowance. This is based on recent
+$0.15431–$0.234185 four-case runs plus clarification/cache variability. Awaiting
+the user's explicit go, including DEV-002 to check its prior startup timeout;
+that timeout's cause is still unestablished.
+
+## 2026-11-09: approved recovery-v6 four-case smoke, no retries
+
+User approved one usual four-case smoke, maximum $0.50. Used the capped temporary
+launcher with per-request reservations and 512-token completion limit. Run
+smoke-20261109-123934-da8fb2 completed 32 model calls for $0.17078250:
+DEV-012 PASS $0.04627250; DEV-002 FAIL $0.01124000; DEV-008 PASS
+$0.04455500; DEV-009 PASS $0.06871500. All usage is reported; launcher accounting
+matches the raw model usage. Reports/JSONL are in backend/logs/evals/.
+
+DEV-002 was not a startup timeout. The opening was "I'd like an annual physical
+with Dr. Maria Garcia." The model added provider_specialty="primary care" to
+resolve_options. No catalog specialty matched that filter, so the provider
+collection became empty before name matching, and the tool falsely returned
+unknown_provider despite the correct name. The scripted patient had no response
+to the resulting spelling request; no booking was created. This is distinct
+from the prior startup-delivery timeout, whose cause remains unknown. No retry,
+scenario changes or runtime fixes were performed during this smoke-only turn.
+
+## 2026-11-09: closed catalog filters and capped two-case smoke
+
+resolve_options schema now enumerates catalog provider specialties and provider,
+service and location IDs. Free-text names remain search queries, not categorical
+filters. Runtime validation rejects unknown enum values with valid_values and
+records filter_issues; they never enter catalog filtering. A valid specialty
+that eliminates every named candidate returns the candidates without that
+filter, marked for confirmation, with filter_no_match. Name suggestions remain
+non-authoritative; no silent identity selection or constraint relaxation.
+Transcript-derived canonical specialty is separate from the model argument;
+invalid raw model filters remain reported even when transcript facts disambiguate.
+
+Offline regressions cover primary care/family doctor rejection with the full
+valid specialty list, preserving both Maria Garcia candidates, valid-but-mismatched
+Dermatology on Linda Ramirez, catalog ID enums and rejected invented IDs.
+make test: 90 collected, 88 passed, 2 paid integrations skipped. No scenario,
+expected outcome or scorer changes.
+
+User authorized DEV-002 and DEV-012 once each, maximum $0.15; estimate provided
+was $0.08–$0.13. Run smoke-20261109-124555-cc5280: DEV-002 PASS (12 calls,
+$0.0808600); DEV-012 stopped by the budget guard (6 dispatched calls,
+$0.0330525). Total dispatched/reported cost $0.1139125, 18 paid requests,
+matching launcher accounting. The next conservative request reservation exceeded
+the remaining $0.0360875, so it was refused before dispatch. Two resulting
+Pipecat metrics rows have null usage for these local denials; they are not two
+additional paid requests. The raw scorer marks DEV-012 failing/incomplete; this
+does not establish a booking regression. No retry or cap increase. Raw report
+and JSONL are in backend/logs/evals/. The filter regression is fixed offline
+and DEV-002 now books; DEV-012's final paid check is incomplete.
+
+## 2026-11-09: DEV-012-only $0.08 smoke and logged enum overhead
+
+User approved one DEV-012 run, maximum $0.08. Run
+smoke-20261109-124918-eeeec1 dispatched seven requests, all with reported usage:
+27,643 prompt tokens (24,832 cached), 240 completion tokens, $0.04046750.
+The conservative reservation for the next request exceeded the remaining
+$0.03953250; it was refused locally before dispatch. One corresponding metrics
+row has null usage. No retry. The transcript reached successful identity
+confirmation and the prepared knee-MRI offer; the booking did not complete.
+Raw scorer marks it failed/incomplete, but this is a budget-guard stop, not
+evidence that the booking code rejected valid consent. The $0.08 ceiling was
+not exceeded; actual spend did not exhaust it.
+
+Offline comparison uses pre-enum smoke-20261109-123934-da8fb2 and post-enum
+smoke-20261109-124555-cc5280, same agent JSON revision 40db1b58. Both DEV-002
+and DEV-012 startup prompts increased from 2,283 to 3,230 tokens: +947 tokens,
+41.48%. Empty-history startup is the cleanest logged comparison of the tool
+schema overhead, including the enum lists and revised specialty description;
+logs do not independently isolate the enum arrays alone. DEV-012's first six
+reported calls total 16,994 pre versus 22,741 post, averages 2,832.33 versus
+3,790.17: +957.83 per call, also including small message/result differences.
+Do not compare whole-run averages as a causal estimate: lengths and outcomes
+differ. At the recorded rates, 947 extra tokens cost $0.0023675 uncached or
+$0.00118375 cached per model call, conditional on that cache treatment.
+
+## 2026-11-09: lazy catalog validation and observed-cost admission
+
+Context-cost decision: removed catalog-sized provider specialty, provider ID,
+location ID and appointment-type ID enums from the tool schema. Runtime catalog
+validation and filter_no_match fallback remain unchanged. Unknown values still
+return valid_values only when needed; no silent filtering or fuzzy identity
+selection. Retained small structural enums (location preference and entity kind)
+and the specialty description instructing the model not to infer a specialty.
+Offline primary care/family doctor rejection tests remain passing. No scenario,
+expected outcome or scorer changes.
+
+Compared enum run smoke-20261109-124555-cc5280 with list-free run
+smoke-20261109-125320-fae71b, same agent JSON revision 40db1b58:
+
+| Prompt measurement | With catalog enums | Without catalog enums | Difference |
+|---|---:|---:|---:|
+| Empty-history startup, both cases | 3,230 | 2,306 | -924 (-28.61%) |
+| DEV-002 mean, 12 calls in each run | 4,516.67 | 3,585.67 | -931.00 |
+| DEV-002 first-six-call mean | 3,752.17 | 2,821.17 | -931.00 |
+| DEV-012 first-six-call mean | 3,790.17 | 2,861.33 | -928.83 |
+
+Startup is the cleanest logged comparison: the previous +947 included the
+specialty description; removing enum lists saves 924 while retaining that
+description's 23-token difference from the older 2,283-token prompt. Later-call
+comparisons also include slightly different assistant/tool messages. Do not
+compare DEV-012 full-run means as causal: enum run was budget-stopped after six
+reported calls, while the new run completed in nine.
+
+Added reusable evals/spend_guard.py, exposed via evals.smoke --max-cost-usd.
+Instead of reserving full uncached context plus maximal output, it reserves
+1.5 times the highest observed actual cost in the last five calls of this run;
+bootstrap is $0.015 before an observation. Reported stream usage settles the
+reservation, unknown usage prevents further requests, and additional requests
+are denied if the forecast does not fit the remaining budget. Output cap stays
+512 tokens. This is a forecast plus margin, not a mathematical guarantee of an
+unseen API request's charge. The observed run completed below its authorized cap.
+
+Offline: 93 tests collected, 91 passed, 2 paid integrations skipped. User
+approved DEV-002 and DEV-012 once each, maximum $0.20, estimate $0.09–$0.15.
+smoke-20261109-125320-fae71b: both PASS; DEV-002 12 calls, 43,028 prompt
+(36,224 cached), 328 completion, $0.0655700; DEV-012 nine calls, 29,616 prompt
+(25,984 cached), 287 completion, $0.0444300. Total 21 requests, $0.1100000,
+all usage reported; budget accounting and JSONL agree. No retries. Raw report
+and JSONL are in backend/logs/evals/ under that run ID.
+
+## 2026-11-09: ordered slot filling and numeric final transcripts
+
+Code confirmed the turn-start filter accepted letters only. A final transcript
+"1991." became empty and MinWordsUserTurnStartStrategy could reset aggregation.
+real_words now includes numeric tokens, ordinal dates, numeric dates and times.
+Offline tests prove these start a user turn instead of resetting aggregation;
+precise acoustic behavior still needs a real call, and no client event log was
+attached in this request.
+
+Voice-tool trace 837b8f69 shows Midtown was stored as loc_005 at 11:56:53 UTC
+and retained in the later identity update. The observed repeated site questions
+were not evidence of a missing location in core state. Independent proximity,
+identity and repeat-output gates could ask for sites despite that filled slot;
+the repeat fallback also cleared an identity consent marker when it changed
+the question.
+
+SchedulingDialogue.next_step is now the ordered source of the next missing
+slot: service, provider, location/proximity clarification, required eligibility
+facts, identity collection/confirmation, offer/consent, complete. It derives
+the stage from authoritative engine state; it does not duplicate resolved IDs.
+Tool results expose dialogue_step; availability/booking use the same gate and
+output generation follows it. A chosen location is pinned through identity
+updates and clears stale proximity questions. Only an actual location correction
+or explicit scope change invalidates it. Catalog-information replies bypass the
+scheduling question gate.
+
+Bounded English identity-segment capture retains "Alex Morgan, April 12th."
+as name plus an incomplete month/day draft, then completes it with "1991.".
+It asks for the year rather than inventing one. "Hello?" does not clear these
+facts. This is a narrow parser for that structured form, not general identity
+understanding; normal model/tool fact collection still accepts other phrasings.
+
+Repeat handling retains the last six questions, including non-consecutive
+repeats, and changes strategy based on the current missing slot. It no longer
+uses site choice as a generic fallback after location is filled. Rephrasing an
+identity confirmation preserves consent only if the same name/DOB is actually
+spoken; switching to unrelated recovery clears the consent marker.
+
+New no-LLM multi-turn tool tests cover provider/service -> geographic site list
+-> Midtown -> two identity segments with an intervening Hello -> identity yes
+-> Midtown-only offers -> phase-one read-back -> yes -> one Midtown booking.
+Additional tests cover alternating questions and affirmative response to a
+rephrased identity question. Code version scheduling-slots-v7. make test:
+96 collected, 94 passed, 2 paid integrations skipped. No scenario, fixture,
+expected outcome or scorer changed. No paid calls. Estimated usual four-case
+smoke: $0.20–$0.35 from recent measured runs and anticipated call counts;
+awaiting the user's explicit go.
+
+## 2026-11-09: approved slots-v7 four-case smoke
+
+User authorized the usual four cases once each, maximum $0.40, no retries.
+smoke-20261109-131238-90cbfb passed all four with 40 model calls and fully
+reported usage: DEV-012 PASS, nine calls, $0.04575250; DEV-002 PASS, eleven
+calls, $0.05942500; DEV-008 PASS, nine calls, $0.05231000; DEV-009 PASS,
+eleven calls, $0.06987750. Total $0.22736500, below $0.40; observed-cost
+guard accounting matches the JSONL usage. No retries or runtime changes.
+Raw report and usage: backend/logs/evals/smoke-20261109-131238-90cbfb.smoke.json
+and the corresponding .jsonl. Text smoke success does not establish acoustic
+behavior; numeric interruptions and segmented identity still need live checking.

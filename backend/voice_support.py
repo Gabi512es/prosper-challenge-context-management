@@ -28,7 +28,7 @@ VOICE_MIN_WORDS = 1
 
 
 def real_words(text: str) -> list[str]:
-    words = re.findall(r"[A-Za-z]+(?:'[A-Za-z]+)?", text)
+    words = re.findall(r"[A-Za-z]+(?:'[A-Za-z]+)?|\d+(?:[/:.-]\d+)*(?:st|nd|rd|th)?", text)
     return [word for word in words if word.casefold() not in FILLER_WORDS]
 
 

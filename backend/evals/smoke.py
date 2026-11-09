@@ -13,7 +13,7 @@ from .scorer import SCORER_VERSION, evaluate_run
 from .text_integration import run_dev_case
 
 
-async def run(scenario_ids: list[str], *, demo: bool = False) -> None:
+async def run(scenario_ids: list[str], *, demo: bool = False, budget=None) -> None:
     scenarios = {item["id"]: item for item in load_dev_scenarios()["scenarios"]}
     unknown = set(scenario_ids) - set(scenarios)
     if unknown:
@@ -33,6 +33,7 @@ async def run(scenario_ids: list[str], *, demo: bool = False) -> None:
             {
                 "run_id": run_id,
                 "scorer_version": SCORER_VERSION,
+                "budget": budget.summary() if budget else None,
                 "results": results,
             },
             indent=2,
@@ -46,8 +47,17 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("scenario_ids", nargs="+")
     parser.add_argument("--demo", action="store_true")
+    parser.add_argument("--max-cost-usd", type=float)
     args = parser.parse_args()
-    asyncio.run(run(args.scenario_ids, demo=args.demo))
+    if args.max_cost_usd is not None:
+        from .spend_guard import SpendGuard
+        with SpendGuard(args.max_cost_usd) as budget:
+            try:
+                asyncio.run(run(args.scenario_ids, demo=args.demo, budget=budget))
+            finally:
+                print(json.dumps(budget.summary()), flush=True)
+    else:
+        asyncio.run(run(args.scenario_ids, demo=args.demo))
 
 
 if __name__ == "__main__":

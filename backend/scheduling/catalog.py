@@ -2,6 +2,7 @@
 
 import json
 import re
+from difflib import SequenceMatcher
 from dataclasses import asdict, dataclass
 from pathlib import Path
 
@@ -119,7 +120,22 @@ class Catalog:
             and normalized_query
             in _normalize(item.name, strip_provider_title=entity == "provider")
         ]
+        if not matches and entity == "provider":
+            ranked = sorted(collection, key=lambda item: (
+                -SequenceMatcher(None, normalized_query, _normalize(item.name, strip_provider_title=True)).ratio(), item.id))
+            return [{**self.summary(entity, item.id), "match_kind": "suggestion", "requires_confirmation": True}
+                    for item in ranked[:3]
+                    if SequenceMatcher(None, normalized_query, _normalize(item.name, strip_provider_title=True)).ratio() >= 0.65]
         return [self.summary(entity, item.id) for item in matches]
+
+    def filter_values(self) -> dict[str, list[str]]:
+        return {
+            "provider_specialty": sorted({item.specialty for item in self.providers}),
+            "appointment_type_specialty": sorted({item.specialty for item in self.appointment_types}),
+            "provider_id": sorted(self.providers_by_id),
+            "location_id": sorted(self.locations_by_id),
+            "appointment_type_id": sorted(self.appointment_types_by_id),
+        }
 
     def details(self, entity: str, entity_id: str) -> dict:
         item = self._by_id(entity).get(entity_id)
@@ -179,7 +195,11 @@ def _unique(items, label: str) -> dict:
 def _normalize(value: str, *, strip_provider_title: bool = False) -> str:
     tokens = re.findall(r"[a-z0-9]+", value.casefold())
     if strip_provider_title:
-        tokens = [token for token in tokens if token not in {"dr", "doctor"}]
+        tokens = [token for token in tokens if token not in {"dr", "doctor", "md", "do", "np", "nurse", "practitioner"} and len(token) > 1]
+        tokens = [token for i, token in enumerate(tokens)
+                  if i == len(tokens) - 1 or not tokens[i + 1].startswith(token)]
+        if len(tokens) > 2:
+            tokens = [tokens[0], tokens[-1]]
     return " ".join(tokens)
 
 

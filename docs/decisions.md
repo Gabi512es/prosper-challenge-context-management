@@ -563,3 +563,33 @@ the actual stored DOB (including an STT error such as 1994); a DOB change
 invalidates old consent, and booking needs a matching read-back plus a later yes.
 This exposes the error for patient correction, not automatic DOB verification.
 Offline suite: 73 collected, 71 passed, 2 paid checks skipped. No paid calls.
+
+## 2026-11-09: ENT substring regression and paid smoke gate
+
+Trace be070748 ran canonical JSON 40db1b58 and scheduling-guards-v3. Exact
+utterance "I'm an existing patient with a referral on file, and I need a knee
+MRI with Linda Ramirez in radiology at Downtown" reproduced specialty ENT:
+the old substring predicate matched ENT inside "patient", overwriting Radiology
+by catalog iteration order. Location resolved correctly to Downtown. Removed
+substring specialty detection in favor of whole-token catalog specialty matching;
+multiple matches preserve ambiguity. Regression test runs a TranscriptionFrame
+through the voice PatientInput processor and the same registry resolver with
+the trace's arguments, proving radiologist/provider/type/location resolution.
+
+The first requested smoke passed DEV-008 but failed all three booking cases:
+the consent allowlist rejected explicit multi-sentence read-back confirmation.
+It now accepts a bounded confirmation grammar referring to the exact read-back
+and requesting booking, without weakening negation/correction vetoes. Both
+scripted confirmation forms have offline regression coverage. Scenario data
+and expected outcomes are unchanged. User requires the four-scenario paid smoke
+after every code-change batch before voice retesting; no matrix is authorized.
+
+Validation: make test collected 74 tests, 72 passed and 2 paid integrations
+skipped. First smoke smoke-20261109-114359-49b9ee: 1/4 passed, $0.31926750.
+Final smoke smoke-20261109-114541-8b41e2: 4/4 passed, 34 model calls, $0.17823000.
+Per-case final costs: DEV-012 $0.03683750 (8 calls), DEV-002 $0.05770000
+(10 calls), DEV-008 $0.04078750 (8 calls), DEV-009 $0.04290500 (8 calls).
+Total both smokes $0.49749750. Costs use logged prompt/cached/completion tokens
+and existing dated 2026-11-07 gpt-4o rates, not estimates. Raw reports and JSONL
+are in backend/logs/evals/ with those run IDs. Existing deletion of
+catalog_scheduler_test.json was preserved, not performed by this fix.

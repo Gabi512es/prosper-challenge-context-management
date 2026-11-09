@@ -1,15 +1,30 @@
 import unittest
 from datetime import datetime
 from pathlib import Path
-from pipecat.frames.frames import LLMFullResponseEndFrame, LLMFullResponseStartFrame, LLMTextFrame
+from pipecat.frames.frames import LLMFullResponseEndFrame, LLMFullResponseStartFrame, LLMTextFrame, TranscriptionFrame
 from pipecat.processors.frame_processor import FrameDirection
 from scheduling import SchedulingEngine, load_catalog
 from scheduling.demo import generate_demo_availability
 from scheduling_agent import build_scheduling_agent
-from scheduling_dialogue import BookingSpeech
+from scheduling_dialogue import BookingSpeech, PatientInput
 
 
 class DialogueTest(unittest.IsolatedAsyncioTestCase):
+    async def test_exact_voice_utterance_does_not_match_ent_inside_patient(self):
+        from unittest.mock import AsyncMock
+        processor = PatientInput(self.d)
+        processor.push_frame = AsyncMock()
+        utterance = "I'm an existing patient with a referral on file, and I need a knee MRI with Linda Ramirez in radiology at Downtown"
+        await processor.process_frame(TranscriptionFrame(utterance, "", ""), FrameDirection.DOWNSTREAM)
+        self.assertEqual(self.d.specialty, "Radiology")
+        fn = next(f for f in self.builder.build_initial_node()["functions"] if f.name == "resolve_options")
+        result = await fn.handler(dict(is_new_patient=False, referral_on_file=True,
+            provider_query="Linda Ramirez", location_query="downtown", appointment_type_query="knee MRI"), None)
+        self.assertEqual(result["resolved"]["provider_id"], "prov_014")
+        self.assertEqual(result["resolved"]["location_id"], "loc_004")
+        self.assertEqual(result["resolved"]["appointment_type_id"], "appt_065")
+        self.assertFalse(result["errors"])
+
     async def test_arbitrary_json_cannot_remove_tool_guards(self):
         from agent_builder import AgentBuilder
         from scheduling_agent import build_scheduling_tool_registry
@@ -107,7 +122,9 @@ class DialogueTest(unittest.IsolatedAsyncioTestCase):
         self.assertFalse(self.d.handoff_requested())
 
     async def test_consent_is_explicit_and_never_correction(self):
-        for text in ("yes", "yeah, sure", "that's fine", "okay, book it"):
+        for text in ("yes", "yeah, sure", "that's fine", "okay, book it",
+                     "Yes. I confirm that exact provider, location, service, date, and time. Please book it.",
+                     "Yes, I confirm the exact earliest slot, clinician, location, service, date, and time. Please book it."):
             self.assertTrue(self.d.is_affirmative(text), text)
         for text in ("no", "wait", "actually", "yes, actually no", "yeah but wait", "yes, not that location"):
             self.assertFalse(self.d.is_affirmative(text), text)

@@ -92,6 +92,11 @@ Not built: catalog CRUD, auth, multi-tenancy, real calendar, reschedule/cancel, 
 
 ## 7. Working rules for the agent
 
+- Voice regression gate (user instruction, 2026-11-09): after each code-change
+  batch, run the paid smoke DEV-012, DEV-002, DEV-008 and DEV-009 once each
+  before handing back for voice testing. Report failures and actual cost; this
+  authorizes that smoke, not a paid matrix. Keep scenarios/expected outcomes fixed.
+
 - Keep a decision log in `docs/decisions.md`: date, options, choice, reason, the measurement behind it.
 - Measure before claiming. Raw numbers come from logs, never from estimates.
 - Smallest change that proves the behavior. Do not add architecture layers to answer each remark.

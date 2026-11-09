@@ -24,6 +24,10 @@ class SchedulingDialogue:
         text = text.casefold().replace("’", "'").strip(" .!?,")
         if re.search(r"\b(no|not|don't|wait|stop|actually|but|except)\b", text):
             return False
+        normalized = re.sub(r"[.,!?]", " ", text)
+        normalized = " ".join(normalized.split())
+        if re.fullmatch(r"yes i confirm (?:the|that) exact (?:provider|clinician|earliest|slot|location|service|date|time|and| )+ please book it", normalized):
+            return True
         return bool(re.fullmatch(r"(?:yes|yeah|correct|i confirm|please book(?: it)?|that's fine|okay,? book it)(?:[, ]+(?:please|sure|book it|please book it|that exact provider, location, service, date, and time))*", text))
 
     def patient(self, text):
@@ -57,10 +61,10 @@ class SchedulingDialogue:
         elif len(positives) > 1:
             self.location_conflict = "Which location would you like?"
         from scheduling.catalog import _specialty_matches
-        for provider in self.engine.catalog.providers:
-            if provider.specialty.casefold() in text.casefold() or any(
-                _specialty_matches(word, provider.specialty) for word in re.findall(r"[A-Za-z]+", text)):
-                self.specialty = provider.specialty
+        specialties = {provider.specialty for provider in self.engine.catalog.providers
+                       if _specialty_matches(text, provider.specialty)}
+        if specialties:
+            self.specialty = next(iter(specialties)) if len(specialties) == 1 else None
         candidates = [item for item in self.engine.state.last_candidates
                       if item.get("entity") == "provider" and item.get("specialty") == self.specialty]
         if len(candidates) == 1:

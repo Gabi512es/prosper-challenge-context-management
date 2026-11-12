@@ -13,16 +13,31 @@ Pipecat's dev runner ships a **prebuilt browser client**, so the test-call UI co
 
 ## Quickstart
 
-Requires **Python 3.11+**. Run from the repo root:
+Requires **Python 3.11+** and **Node.js with npm** (for the graph editor).
+`make install` uses `python3`: check that `python3 --version` is 3.11 or later
+first, since some systems ship an older `python3`.
+
+Put the API keys in `backend/.env` (never committed):
 
 ```bash
-make install
-make run
+OPENAI_API_KEY=...
+ELEVENLABS_API_KEY=...
 ```
 
-Open the URL it prints (default `http://localhost:7860/client`), click **Connect**, allow mic access, and talk to the agent. `Ctrl+C` to stop. (`make help` lists all targets.)\
-\
-Remember to update the `.env` file accordingly.
+Run from the repo root:
+
+```bash
+make install   # creates backend/.venv, installs Python and frontend dependencies
+make run       # voice agent
+```
+
+Open the URL it prints (default `http://localhost:7860/client`), click **Connect**, allow mic access, and talk to the agent. `Ctrl+C` to stop. (`make help` lists all targets.)
+
+Run the offline tests (no API calls, no cost):
+
+```bash
+make test
+```
 
 ## Graph editor
 
@@ -43,8 +58,8 @@ continue to use only their scenario fixtures.
 Voice tool traces are written to `backend/logs/voice-tools.jsonl`, with call id,
 tool name, arguments, actual result/error and duration. Model usage remains in
 `backend/logs/turns.jsonl`; join by call id. Logs contain patient data and stay
-local/ignored. English STT and two-word interruption detection are enabled; a
-silent cut-off recovery prompt is voice-only and still needs acoustic testing.
+local/ignored. English STT is pinned. One real word interrupts the agent while
+it speaks; filler sounds and punctuation noise do not.
 
 Run the voice service and editor in separate terminals:
 

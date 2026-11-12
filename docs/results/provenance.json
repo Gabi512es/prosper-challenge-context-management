@@ -1,0 +1,68 @@
+{
+  "copy_policy": "Verbatim bytes; hashes verified. These are existing DEV/scaling results, never held-out or robustness data. Relative links inside copied Markdown retain their original source context; use README.md navigation.",
+  "files": [
+    {
+      "copy": "docs/results/x1-comparison-v5.md",
+      "source": "docs/comparison-evaluator-v5.md",
+      "sha256": "7947b8921039a3c0c197deea340e879e5997d09aedb0cebb0903c5669fcc87ca",
+      "bytes": 16745,
+      "label": "official x1 DEV comparison"
+    },
+    {
+      "copy": "docs/results/x1-summary.json",
+      "source": "backend/logs/evals/comparison-v5-summary.json",
+      "sha256": "cc75f21da81452118bfc9bfee0ab782d996d2874988f0146c848a52214b61d7c",
+      "bytes": 40405,
+      "label": "official x1 DEV comparison"
+    },
+    {
+      "copy": "docs/results/x1-manual-review.json",
+      "source": "backend/logs/evals/comparison-v5-manual-review.json",
+      "sha256": "02667072a56fa1b053ef6c6fb62d10b88d16ca540ec152d3fa4a0b2e8e9cda4d",
+      "bytes": 3904,
+      "label": "official x1 DEV comparison"
+    },
+    {
+      "copy": "docs/results/scaling-v3-measured.md",
+      "source": "docs/scaling-v3-results.md",
+      "sha256": "634886c840d3a378456c169549605366533598f1df2bf1b55cdd57fd989bacda",
+      "bytes": 15250,
+      "label": "completed subset scaling; search-only exploratory; projections labeled"
+    },
+    {
+      "copy": "docs/results/scaling-v3-analysis.json",
+      "source": "backend/logs/evals/scaling-v3-20261110-092924-e2cde6.analysis.json",
+      "sha256": "29c2846ac8034a9383d33cb34ae3dd607458858609f3fc6f8e8ec917069816a6",
+      "bytes": 44237,
+      "label": "completed subset scaling; search-only exploratory; projections labeled"
+    },
+    {
+      "copy": "docs/results/comparison-proposed-v2-20261109-180827-8752c3.results.json",
+      "source": "backend/logs/evals/comparison-proposed-v2-20261109-180827-8752c3.results.json",
+      "sha256": "b09c39a93d8056a330d7d35f0c3b56669a0f7bf580f4b7e53b691a3618b882b3",
+      "bytes": 745437,
+      "label": "Official x1 DEV raw report/usage. Existing synthetic-development data only; not hidden-set data."
+    },
+    {
+      "copy": "docs/results/comparison-proposed-v2-20261109-180827-8752c3.jsonl",
+      "source": "backend/logs/evals/comparison-proposed-v2-20261109-180827-8752c3.jsonl",
+      "sha256": "f7bb2c9e28cd0a49d4b9dd6444eff87a17040d7963b0a1e83e8b9637fbd25e6a",
+      "bytes": 113379,
+      "label": "Official x1 DEV raw report/usage. Existing synthetic-development data only; not hidden-set data."
+    },
+    {
+      "copy": "docs/results/comparison-baseline-20261109-182321-c4ee5f.results.json",
+      "source": "backend/logs/evals/comparison-baseline-20261109-182321-c4ee5f.results.json",
+      "sha256": "94d47cdde186e528a1c239b42d29f97054f9a93ade8acbfbe9ec02ac47802d44",
+      "bytes": 546112,
+      "label": "Official x1 DEV raw report/usage. Existing synthetic-development data only; not hidden-set data."
+    },
+    {
+      "copy": "docs/results/comparison-baseline-20261109-182321-c4ee5f.jsonl",
+      "source": "backend/logs/evals/comparison-baseline-20261109-182321-c4ee5f.jsonl",
+      "sha256": "febcc54ac845eba515e9a0dfe6da1cb450fe96abb60389e07e1e57ae05053394",
+      "bytes": 105801,
+      "label": "Official x1 DEV raw report/usage. Existing synthetic-development data only; not hidden-set data."
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "status": "proposal only; new explicit approval required",
+  "basis": "complete-usage historical x1 proxy, excluding entire unknown-usage conversation; no revised-set outcome tuning",
+  "new_paid_calls_in_fix": 0,
+  "known_old_cost_usd": "0.0923300",
+  "old_billing_bounds": {
+    "heldout": {
+      "old_cap_usd": "5",
+      "known_usage_cost_usd": "0.0466975",
+      "actual_total_billing_usd": null,
+      "conditional_total_billing_interval_usd": [
+        "0.0466975",
+        "5"
+      ],
+      "additional_unobserved_charge_upper_bound_usd": "4.9533025",
+      "unreported_usage_request_count_upper_bound_if_full_reserves_retained": 15,
+      "unlogged_request_count": null,
+      "certified_unspent_balance_usd": null
+    },
+    "robustness": {
+      "old_cap_usd": "2",
+      "known_usage_cost_usd": "0.0456325",
+      "actual_total_billing_usd": null,
+      "conditional_total_billing_interval_usd": [
+        "0.0456325",
+        "2"
+      ],
+      "additional_unobserved_charge_upper_bound_usd": "1.9543675",
+      "unreported_usage_request_count_upper_bound_if_full_reserves_retained": 6,
+      "unlogged_request_count": null,
+      "certified_unspent_balance_usd": null
+    }
+  },
+  "restart_batches": {
+    "heldout": {
+      "conversations": 32,
+      "expected_incremental_cost_usd": 1.5101216507936506,
+      "conservative_all_cold_plus_50pct_calls_proxy_usd": 4.0094567619047625,
+      "allowance_usd_proposal": 4.5,
+      "fresh_incremental_cap_usd_proposal": 5
+    },
+    "robustness": {
+      "conversations": 8,
+      "expected_incremental_cost_usd": 0.24882971428571424,
+      "conservative_all_cold_plus_50pct_calls_proxy_usd": 0.6277817142857144,
+      "allowance_usd_proposal": 1.5,
+      "fresh_incremental_cap_usd_proposal": 2
+    }
+  },
+  "expected_incremental_cost_usd": 1.758951365079365,
+  "expected_plus_known_old_subtotal_usd": 1.851281365079365,
+  "proposed_incremental_allowance_usd": 6,
+  "proposed_fresh_incremental_caps_usd": 7,
+  "combined_historical_and_restart_conditional_maximum_if_fresh_caps_approved_usd": 14,
+  "note": "Fresh restart caps would authorize additional exposure, not claim the old balances are unspent. Keeping original lifetime caps would need billing reconciliation because certified unspent balance is unknown. Expected values are projections, not measurements or upper bounds."
+}

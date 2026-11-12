@@ -1,0 +1,71 @@
+{
+  "version": "external-eval-v1.1",
+  "source_contract": "reviewed-conversational-v1; boundary fault mapping v1.1",
+  "model": "gpt-4o",
+  "context_strategy": "APPEND",
+  "parallel_tool_calls": false,
+  "temperature": "not explicitly set by frozen runtime",
+  "provider_snapshot": "gpt-4o alias; not pinned",
+  "availability_mode": "eval_fixture",
+  "now": "2026-11-07T00:00:00-08:00",
+  "max_patient_turns": 9,
+  "patient_turn_timeout_seconds": 45,
+  "concurrency": 1,
+  "sdk_retries": 0,
+  "timeout_retries": false,
+  "max_input_tokens": 128000,
+  "max_completion_tokens": 512,
+  "pricing_as_of": "2026-11-07",
+  "prices_per_million_usd": {
+    "input": 2.5,
+    "cached_input": 1.25,
+    "output": 10
+  },
+  "required_review_blocks_pass": true,
+  "prose_rules_are_automated": false,
+  "expected_usd_proposal": {
+    "heldout": 1.51,
+    "robustness": 0.25
+  },
+  "spending_allowance_usd_proposal": {
+    "heldout": 4.5,
+    "robustness": 1.5
+  },
+  "hard_cap_usd_proposal": {
+    "heldout": 5,
+    "robustness": 2
+  },
+  "paid_authorized": false,
+  "patient_driver_changes": [
+    "brief slot selection before full readback",
+    "earliest eligible consent respects explicit provider/site and observed slot loss",
+    "explicit patient_script clarifications",
+    "requested_location_id aliases initial_location_id in private driver when paired with final_location_id; source retained",
+    "continue supported requested patient replies before treating basic no-booking assertions as a completed conversation"
+  ],
+  "scoring_changes": [
+    "unimplemented structured semantics remain mandatory review",
+    "recovery requires intended fault triggered at declared stage",
+    "booking faults require actual write after consent",
+    "non-location correction requirements need review, never fabricated location-correction failures"
+  ],
+  "batch_plan": {
+    "heldout": {
+      "scenarios": 16,
+      "arms": [
+        "proposed",
+        "baseline"
+      ],
+      "repetitions": 1,
+      "conversations": 32
+    },
+    "robustness": {
+      "scenarios": 8,
+      "arms": [
+        "proposed"
+      ],
+      "repetitions": 1,
+      "conversations": 8
+    }
+  }
+}

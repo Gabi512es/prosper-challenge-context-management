@@ -1,0 +1,1202 @@
+{
+  "source_report": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/scaling-v3-20261110-092924-e2cde6.results.json",
+  "evaluator_version": "dev-eval-v5-recovery",
+  "evaluator_sha256": "97117348b6d00263d60c0561381841e3fc50e843873a53b60e827a8c7415a996",
+  "rescore": false,
+  "dependency_sha256": {
+    "baseline_agent.py": "92c1ac39774b3588ebc05d010a29f035af070b237ce125c8e122657f686d7c7b",
+    "evals/catalog_scaling.py": "4edd0cfc9228ee552371a6d7eca25e47997267eb1033e658249221e2a0a98126",
+    "evals/catalog_expander.py": "53e6017d9ee4a07d57aba816a610a6fc1af85c61208e82484f758fa32db4a726",
+    "evals/scaling_matrix.py": "d2319f832ef6e5e0b599c9d8bb765a910cfbfa1d999f3a9aa03892cfda5e9202"
+  },
+  "phases": [
+    {
+      "arm": "proposed-indexed",
+      "factor": 5,
+      "run_id": "scaling-v3-20261110-092924-e2cde6-proposed-indexed-x05",
+      "summary": {
+        "runs": 8,
+        "passed": 6,
+        "failed": 2,
+        "pass_rate": 0.75,
+        "severity": {
+          "unnecessary question": 2
+        },
+        "model_calls": 60,
+        "prompt_tokens": 500482,
+        "cached_tokens": 462976,
+        "uncached_prompt_tokens": 37506,
+        "completion_tokens": 1673,
+        "known_token_subtotals": {
+          "prompt_tokens": 500482,
+          "cached_tokens": 462976,
+          "uncached_prompt_tokens": 37506,
+          "completion_tokens": 1673
+        },
+        "known_cost_usd": 0.689215,
+        "unreported_model_calls": 0,
+        "maximum_cost_exposure_usd": 0.689215,
+        "cost_usd": 0.689215,
+        "successful_bookings": 4,
+        "cost_per_successful_booking_usd": 0.17230375,
+        "known_cost_per_successful_booking_usd": 0.17230375,
+        "maximum_cost_per_successful_booking_usd": 0.17230375,
+        "invalid_booking_attempts": 0,
+        "unnecessary_questions_logged": 2,
+        "additional_unnecessary_questions_reviewed": 2,
+        "unnecessary_questions": 4,
+        "completed_patient_turns": 28,
+        "incomplete_patient_turns": 0,
+        "patient_turn_latency_ms_p50": 2592.516,
+        "patient_turn_latency_ms_p95": 3223.865,
+        "calls_per_repetition": [
+          7,
+          7,
+          3,
+          3,
+          11,
+          11,
+          9,
+          9
+        ],
+        "min_run_cost_usd": 0.0306275,
+        "max_run_cost_usd": 0.1364075
+      },
+      "cache_billing": {
+        "actual_cached_tokens": 462976,
+        "actual_cached_input_cost_usd": 0.57872,
+        "actual_uncached_input_cost_usd": 0.093765,
+        "cache_write_tokens": null,
+        "cache_write_input_cost_usd": null,
+        "cache_write_surcharge_usd": 0,
+        "write_accounting": "Not separately reported by GPT-4o Chat Completions; included in uncached input, no extra write fee."
+      },
+      "manual_review": {
+        "DEV-002/1": {
+          "severity": "unnecessary question",
+          "cause": "Agent/shared dialogue behavior",
+          "additional_unnecessary_questions": 1,
+          "evidence": "Patient twice says I am a new patient. No subsequent resolve_options update; is_new_patient remains null. The code-generated question repeats three times, including a final unanswered repeat beyond the driver reply limit."
+        },
+        "DEV-002/2": {
+          "severity": "unnecessary question",
+          "cause": "Agent/shared dialogue behavior",
+          "additional_unnecessary_questions": 1,
+          "evidence": "Patient twice says I am a new patient. No subsequent resolve_options update; is_new_patient remains null. The code-generated question repeats three times, including a final unanswered repeat beyond the driver reply limit."
+        }
+      },
+      "scenarios": {
+        "DEV-002": {
+          "runs": 2,
+          "passed": 0,
+          "failed": 2,
+          "pass_rate": 0.0,
+          "severity": {
+            "unnecessary question": 2
+          },
+          "model_calls": 14,
+          "prompt_tokens": 109013,
+          "cached_tokens": 96128,
+          "uncached_prompt_tokens": 12885,
+          "completion_tokens": 313,
+          "known_token_subtotals": {
+            "prompt_tokens": 109013,
+            "cached_tokens": 96128,
+            "uncached_prompt_tokens": 12885,
+            "completion_tokens": 313
+          },
+          "known_cost_usd": 0.1555025,
+          "unreported_model_calls": 0,
+          "maximum_cost_exposure_usd": 0.1555025,
+          "cost_usd": 0.1555025,
+          "successful_bookings": 0,
+          "cost_per_successful_booking_usd": null,
+          "known_cost_per_successful_booking_usd": null,
+          "maximum_cost_per_successful_booking_usd": null,
+          "invalid_booking_attempts": 0,
+          "unnecessary_questions_logged": 2,
+          "additional_unnecessary_questions_reviewed": 2,
+          "unnecessary_questions": 4,
+          "completed_patient_turns": 8,
+          "incomplete_patient_turns": 0,
+          "patient_turn_latency_ms_p50": 2149.794,
+          "patient_turn_latency_ms_p95": 3833.367,
+          "calls_per_repetition": [
+            7,
+            7
+          ],
+          "min_run_cost_usd": 0.073955,
+          "max_run_cost_usd": 0.0815475
+        },
+        "DEV-003": {
+          "runs": 2,
+          "passed": 2,
+          "failed": 0,
+          "pass_rate": 1.0,
+          "severity": {},
+          "model_calls": 6,
+          "prompt_tokens": 43749,
+          "cached_tokens": 39936,
+          "uncached_prompt_tokens": 3813,
+          "completion_tokens": 201,
+          "known_token_subtotals": {
+            "prompt_tokens": 43749,
+            "cached_tokens": 39936,
+            "uncached_prompt_tokens": 3813,
+            "completion_tokens": 201
+          },
+          "known_cost_usd": 0.0614625,
+          "unreported_model_calls": 0,
+          "maximum_cost_exposure_usd": 0.0614625,
+          "cost_usd": 0.0614625,
+          "successful_bookings": 0,
+          "cost_per_successful_booking_usd": null,
+          "known_cost_per_successful_booking_usd": null,
+          "maximum_cost_per_successful_booking_usd": null,
+          "invalid_booking_attempts": 0,
+          "unnecessary_questions_logged": 0,
+          "additional_unnecessary_questions_reviewed": 0,
+          "unnecessary_questions": 0,
+          "completed_patient_turns": 2,
+          "incomplete_patient_turns": 0,
+          "patient_turn_latency_ms_p50": 2489.206,
+          "patient_turn_latency_ms_p95": 2529.101,
+          "calls_per_repetition": [
+            3,
+            3
+          ],
+          "min_run_cost_usd": 0.0306275,
+          "max_run_cost_usd": 0.030835
+        },
+        "DEV-009": {
+          "runs": 2,
+          "passed": 2,
+          "failed": 0,
+          "pass_rate": 1.0,
+          "severity": {},
+          "model_calls": 22,
+          "prompt_tokens": 200402,
+          "cached_tokens": 188544,
+          "uncached_prompt_tokens": 11858,
+          "completion_tokens": 609,
+          "known_token_subtotals": {
+            "prompt_tokens": 200402,
+            "cached_tokens": 188544,
+            "uncached_prompt_tokens": 11858,
+            "completion_tokens": 609
+          },
+          "known_cost_usd": 0.271415,
+          "unreported_model_calls": 0,
+          "maximum_cost_exposure_usd": 0.271415,
+          "cost_usd": 0.271415,
+          "successful_bookings": 2,
+          "cost_per_successful_booking_usd": 0.1357075,
+          "known_cost_per_successful_booking_usd": 0.1357075,
+          "maximum_cost_per_successful_booking_usd": 0.1357075,
+          "invalid_booking_attempts": 0,
+          "unnecessary_questions_logged": 0,
+          "additional_unnecessary_questions_reviewed": 0,
+          "unnecessary_questions": 0,
+          "completed_patient_turns": 10,
+          "incomplete_patient_turns": 0,
+          "patient_turn_latency_ms_p50": 2606.495,
+          "patient_turn_latency_ms_p95": 2988.362,
+          "calls_per_repetition": [
+            11,
+            11
+          ],
+          "min_run_cost_usd": 0.1350075,
+          "max_run_cost_usd": 0.1364075
+        },
+        "DEV-012": {
+          "runs": 2,
+          "passed": 2,
+          "failed": 0,
+          "pass_rate": 1.0,
+          "severity": {},
+          "model_calls": 18,
+          "prompt_tokens": 147318,
+          "cached_tokens": 138368,
+          "uncached_prompt_tokens": 8950,
+          "completion_tokens": 550,
+          "known_token_subtotals": {
+            "prompt_tokens": 147318,
+            "cached_tokens": 138368,
+            "uncached_prompt_tokens": 8950,
+            "completion_tokens": 550
+          },
+          "known_cost_usd": 0.200835,
+          "unreported_model_calls": 0,
+          "maximum_cost_exposure_usd": 0.200835,
+          "cost_usd": 0.200835,
+          "successful_bookings": 2,
+          "cost_per_successful_booking_usd": 0.1004175,
+          "known_cost_per_successful_booking_usd": 0.1004175,
+          "maximum_cost_per_successful_booking_usd": 0.1004175,
+          "invalid_booking_attempts": 0,
+          "unnecessary_questions_logged": 0,
+          "additional_unnecessary_questions_reviewed": 0,
+          "unnecessary_questions": 0,
+          "completed_patient_turns": 8,
+          "incomplete_patient_turns": 0,
+          "patient_turn_latency_ms_p50": 2603.045,
+          "patient_turn_latency_ms_p95": 3114.548,
+          "calls_per_repetition": [
+            9,
+            9
+          ],
+          "min_run_cost_usd": 0.1001575,
+          "max_run_cost_usd": 0.1006775
+        }
+      }
+    },
+    {
+      "arm": "baseline",
+      "factor": 5,
+      "run_id": "scaling-v3-20261110-092924-e2cde6-baseline-x05",
+      "summary": {
+        "runs": 8,
+        "passed": 5,
+        "failed": 3,
+        "pass_rate": 0.625,
+        "severity": {
+          "unnecessary question": 2,
+          "false statement to patient": 1
+        },
+        "model_calls": 56,
+        "prompt_tokens": 1775158,
+        "cached_tokens": 1685376,
+        "uncached_prompt_tokens": 89782,
+        "completion_tokens": 1703,
+        "known_token_subtotals": {
+          "prompt_tokens": 1775158,
+          "cached_tokens": 1685376,
+          "uncached_prompt_tokens": 89782,
+          "completion_tokens": 1703
+        },
+        "known_cost_usd": 2.348205,
+        "unreported_model_calls": 0,
+        "maximum_cost_exposure_usd": 2.348205,
+        "cost_usd": 2.348205,
+        "successful_bookings": 3,
+        "cost_per_successful_booking_usd": 0.782735,
+        "known_cost_per_successful_booking_usd": 0.782735,
+        "maximum_cost_per_successful_booking_usd": 0.782735,
+        "invalid_booking_attempts": 0,
+        "unnecessary_questions_logged": 2,
+        "additional_unnecessary_questions_reviewed": 2,
+        "unnecessary_questions": 4,
+        "completed_patient_turns": 27,
+        "incomplete_patient_turns": 0,
+        "patient_turn_latency_ms_p50": 2871.117,
+        "patient_turn_latency_ms_p95": 5593.088,
+        "calls_per_repetition": [
+          6,
+          6,
+          3,
+          3,
+          11,
+          11,
+          7,
+          9
+        ],
+        "min_run_cost_usd": 0.1188275,
+        "max_run_cost_usd": 0.45943
+      },
+      "cache_billing": {
+        "actual_cached_tokens": 1685376,
+        "actual_cached_input_cost_usd": 2.10672,
+        "actual_uncached_input_cost_usd": 0.224455,
+        "cache_write_tokens": null,
+        "cache_write_input_cost_usd": null,
+        "cache_write_surcharge_usd": 0,
+        "write_accounting": "Not separately reported by GPT-4o Chat Completions; included in uncached input, no extra write fee."
+      },
+      "manual_review": {
+        "DEV-002/1": {
+          "severity": "unnecessary question",
+          "cause": "Agent/shared dialogue behavior",
+          "additional_unnecessary_questions": 1,
+          "evidence": "Patient twice says I am a new patient. No subsequent resolve_options update; is_new_patient remains null. The code-generated question repeats three times, including a final unanswered repeat beyond the driver reply limit."
+        },
+        "DEV-002/2": {
+          "severity": "unnecessary question",
+          "cause": "Agent/shared dialogue behavior",
+          "additional_unnecessary_questions": 1,
+          "evidence": "Patient twice says I am a new patient. No subsequent resolve_options update; is_new_patient remains null. The code-generated question repeats three times, including a final unanswered repeat beyond the driver reply limit."
+        },
+        "DEV-012/1": {
+          "severity": "false statement to patient",
+          "cause": "Agent selected wrong catalog ID",
+          "evidence": "Knee MRI requested, but resolve_options uses appt_064 (MRI - Spine), not appt_065 (MRI - Knee). No fixture slot fits the wrong service. Patient hears: No matching slots are available. Would you like to change your search constraints? No booking created."
+        }
+      },
+      "scenarios": {
+        "DEV-002": {
+          "runs": 2,
+          "passed": 0,
+          "failed": 2,
+          "pass_rate": 0.0,
+          "severity": {
+            "unnecessary question": 2
+          },
+          "model_calls": 12,
+          "prompt_tokens": 370536,
+          "cached_tokens": 336000,
+          "uncached_prompt_tokens": 34536,
+          "completion_tokens": 349,
+          "known_token_subtotals": {
+            "prompt_tokens": 370536,
+            "cached_tokens": 336000,
+            "uncached_prompt_tokens": 34536,
+            "completion_tokens": 349
+          },
+          "known_cost_usd": 0.50983,
+          "unreported_model_calls": 0,
+          "maximum_cost_exposure_usd": 0.50983,
+          "cost_usd": 0.50983,
+          "successful_bookings": 0,
+          "cost_per_successful_booking_usd": null,
+          "known_cost_per_successful_booking_usd": null,
+          "maximum_cost_per_successful_booking_usd": null,
+          "invalid_booking_attempts": 0,
+          "unnecessary_questions_logged": 2,
+          "additional_unnecessary_questions_reviewed": 2,
+          "unnecessary_questions": 4,
+          "completed_patient_turns": 8,
+          "incomplete_patient_turns": 0,
+          "patient_turn_latency_ms_p50": 1616.449,
+          "patient_turn_latency_ms_p95": 3737.759,
+          "calls_per_repetition": [
+            6,
+            6
+          ],
+          "min_run_cost_usd": 0.236125,
+          "max_run_cost_usd": 0.273705
+        },
+        "DEV-003": {
+          "runs": 2,
+          "passed": 2,
+          "failed": 0,
+          "pass_rate": 1.0,
+          "severity": {},
+          "model_calls": 6,
+          "prompt_tokens": 184644,
+          "cached_tokens": 180736,
+          "uncached_prompt_tokens": 3908,
+          "completion_tokens": 226,
+          "known_token_subtotals": {
+            "prompt_tokens": 184644,
+            "cached_tokens": 180736,
+            "uncached_prompt_tokens": 3908,
+            "completion_tokens": 226
+          },
+          "known_cost_usd": 0.23795,
+          "unreported_model_calls": 0,
+          "maximum_cost_exposure_usd": 0.23795,
+          "cost_usd": 0.23795,
+          "successful_bookings": 0,
+          "cost_per_successful_booking_usd": null,
+          "known_cost_per_successful_booking_usd": null,
+          "maximum_cost_per_successful_booking_usd": null,
+          "invalid_booking_attempts": 0,
+          "unnecessary_questions_logged": 0,
+          "additional_unnecessary_questions_reviewed": 0,
+          "unnecessary_questions": 0,
+          "completed_patient_turns": 2,
+          "incomplete_patient_turns": 0,
+          "patient_turn_latency_ms_p50": 2839.414,
+          "patient_turn_latency_ms_p95": 2867.947,
+          "calls_per_repetition": [
+            3,
+            3
+          ],
+          "min_run_cost_usd": 0.1188275,
+          "max_run_cost_usd": 0.1191225
+        },
+        "DEV-009": {
+          "runs": 2,
+          "passed": 2,
+          "failed": 0,
+          "pass_rate": 1.0,
+          "severity": {},
+          "model_calls": 22,
+          "prompt_tokens": 717100,
+          "cached_tokens": 704256,
+          "uncached_prompt_tokens": 12844,
+          "completion_tokens": 643,
+          "known_token_subtotals": {
+            "prompt_tokens": 717100,
+            "cached_tokens": 704256,
+            "uncached_prompt_tokens": 12844,
+            "completion_tokens": 643
+          },
+          "known_cost_usd": 0.91886,
+          "unreported_model_calls": 0,
+          "maximum_cost_exposure_usd": 0.91886,
+          "cost_usd": 0.91886,
+          "successful_bookings": 2,
+          "cost_per_successful_booking_usd": 0.45943,
+          "known_cost_per_successful_booking_usd": 0.45943,
+          "maximum_cost_per_successful_booking_usd": 0.45943,
+          "invalid_booking_attempts": 0,
+          "unnecessary_questions_logged": 0,
+          "additional_unnecessary_questions_reviewed": 0,
+          "unnecessary_questions": 0,
+          "completed_patient_turns": 10,
+          "incomplete_patient_turns": 0,
+          "patient_turn_latency_ms_p50": 2870.747,
+          "patient_turn_latency_ms_p95": 5239.512,
+          "calls_per_repetition": [
+            11,
+            11
+          ],
+          "min_run_cost_usd": 0.45943,
+          "max_run_cost_usd": 0.45943
+        },
+        "DEV-012": {
+          "runs": 2,
+          "passed": 1,
+          "failed": 1,
+          "pass_rate": 0.5,
+          "severity": {
+            "false statement to patient": 1
+          },
+          "model_calls": 16,
+          "prompt_tokens": 502878,
+          "cached_tokens": 464384,
+          "uncached_prompt_tokens": 38494,
+          "completion_tokens": 485,
+          "known_token_subtotals": {
+            "prompt_tokens": 502878,
+            "cached_tokens": 464384,
+            "uncached_prompt_tokens": 38494,
+            "completion_tokens": 485
+          },
+          "known_cost_usd": 0.681565,
+          "unreported_model_calls": 0,
+          "maximum_cost_exposure_usd": 0.681565,
+          "cost_usd": 0.681565,
+          "successful_bookings": 1,
+          "cost_per_successful_booking_usd": 0.681565,
+          "known_cost_per_successful_booking_usd": 0.681565,
+          "maximum_cost_per_successful_booking_usd": 0.681565,
+          "invalid_booking_attempts": 0,
+          "unnecessary_questions_logged": 0,
+          "additional_unnecessary_questions_reviewed": 0,
+          "unnecessary_questions": 0,
+          "completed_patient_turns": 7,
+          "incomplete_patient_turns": 0,
+          "patient_turn_latency_ms_p50": 3094.867,
+          "patient_turn_latency_ms_p95": 5427.851,
+          "calls_per_repetition": [
+            7,
+            9
+          ],
+          "min_run_cost_usd": 0.3182325,
+          "max_run_cost_usd": 0.3633325
+        }
+      }
+    },
+    {
+      "arm": "proposed-indexed",
+      "factor": 10,
+      "run_id": "scaling-v3-20261110-092924-e2cde6-proposed-indexed-x10",
+      "summary": {
+        "runs": 4,
+        "passed": 3,
+        "failed": 1,
+        "pass_rate": 0.75,
+        "severity": {
+          "unnecessary question": 1
+        },
+        "model_calls": 27,
+        "prompt_tokens": 387438,
+        "cached_tokens": 366848,
+        "uncached_prompt_tokens": 20590,
+        "completion_tokens": 777,
+        "known_token_subtotals": {
+          "prompt_tokens": 387438,
+          "cached_tokens": 366848,
+          "uncached_prompt_tokens": 20590,
+          "completion_tokens": 777
+        },
+        "known_cost_usd": 0.517805,
+        "unreported_model_calls": 0,
+        "maximum_cost_exposure_usd": 0.517805,
+        "cost_usd": 0.517805,
+        "successful_bookings": 2,
+        "cost_per_successful_booking_usd": 0.2589025,
+        "known_cost_per_successful_booking_usd": 0.2589025,
+        "maximum_cost_per_successful_booking_usd": 0.2589025,
+        "invalid_booking_attempts": 0,
+        "unnecessary_questions_logged": 0,
+        "additional_unnecessary_questions_reviewed": 1,
+        "unnecessary_questions": 1,
+        "completed_patient_turns": 12,
+        "incomplete_patient_turns": 0,
+        "patient_turn_latency_ms_p50": 2696.418,
+        "patient_turn_latency_ms_p95": 3752.954,
+        "calls_per_repetition": [
+          4,
+          3,
+          11,
+          9
+        ],
+        "min_run_cost_usd": 0.0531725,
+        "max_run_cost_usd": 0.2184275
+      },
+      "cache_billing": {
+        "actual_cached_tokens": 366848,
+        "actual_cached_input_cost_usd": 0.45856,
+        "actual_uncached_input_cost_usd": 0.051475,
+        "cache_write_tokens": null,
+        "cache_write_input_cost_usd": null,
+        "cache_write_surcharge_usd": 0,
+        "write_accounting": "Not separately reported by GPT-4o Chat Completions; included in uncached input, no extra write fee."
+      },
+      "manual_review": {
+        "DEV-002/1": {
+          "severity": "unnecessary question",
+          "cause": "Agent did not apply provider clarification; driver cannot continue spelling in this case",
+          "additional_unnecessary_questions": 1,
+          "evidence": "After Maria Garcia, Family Medicine nurse practitioner and Midtown are supplied, no second resolve_options call occurs, provider stays unresolved, and the agent asks to spell the first name and surname. DEV-002 driver has no reply for that spelling question."
+        }
+      },
+      "scenarios": {
+        "DEV-002": {
+          "runs": 1,
+          "passed": 0,
+          "failed": 1,
+          "pass_rate": 0.0,
+          "severity": {
+            "unnecessary question": 1
+          },
+          "model_calls": 4,
+          "prompt_tokens": 53542,
+          "cached_tokens": 45312,
+          "uncached_prompt_tokens": 8230,
+          "completion_tokens": 88,
+          "known_token_subtotals": {
+            "prompt_tokens": 53542,
+            "cached_tokens": 45312,
+            "uncached_prompt_tokens": 8230,
+            "completion_tokens": 88
+          },
+          "known_cost_usd": 0.078095,
+          "unreported_model_calls": 0,
+          "maximum_cost_exposure_usd": 0.078095,
+          "cost_usd": 0.078095,
+          "successful_bookings": 0,
+          "cost_per_successful_booking_usd": null,
+          "known_cost_per_successful_booking_usd": null,
+          "maximum_cost_per_successful_booking_usd": null,
+          "invalid_booking_attempts": 0,
+          "unnecessary_questions_logged": 0,
+          "additional_unnecessary_questions_reviewed": 1,
+          "unnecessary_questions": 1,
+          "completed_patient_turns": 2,
+          "incomplete_patient_turns": 0,
+          "patient_turn_latency_ms_p50": 2084.249,
+          "patient_turn_latency_ms_p95": 2389.459,
+          "calls_per_repetition": [
+            4
+          ],
+          "min_run_cost_usd": 0.078095,
+          "max_run_cost_usd": 0.078095
+        },
+        "DEV-003": {
+          "runs": 1,
+          "passed": 1,
+          "failed": 0,
+          "pass_rate": 1.0,
+          "severity": {},
+          "model_calls": 3,
+          "prompt_tokens": 39821,
+          "cached_tokens": 38016,
+          "uncached_prompt_tokens": 1805,
+          "completion_tokens": 114,
+          "known_token_subtotals": {
+            "prompt_tokens": 39821,
+            "cached_tokens": 38016,
+            "uncached_prompt_tokens": 1805,
+            "completion_tokens": 114
+          },
+          "known_cost_usd": 0.0531725,
+          "unreported_model_calls": 0,
+          "maximum_cost_exposure_usd": 0.0531725,
+          "cost_usd": 0.0531725,
+          "successful_bookings": 0,
+          "cost_per_successful_booking_usd": null,
+          "known_cost_per_successful_booking_usd": null,
+          "maximum_cost_per_successful_booking_usd": null,
+          "invalid_booking_attempts": 0,
+          "unnecessary_questions_logged": 0,
+          "additional_unnecessary_questions_reviewed": 0,
+          "unnecessary_questions": 0,
+          "completed_patient_turns": 1,
+          "incomplete_patient_turns": 0,
+          "patient_turn_latency_ms_p50": 2780.685,
+          "patient_turn_latency_ms_p95": 2780.685,
+          "calls_per_repetition": [
+            3
+          ],
+          "min_run_cost_usd": 0.0531725,
+          "max_run_cost_usd": 0.0531725
+        },
+        "DEV-009": {
+          "runs": 1,
+          "passed": 1,
+          "failed": 0,
+          "pass_rate": 1.0,
+          "severity": {},
+          "model_calls": 11,
+          "prompt_tokens": 166075,
+          "cached_tokens": 159872,
+          "uncached_prompt_tokens": 6203,
+          "completion_tokens": 308,
+          "known_token_subtotals": {
+            "prompt_tokens": 166075,
+            "cached_tokens": 159872,
+            "uncached_prompt_tokens": 6203,
+            "completion_tokens": 308
+          },
+          "known_cost_usd": 0.2184275,
+          "unreported_model_calls": 0,
+          "maximum_cost_exposure_usd": 0.2184275,
+          "cost_usd": 0.2184275,
+          "successful_bookings": 1,
+          "cost_per_successful_booking_usd": 0.2184275,
+          "known_cost_per_successful_booking_usd": 0.2184275,
+          "maximum_cost_per_successful_booking_usd": 0.2184275,
+          "invalid_booking_attempts": 0,
+          "unnecessary_questions_logged": 0,
+          "additional_unnecessary_questions_reviewed": 0,
+          "unnecessary_questions": 0,
+          "completed_patient_turns": 5,
+          "incomplete_patient_turns": 0,
+          "patient_turn_latency_ms_p50": 3319.45,
+          "patient_turn_latency_ms_p95": 3989.864,
+          "calls_per_repetition": [
+            11
+          ],
+          "min_run_cost_usd": 0.2184275,
+          "max_run_cost_usd": 0.2184275
+        },
+        "DEV-012": {
+          "runs": 1,
+          "passed": 1,
+          "failed": 0,
+          "pass_rate": 1.0,
+          "severity": {},
+          "model_calls": 9,
+          "prompt_tokens": 128000,
+          "cached_tokens": 123648,
+          "uncached_prompt_tokens": 4352,
+          "completion_tokens": 267,
+          "known_token_subtotals": {
+            "prompt_tokens": 128000,
+            "cached_tokens": 123648,
+            "uncached_prompt_tokens": 4352,
+            "completion_tokens": 267
+          },
+          "known_cost_usd": 0.16811,
+          "unreported_model_calls": 0,
+          "maximum_cost_exposure_usd": 0.16811,
+          "cost_usd": 0.16811,
+          "successful_bookings": 1,
+          "cost_per_successful_booking_usd": 0.16811,
+          "known_cost_per_successful_booking_usd": 0.16811,
+          "maximum_cost_per_successful_booking_usd": 0.16811,
+          "invalid_booking_attempts": 0,
+          "unnecessary_questions_logged": 0,
+          "additional_unnecessary_questions_reviewed": 0,
+          "unnecessary_questions": 0,
+          "completed_patient_turns": 4,
+          "incomplete_patient_turns": 0,
+          "patient_turn_latency_ms_p50": 2589.146,
+          "patient_turn_latency_ms_p95": 3192.736,
+          "calls_per_repetition": [
+            9
+          ],
+          "min_run_cost_usd": 0.16811,
+          "max_run_cost_usd": 0.16811
+        }
+      }
+    },
+    {
+      "arm": "exploratory-search-only",
+      "factor": 10,
+      "run_id": "scaling-v3-20261110-092924-e2cde6-exploratory-search-only-x10",
+      "summary": {
+        "runs": 4,
+        "passed": 3,
+        "failed": 1,
+        "pass_rate": 0.75,
+        "severity": {
+          "unnecessary question": 1
+        },
+        "model_calls": 28,
+        "prompt_tokens": 71610,
+        "cached_tokens": 46976,
+        "uncached_prompt_tokens": 24634,
+        "completion_tokens": 825,
+        "known_token_subtotals": {
+          "prompt_tokens": 71610,
+          "cached_tokens": 46976,
+          "uncached_prompt_tokens": 24634,
+          "completion_tokens": 825
+        },
+        "known_cost_usd": 0.128555,
+        "unreported_model_calls": 0,
+        "maximum_cost_exposure_usd": 0.128555,
+        "cost_usd": 0.128555,
+        "successful_bookings": 2,
+        "cost_per_successful_booking_usd": 0.0642775,
+        "known_cost_per_successful_booking_usd": 0.0642775,
+        "maximum_cost_per_successful_booking_usd": 0.0642775,
+        "invalid_booking_attempts": 0,
+        "unnecessary_questions_logged": 0,
+        "additional_unnecessary_questions_reviewed": 1,
+        "unnecessary_questions": 1,
+        "completed_patient_turns": 12,
+        "incomplete_patient_turns": 0,
+        "patient_turn_latency_ms_p50": 2860.636,
+        "patient_turn_latency_ms_p95": 4272.307,
+        "calls_per_repetition": [
+          5,
+          3,
+          11,
+          9
+        ],
+        "min_run_cost_usd": 0.01078,
+        "max_run_cost_usd": 0.061695
+      },
+      "cache_billing": {
+        "actual_cached_tokens": 46976,
+        "actual_cached_input_cost_usd": 0.05872,
+        "actual_uncached_input_cost_usd": 0.061585,
+        "cache_write_tokens": null,
+        "cache_write_input_cost_usd": null,
+        "cache_write_surcharge_usd": 0,
+        "write_accounting": "Not separately reported by GPT-4o Chat Completions; included in uncached input, no extra write fee."
+      },
+      "manual_review": {
+        "DEV-002/1": {
+          "severity": "unnecessary question",
+          "cause": "Agent query formatting and shared resolver candidate error; driver cannot answer wrong-candidate question",
+          "additional_unnecessary_questions": 1,
+          "evidence": "resolve_options provider_query is Dr. Maria Garcia, Family Medicine. Shared resolver returns original prov_019 Dr. Maria Martinez (ENT), with requires_confirmation and a specialty filter_no_match. Agent asks Did you mean Dr. Maria Martinez? No provider is selected or booked. Specialty was embedded in the name query; no synthetic provider caused the collision."
+        }
+      },
+      "scenarios": {
+        "DEV-002": {
+          "runs": 1,
+          "passed": 0,
+          "failed": 1,
+          "pass_rate": 0.0,
+          "severity": {
+            "unnecessary question": 1
+          },
+          "model_calls": 5,
+          "prompt_tokens": 8981,
+          "cached_tokens": 5760,
+          "uncached_prompt_tokens": 3221,
+          "completion_tokens": 143,
+          "known_token_subtotals": {
+            "prompt_tokens": 8981,
+            "cached_tokens": 5760,
+            "uncached_prompt_tokens": 3221,
+            "completion_tokens": 143
+          },
+          "known_cost_usd": 0.0166825,
+          "unreported_model_calls": 0,
+          "maximum_cost_exposure_usd": 0.0166825,
+          "cost_usd": 0.0166825,
+          "successful_bookings": 0,
+          "cost_per_successful_booking_usd": null,
+          "known_cost_per_successful_booking_usd": null,
+          "maximum_cost_per_successful_booking_usd": null,
+          "invalid_booking_attempts": 0,
+          "unnecessary_questions_logged": 0,
+          "additional_unnecessary_questions_reviewed": 1,
+          "unnecessary_questions": 1,
+          "completed_patient_turns": 2,
+          "incomplete_patient_turns": 0,
+          "patient_turn_latency_ms_p50": 2618.431,
+          "patient_turn_latency_ms_p95": 2780.043,
+          "calls_per_repetition": [
+            5
+          ],
+          "min_run_cost_usd": 0.0166825,
+          "max_run_cost_usd": 0.0166825
+        },
+        "DEV-003": {
+          "runs": 1,
+          "passed": 1,
+          "failed": 0,
+          "pass_rate": 1.0,
+          "severity": {},
+          "model_calls": 3,
+          "prompt_tokens": 4456,
+          "cached_tokens": 1152,
+          "uncached_prompt_tokens": 3304,
+          "completion_tokens": 108,
+          "known_token_subtotals": {
+            "prompt_tokens": 4456,
+            "cached_tokens": 1152,
+            "uncached_prompt_tokens": 3304,
+            "completion_tokens": 108
+          },
+          "known_cost_usd": 0.01078,
+          "unreported_model_calls": 0,
+          "maximum_cost_exposure_usd": 0.01078,
+          "cost_usd": 0.01078,
+          "successful_bookings": 0,
+          "cost_per_successful_booking_usd": null,
+          "known_cost_per_successful_booking_usd": null,
+          "maximum_cost_per_successful_booking_usd": null,
+          "invalid_booking_attempts": 0,
+          "unnecessary_questions_logged": 0,
+          "additional_unnecessary_questions_reviewed": 0,
+          "unnecessary_questions": 0,
+          "completed_patient_turns": 1,
+          "incomplete_patient_turns": 0,
+          "patient_turn_latency_ms_p50": 3844.567,
+          "patient_turn_latency_ms_p95": 3844.567,
+          "calls_per_repetition": [
+            3
+          ],
+          "min_run_cost_usd": 0.01078,
+          "max_run_cost_usd": 0.01078
+        },
+        "DEV-009": {
+          "runs": 1,
+          "passed": 1,
+          "failed": 0,
+          "pass_rate": 1.0,
+          "severity": {},
+          "model_calls": 11,
+          "prompt_tokens": 36262,
+          "cached_tokens": 25600,
+          "uncached_prompt_tokens": 10662,
+          "completion_tokens": 304,
+          "known_token_subtotals": {
+            "prompt_tokens": 36262,
+            "cached_tokens": 25600,
+            "uncached_prompt_tokens": 10662,
+            "completion_tokens": 304
+          },
+          "known_cost_usd": 0.061695,
+          "unreported_model_calls": 0,
+          "maximum_cost_exposure_usd": 0.061695,
+          "cost_usd": 0.061695,
+          "successful_bookings": 1,
+          "cost_per_successful_booking_usd": 0.061695,
+          "known_cost_per_successful_booking_usd": 0.061695,
+          "maximum_cost_per_successful_booking_usd": 0.061695,
+          "invalid_booking_attempts": 0,
+          "unnecessary_questions_logged": 0,
+          "additional_unnecessary_questions_reviewed": 0,
+          "unnecessary_questions": 0,
+          "completed_patient_turns": 5,
+          "incomplete_patient_turns": 0,
+          "patient_turn_latency_ms_p50": 2420.573,
+          "patient_turn_latency_ms_p95": 4583.473,
+          "calls_per_repetition": [
+            11
+          ],
+          "min_run_cost_usd": 0.061695,
+          "max_run_cost_usd": 0.061695
+        },
+        "DEV-012": {
+          "runs": 1,
+          "passed": 1,
+          "failed": 0,
+          "pass_rate": 1.0,
+          "severity": {},
+          "model_calls": 9,
+          "prompt_tokens": 21911,
+          "cached_tokens": 14464,
+          "uncached_prompt_tokens": 7447,
+          "completion_tokens": 270,
+          "known_token_subtotals": {
+            "prompt_tokens": 21911,
+            "cached_tokens": 14464,
+            "uncached_prompt_tokens": 7447,
+            "completion_tokens": 270
+          },
+          "known_cost_usd": 0.0393975,
+          "unreported_model_calls": 0,
+          "maximum_cost_exposure_usd": 0.0393975,
+          "cost_usd": 0.0393975,
+          "successful_bookings": 1,
+          "cost_per_successful_booking_usd": 0.0393975,
+          "known_cost_per_successful_booking_usd": 0.0393975,
+          "maximum_cost_per_successful_booking_usd": 0.0393975,
+          "invalid_booking_attempts": 0,
+          "unnecessary_questions_logged": 0,
+          "additional_unnecessary_questions_reviewed": 0,
+          "unnecessary_questions": 0,
+          "completed_patient_turns": 4,
+          "incomplete_patient_turns": 0,
+          "patient_turn_latency_ms_p50": 3029.294,
+          "patient_turn_latency_ms_p95": 3391.737,
+          "calls_per_repetition": [
+            9
+          ],
+          "min_run_cost_usd": 0.0393975,
+          "max_run_cost_usd": 0.0393975
+        }
+      }
+    },
+    {
+      "arm": "exploratory-search-only",
+      "factor": 50,
+      "run_id": "scaling-v3-20261110-092924-e2cde6-exploratory-search-only-x50",
+      "summary": {
+        "runs": 4,
+        "passed": 3,
+        "failed": 1,
+        "pass_rate": 0.75,
+        "severity": {
+          "unnecessary question": 1
+        },
+        "model_calls": 30,
+        "prompt_tokens": 75032,
+        "cached_tokens": 52992,
+        "uncached_prompt_tokens": 22040,
+        "completion_tokens": 812,
+        "known_token_subtotals": {
+          "prompt_tokens": 75032,
+          "cached_tokens": 52992,
+          "uncached_prompt_tokens": 22040,
+          "completion_tokens": 812
+        },
+        "known_cost_usd": 0.12946,
+        "unreported_model_calls": 0,
+        "maximum_cost_exposure_usd": 0.12946,
+        "cost_usd": 0.12946,
+        "successful_bookings": 2,
+        "cost_per_successful_booking_usd": 0.06473,
+        "known_cost_per_successful_booking_usd": 0.06473,
+        "maximum_cost_per_successful_booking_usd": 0.06473,
+        "invalid_booking_attempts": 0,
+        "unnecessary_questions_logged": 1,
+        "additional_unnecessary_questions_reviewed": 1,
+        "unnecessary_questions": 2,
+        "completed_patient_turns": 14,
+        "incomplete_patient_turns": 0,
+        "patient_turn_latency_ms_p50": 2602.434,
+        "patient_turn_latency_ms_p95": 3534.993,
+        "calls_per_repetition": [
+          7,
+          3,
+          11,
+          9
+        ],
+        "min_run_cost_usd": 0.009365,
+        "max_run_cost_usd": 0.061545
+      },
+      "cache_billing": {
+        "actual_cached_tokens": 52992,
+        "actual_cached_input_cost_usd": 0.06624,
+        "actual_uncached_input_cost_usd": 0.0551,
+        "cache_write_tokens": null,
+        "cache_write_input_cost_usd": null,
+        "cache_write_surcharge_usd": 0,
+        "write_accounting": "Not separately reported by GPT-4o Chat Completions; included in uncached input, no extra write fee."
+      },
+      "manual_review": {
+        "DEV-002/1": {
+          "severity": "unnecessary question",
+          "cause": "Agent/shared dialogue behavior",
+          "additional_unnecessary_questions": 1,
+          "evidence": "Patient twice says I am a new patient. No subsequent resolve_options update; is_new_patient remains null. The code-generated question repeats three times, including a final unanswered repeat beyond the driver reply limit."
+        }
+      },
+      "scenarios": {
+        "DEV-002": {
+          "runs": 1,
+          "passed": 0,
+          "failed": 1,
+          "pass_rate": 0.0,
+          "severity": {
+            "unnecessary question": 1
+          },
+          "model_calls": 7,
+          "prompt_tokens": 13855,
+          "cached_tokens": 10368,
+          "uncached_prompt_tokens": 3487,
+          "completion_tokens": 148,
+          "known_token_subtotals": {
+            "prompt_tokens": 13855,
+            "cached_tokens": 10368,
+            "uncached_prompt_tokens": 3487,
+            "completion_tokens": 148
+          },
+          "known_cost_usd": 0.0231575,
+          "unreported_model_calls": 0,
+          "maximum_cost_exposure_usd": 0.0231575,
+          "cost_usd": 0.0231575,
+          "successful_bookings": 0,
+          "cost_per_successful_booking_usd": null,
+          "known_cost_per_successful_booking_usd": null,
+          "maximum_cost_per_successful_booking_usd": null,
+          "invalid_booking_attempts": 0,
+          "unnecessary_questions_logged": 1,
+          "additional_unnecessary_questions_reviewed": 1,
+          "unnecessary_questions": 2,
+          "completed_patient_turns": 4,
+          "incomplete_patient_turns": 0,
+          "patient_turn_latency_ms_p50": 2040.014,
+          "patient_turn_latency_ms_p95": 2585.597,
+          "calls_per_repetition": [
+            7
+          ],
+          "min_run_cost_usd": 0.0231575,
+          "max_run_cost_usd": 0.0231575
+        },
+        "DEV-003": {
+          "runs": 1,
+          "passed": 1,
+          "failed": 0,
+          "pass_rate": 1.0,
+          "severity": {},
+          "model_calls": 3,
+          "prompt_tokens": 4458,
+          "cached_tokens": 2304,
+          "uncached_prompt_tokens": 2154,
+          "completion_tokens": 110,
+          "known_token_subtotals": {
+            "prompt_tokens": 4458,
+            "cached_tokens": 2304,
+            "uncached_prompt_tokens": 2154,
+            "completion_tokens": 110
+          },
+          "known_cost_usd": 0.009365,
+          "unreported_model_calls": 0,
+          "maximum_cost_exposure_usd": 0.009365,
+          "cost_usd": 0.009365,
+          "successful_bookings": 0,
+          "cost_per_successful_booking_usd": null,
+          "known_cost_per_successful_booking_usd": null,
+          "maximum_cost_per_successful_booking_usd": null,
+          "invalid_booking_attempts": 0,
+          "unnecessary_questions_logged": 0,
+          "additional_unnecessary_questions_reviewed": 0,
+          "unnecessary_questions": 0,
+          "completed_patient_turns": 1,
+          "incomplete_patient_turns": 0,
+          "patient_turn_latency_ms_p50": 2681.358,
+          "patient_turn_latency_ms_p95": 2681.358,
+          "calls_per_repetition": [
+            3
+          ],
+          "min_run_cost_usd": 0.009365,
+          "max_run_cost_usd": 0.009365
+        },
+        "DEV-009": {
+          "runs": 1,
+          "passed": 1,
+          "failed": 0,
+          "pass_rate": 1.0,
+          "severity": {},
+          "model_calls": 11,
+          "prompt_tokens": 36290,
+          "cached_tokens": 25728,
+          "uncached_prompt_tokens": 10562,
+          "completion_tokens": 298,
+          "known_token_subtotals": {
+            "prompt_tokens": 36290,
+            "cached_tokens": 25728,
+            "uncached_prompt_tokens": 10562,
+            "completion_tokens": 298
+          },
+          "known_cost_usd": 0.061545,
+          "unreported_model_calls": 0,
+          "maximum_cost_exposure_usd": 0.061545,
+          "cost_usd": 0.061545,
+          "successful_bookings": 1,
+          "cost_per_successful_booking_usd": 0.061545,
+          "known_cost_per_successful_booking_usd": 0.061545,
+          "maximum_cost_per_successful_booking_usd": 0.061545,
+          "invalid_booking_attempts": 0,
+          "unnecessary_questions_logged": 0,
+          "additional_unnecessary_questions_reviewed": 0,
+          "unnecessary_questions": 0,
+          "completed_patient_turns": 5,
+          "incomplete_patient_turns": 0,
+          "patient_turn_latency_ms_p50": 2743.337,
+          "patient_turn_latency_ms_p95": 4435.574,
+          "calls_per_repetition": [
+            11
+          ],
+          "min_run_cost_usd": 0.061545,
+          "max_run_cost_usd": 0.061545
+        },
+        "DEV-012": {
+          "runs": 1,
+          "passed": 1,
+          "failed": 0,
+          "pass_rate": 1.0,
+          "severity": {},
+          "model_calls": 9,
+          "prompt_tokens": 20429,
+          "cached_tokens": 14592,
+          "uncached_prompt_tokens": 5837,
+          "completion_tokens": 256,
+          "known_token_subtotals": {
+            "prompt_tokens": 20429,
+            "cached_tokens": 14592,
+            "uncached_prompt_tokens": 5837,
+            "completion_tokens": 256
+          },
+          "known_cost_usd": 0.0353925,
+          "unreported_model_calls": 0,
+          "maximum_cost_exposure_usd": 0.0353925,
+          "cost_usd": 0.0353925,
+          "successful_bookings": 1,
+          "cost_per_successful_booking_usd": 0.0353925,
+          "known_cost_per_successful_booking_usd": 0.0353925,
+          "maximum_cost_per_successful_booking_usd": 0.0353925,
+          "invalid_booking_attempts": 0,
+          "unnecessary_questions_logged": 0,
+          "additional_unnecessary_questions_reviewed": 0,
+          "unnecessary_questions": 0,
+          "completed_patient_turns": 4,
+          "incomplete_patient_turns": 0,
+          "patient_turn_latency_ms_p50": 2596.367,
+          "patient_turn_latency_ms_p95": 2630.099,
+          "calls_per_repetition": [
+            9
+          ],
+          "min_run_cost_usd": 0.0353925,
+          "max_run_cost_usd": 0.0353925
+        }
+      }
+    }
+  ],
+  "totals": {
+    "prompt_tokens": 2809720,
+    "cached_tokens": 2615168,
+    "uncached_prompt_tokens": 194552,
+    "completion_tokens": 5790,
+    "model_calls": 201,
+    "successful_bookings": 13,
+    "unnecessary_questions": 12,
+    "runs": 28,
+    "passed": 20,
+    "cost_usd": 3.81324,
+    "invalid_booking_attempts": 0,
+    "cache_billing": {
+      "actual_cached_tokens": 2615168,
+      "actual_cached_input_cost_usd": 3.26896,
+      "actual_uncached_input_cost_usd": 0.48638,
+      "cache_write_tokens": null,
+      "cache_write_input_cost_usd": null,
+      "cache_write_surcharge_usd": 0,
+      "write_accounting": "Not separately reported by GPT-4o Chat Completions; included in uncached input, no extra write fee."
+    }
+  }
+}

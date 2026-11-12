@@ -1,0 +1,9 @@
+{
+  "status": "unsupported",
+  "code": "malformed_availability",
+  "field": "availability_fixture",
+  "api_calls": 0,
+  "external_set": "heldout",
+  "scenario_contents_printed": false,
+  "no_scenario_change": true
+}

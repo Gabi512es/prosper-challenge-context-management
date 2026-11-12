@@ -1,0 +1,231 @@
+{
+  "preparation_version": "external-eval-v1.1",
+  "paid_authorized": true,
+  "paid_api_calls_this_work": null,
+  "assets": {
+    "heldout": {
+      "original_path": "/Users/gabrielernoult/Documents/prosper_heldout_scenarios.json",
+      "original_sha256": "d41abdad3defe405a48becc55a97d4d153c3c3b27a4eff5f5518db8a2dedd1b6",
+      "revised_path": "/Users/gabrielernoult/Desktop/Prosper AI/Evals/revised-evaluation-v1/heldout.reviewed.json",
+      "revised_sha256": "94dcf459ad8d0e13f89981aefb8afb6492982e3d611a0cd50a22a2bf7be72fea",
+      "scenarios": 16,
+      "normalized_path": "/Users/gabrielernoult/Desktop/Prosper AI/Evals/revised-evaluation-v1/heldout.boundary-v1.1.json",
+      "normalized_sha256": "94dcf459ad8d0e13f89981aefb8afb6492982e3d611a0cd50a22a2bf7be72fea",
+      "normalization": "fault aliases and explicit write stage only; availability unchanged"
+    },
+    "robustness": {
+      "original_path": "/Users/gabrielernoult/Documents/prosper_robustness_scenarios.json",
+      "original_sha256": "c5de085b51996c51afaa9dbc3b40c392452d0eec28760b422ced2a6f74aa6c19",
+      "revised_path": "/Users/gabrielernoult/Desktop/Prosper AI/Evals/revised-evaluation-v1/robustness.reviewed.json",
+      "revised_sha256": "2c2ce46ce4864b7b6a18153ffa1a353d279b67f3c340155f0b1712937f3ebebd",
+      "scenarios": 8,
+      "normalized_path": "/Users/gabrielernoult/Desktop/Prosper AI/Evals/revised-evaluation-v1/robustness.boundary-v1.1.json",
+      "normalized_sha256": "3bdc968cabea2a5825e30b0e1003eeea6a7631d5580e6a7364fe726ee9eb60ed",
+      "normalization": "fault aliases and explicit write stage only; availability unchanged"
+    }
+  },
+  "final_evaluator": {
+    "version": "external-eval-v1.1",
+    "pin_path": "backend/evals/external_pin_v1_1.json",
+    "pin_sha256": "529c0714f452d158d91fcde98237d0728fa17775e89ab3e7a84e5f34721259e5",
+    "configuration": {
+      "version": "external-eval-v1.1",
+      "source_contract": "reviewed-conversational-v1; boundary fault mapping v1.1",
+      "model": "gpt-4o",
+      "context_strategy": "APPEND",
+      "parallel_tool_calls": false,
+      "temperature": "not explicitly set by frozen runtime",
+      "provider_snapshot": "gpt-4o alias; not pinned",
+      "availability_mode": "eval_fixture",
+      "now": "2026-11-07T00:00:00-08:00",
+      "max_patient_turns": 9,
+      "patient_turn_timeout_seconds": 45,
+      "concurrency": 1,
+      "sdk_retries": 0,
+      "timeout_retries": false,
+      "max_input_tokens": 128000,
+      "max_completion_tokens": 512,
+      "pricing_as_of": "2026-11-07",
+      "prices_per_million_usd": {
+        "input": 2.5,
+        "cached_input": 1.25,
+        "output": 10
+      },
+      "required_review_blocks_pass": true,
+      "prose_rules_are_automated": false,
+      "expected_usd_proposal": {
+        "heldout": 1.51,
+        "robustness": 0.25
+      },
+      "spending_allowance_usd_proposal": {
+        "heldout": 4.5,
+        "robustness": 1.5
+      },
+      "hard_cap_usd_proposal": {
+        "heldout": 5,
+        "robustness": 2
+      },
+      "paid_authorized": false,
+      "patient_driver_changes": [
+        "brief slot selection before full readback",
+        "earliest eligible consent respects explicit provider/site and observed slot loss",
+        "explicit patient_script clarifications",
+        "requested_location_id aliases initial_location_id in private driver when paired with final_location_id; source retained",
+        "continue supported requested patient replies before treating basic no-booking assertions as a completed conversation"
+      ],
+      "scoring_changes": [
+        "unimplemented structured semantics remain mandatory review",
+        "recovery requires intended fault triggered at declared stage",
+        "booking faults require actual write after consent",
+        "non-location correction requirements need review, never fabricated location-correction failures"
+      ],
+      "batch_plan": {
+        "heldout": {
+          "scenarios": 16,
+          "arms": [
+            "proposed",
+            "baseline"
+          ],
+          "repetitions": 1,
+          "conversations": 32
+        },
+        "robustness": {
+          "scenarios": 8,
+          "arms": [
+            "proposed"
+          ],
+          "repetitions": 1,
+          "conversations": 8
+        }
+      }
+    },
+    "configuration_sha256": "97e54fe59f65c3e931c1c4865d8bd74a99a79cd59f883c6186ca426376aa24e1",
+    "rubric_sha256": "054cbbd261440e29d0c7bdf6749bbff56ac38023f11cdf130d1efef31d08e686",
+    "offline_evidence": "docs/results/external-offline-validation-v1.1.json"
+  },
+  "frozen_arms": {
+    "git_commit": "a5b124f7aa3ffa9d7ebcd32a7f76c837c95486c8",
+    "catalog_blob_sha": "8e5091080383d598ae18acce084c7dcd6522ab14",
+    "identities": {
+      "proposed": {
+        "agent_id": "catalog_scheduler",
+        "agent_revision": "40db1b587b5790ab2c92bc642edbc55e67f0d44ebd8d4f1267de29e1e86ebdc5",
+        "availability_mode": "eval_fixture"
+      },
+      "baseline": {
+        "agent_id": "full_catalog_baseline",
+        "agent_revision": "68d02acb9a89a72c279c3410001e2b184438abce7f7c714ce39a0e87ddf4f623",
+        "availability_mode": "eval_fixture",
+        "catalog_prefix_sha256": "baea1382762b1177e7f21a5070a6dd38724fc910c965905b9eb9f96458436e4f"
+      }
+    },
+    "legacy_evaluator_behavior_sha256": "97117348b6d00263d60c0561381841e3fc50e843873a53b60e827a8c7415a996"
+  },
+  "preflight": {
+    "path": "docs/results/external-preflight-v1.1.json",
+    "sha256": "2a7cc56ed62c8df1c5e0c67ea61d8d20b0a62e83d7dfc0b4f8b18de5dd1506df",
+    "status": "structurally compatible; semantic review mandatory"
+  },
+  "pricing": {
+    "status": "proposal; no paid authorization",
+    "basis": "original official x1 usage only; entire incomplete-usage conversation excluded, not priced as zero",
+    "profiles": {
+      "proposed": {
+        "source_run_id": "comparison-proposed-v2-20261109-180827-8752c3",
+        "complete_usage_conversations": 35,
+        "excluded_incomplete": 1,
+        "mean_usd": 0.03110371428571428,
+        "cold_mean_usd": 0.052315142857142866
+      },
+      "baseline": {
+        "source_run_id": "comparison-baseline-20261109-182321-c4ee5f",
+        "complete_usage_conversations": 36,
+        "excluded_incomplete": 0,
+        "mean_usd": 0.06327888888888888,
+        "cold_mean_usd": 0.11474555555555556
+      }
+    },
+    "batches": {
+      "heldout": {
+        "conversations": 32,
+        "expected_proxy_usd": 1.5101216507936506,
+        "cold_plus_50pct_calls_proxy_usd": 4.0094567619047625,
+        "spending_allowance_usd_proposal": 4.5,
+        "hard_cap_usd_proposal": 5
+      },
+      "robustness": {
+        "conversations": 8,
+        "expected_proxy_usd": 0.24882971428571424,
+        "cold_plus_50pct_calls_proxy_usd": 0.6277817142857144,
+        "spending_allowance_usd_proposal": 1.5,
+        "hard_cap_usd_proposal": 2
+      }
+    },
+    "expected_total_proxy_usd": 1.758951365079365,
+    "spending_allowance_total_usd_proposal": 6,
+    "hard_caps_total_usd_proposal": 7,
+    "uncertainty": "Private scenario mix, revised patient driver, recovery rounds, cache state, alias model variability, and missing/in-flight usage. Neither proxy nor allowance is a billing bound."
+  },
+  "manual_review": {
+    "required_conversation_reviews": 40,
+    "heldout": 32,
+    "robustness": 8,
+    "incomplete_review_can_pass": false,
+    "rubric_path": "backend/evals/review_rubric_v1_1.json",
+    "estimated_minutes_per_transcript": [
+      3,
+      5
+    ],
+    "estimated_total_hours": [
+      2,
+      3.33
+    ]
+  },
+  "voice_call_b": "pending manual verification",
+  "historical_v1_plan": "docs/results/archive/final-evaluation-plan-external-v1.json",
+  "historical_v1_archive": "docs/results/archive/external-eval-v1.zip",
+  "execution_instructions": "docs/revised-evaluation-preflight.md; no paid approval yet",
+  "authorization_reference": "explicit user approval of both once-only batches, separate $5/$2 hard caps",
+  "execution": {
+    "status": "both interrupted after first conversation; no retry",
+    "report": "docs/final-evaluation-execution.md",
+    "summary": "docs/results/final-evaluation/summary.json",
+    "attempted": 2,
+    "not_run": 38,
+    "known_reported_usage_cost_usd": "0.0923300",
+    "final_semantic_pass_rate": null,
+    "further_paid_execution_authorized": false
+  },
+  "saved_model_call_usage_rows": 18,
+  "prepared_restart": {
+    "infrastructure_version": "external-infra-v1.2",
+    "evaluator_semantics": "external-eval-v1.1",
+    "pin_path": "backend/evals/external_pin_v1_2.json",
+    "pin_sha256": "032f9418860c650afbe3771ca947f7afc15b82cc5cda5ebdae1b5fbaf04375c8",
+    "plan_path": "backend/evals/external_restart_v1_2.json",
+    "plan_sha256": "bf9674be6c7c71db9b6465332da22e123592578128381f081e98854ad6f1a8f7",
+    "replacements_first": 2,
+    "then_previously_unrun": 38,
+    "paid_authorized": true,
+    "report": "docs/external-infrastructure-v1.2.md",
+    "estimate": "docs/results/external-restart-budget-v1.2.json"
+  },
+  "restart_execution": {
+    "status": "completed",
+    "approval_reference": "user-approval-2026-11-10-1649UTC-restart40-v1.2-fresh-heldout5-robustness2",
+    "run_id": "external-infra-v1.2-restart-20261110-175004-ec9627",
+    "attempts": 40,
+    "replacements": 2,
+    "retries": 0,
+    "source_changes": false,
+    "model_cost_usd": "1.4072150",
+    "new_outstanding_exposure_usd": "0",
+    "raw_status_counts": {
+      "review_required": 24,
+      "failed": 16
+    },
+    "final_semantic_pass_rate": null,
+    "report": "docs/final-evaluation-restart-v1.2.md",
+    "further_paid_execution_authorized": false
+  }
+}

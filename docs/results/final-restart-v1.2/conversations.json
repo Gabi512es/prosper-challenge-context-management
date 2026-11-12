@@ -1,0 +1,5199 @@
+[
+  {
+    "dataset": "heldout",
+    "arm": "proposed",
+    "scenario_id": "HO-001",
+    "expected_outcome": "book",
+    "raw_status": "review_required",
+    "automatic_false": [],
+    "automatic_unknown": [],
+    "automatic_results": [
+      {
+        "name": "runner_completed",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "slot_offers_include_location",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_unrecorded_callback_promise",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_match_has_next_step",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "booking_count",
+        "automatic": true,
+        "passed": true,
+        "observed": 1
+      },
+      {
+        "name": "booking_fields",
+        "automatic": true,
+        "passed": true,
+        "observed": {
+          "provider_id": "prov_018",
+          "location_id": "loc_001",
+          "appointment_type_id": "appt_074"
+        }
+      },
+      {
+        "name": "confirmation_recorded",
+        "automatic": true,
+        "passed": true,
+        "observed": {
+          "name": "Jordan Lee",
+          "date_of_birth": "1985-09-23",
+          "is_new_patient": true,
+          "referral_on_file": null,
+          "appointment_type_id": "appt_074",
+          "provider_id": "prov_018",
+          "location_id": "loc_001",
+          "slot_id": "ho001-s1"
+        }
+      }
+    ],
+    "agent_assessment": "review_pending",
+    "infrastructure_failure": false,
+    "runner_error": false,
+    "evaluation_limited": false,
+    "call_id": "6a7d3e0c-9cfe-40e9-8889-f35d36683837",
+    "attempt_id": "bec7694918404597b83253e4512ba08e",
+    "replacement_for": {
+      "run_id": "external-v1.1-heldout-20261110-153532-72eb74",
+      "call_id": "c62fb921-e9c3-48d2-8d44-f7ef422be8ad",
+      "scenario_id": "HO-001",
+      "status": "infrastructure_failure",
+      "agent_outcome": "unknown"
+    },
+    "model_requests": 9,
+    "cost_usd": "0.0467575",
+    "usage": {
+      "model_calls": 9,
+      "prompt_tokens": 29855,
+      "cached_tokens": 24320,
+      "uncached_prompt_tokens": 5535,
+      "completion_tokens": 252,
+      "total_tokens": 30107,
+      "cost_usd": 0.0467575
+    },
+    "request_coverage": {
+      "admitted": 9,
+      "complete_usage": 9,
+      "certified": true
+    },
+    "patient_turn_metrics": [
+      {
+        "patient_turn": 0,
+        "completed": true,
+        "elapsed_ms": 1582.317
+      },
+      {
+        "patient_turn": 1,
+        "completed": true,
+        "elapsed_ms": 2887.419
+      },
+      {
+        "patient_turn": 2,
+        "completed": true,
+        "elapsed_ms": 3127.704
+      },
+      {
+        "patient_turn": 3,
+        "completed": true,
+        "elapsed_ms": 2383.389
+      },
+      {
+        "patient_turn": 4,
+        "completed": true,
+        "elapsed_ms": 2479.476
+      }
+    ],
+    "required_semantic_checks": [
+      "dataset.contract.availability",
+      "dataset.contract.availability_scope_revision",
+      "dataset.contract.confirmation",
+      "dataset.contract.default_patient_behavior",
+      "dataset.contract.grading",
+      "dataset.contract.holdout",
+      "dataset.contract.integration",
+      "dataset.contract.referral_on_file",
+      "dataset.contract.revision_clarification_precedence",
+      "dataset.contract.slot_horizon",
+      "dataset.contract.synchronization",
+      "forbidden[0]",
+      "forbidden[1]",
+      "notes",
+      "reply_rules_execution"
+    ],
+    "manual_review_status": "pending",
+    "final_semantic_pass": null,
+    "automatic_consequence_flags": [],
+    "bookings_observed": 1,
+    "faults": [],
+    "transcript_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/heldout-proposed-HO-001.transcript.md",
+    "evidence_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/heldout-proposed-HO-001.evidence.json",
+    "private_review_packet": "/Users/gabrielernoult/Desktop/Prosper AI/Evals/final-evaluation-review-v1.1/review-packet.md#heldout-ho-001"
+  },
+  {
+    "dataset": "robustness",
+    "arm": "proposed",
+    "scenario_id": "RW-001",
+    "expected_outcome": "book",
+    "raw_status": "review_required",
+    "automatic_false": [],
+    "automatic_unknown": [],
+    "automatic_results": [
+      {
+        "name": "runner_completed",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "slot_offers_include_location",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_unrecorded_callback_promise",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_match_has_next_step",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "booking_count",
+        "automatic": true,
+        "passed": true,
+        "observed": 1
+      },
+      {
+        "name": "booking_fields",
+        "automatic": true,
+        "passed": true,
+        "observed": {
+          "slot_id": "rw001-midtown-11",
+          "provider_id": "prov_013",
+          "location_id": "loc_005",
+          "appointment_type_id": "appt_011"
+        }
+      },
+      {
+        "name": "confirmation_recorded",
+        "automatic": true,
+        "passed": true,
+        "observed": {
+          "name": "Jordan Lee",
+          "date_of_birth": "1985-09-23",
+          "is_new_patient": true,
+          "referral_on_file": null,
+          "appointment_type_id": "appt_011",
+          "provider_id": "prov_013",
+          "location_id": "loc_005",
+          "slot_id": "rw001-midtown-11"
+        }
+      }
+    ],
+    "agent_assessment": "review_pending",
+    "infrastructure_failure": false,
+    "runner_error": false,
+    "evaluation_limited": false,
+    "call_id": "8976f802-0a16-4f5b-8a40-50af7bbab6f7",
+    "attempt_id": "acd9bfa1657f473b8ebb7f3dbcdcacf7",
+    "replacement_for": {
+      "run_id": "external-v1.1-robustness-20261110-153646-ed8563",
+      "call_id": "26258f04-1173-412f-8a81-27c5d3dfba83",
+      "scenario_id": "RW-001",
+      "status": "infrastructure_failure",
+      "agent_outcome": "unknown"
+    },
+    "model_requests": 9,
+    "cost_usd": "0.0456200",
+    "usage": {
+      "model_calls": 9,
+      "prompt_tokens": 30352,
+      "cached_tokens": 26496,
+      "uncached_prompt_tokens": 3856,
+      "completion_tokens": 286,
+      "total_tokens": 30638,
+      "cost_usd": 0.04562
+    },
+    "request_coverage": {
+      "admitted": 9,
+      "complete_usage": 9,
+      "certified": true
+    },
+    "patient_turn_metrics": [
+      {
+        "patient_turn": 0,
+        "completed": true,
+        "elapsed_ms": 849.303
+      },
+      {
+        "patient_turn": 1,
+        "completed": true,
+        "elapsed_ms": 2583.577
+      },
+      {
+        "patient_turn": 2,
+        "completed": true,
+        "elapsed_ms": 2433.514
+      },
+      {
+        "patient_turn": 3,
+        "completed": true,
+        "elapsed_ms": 2215.324
+      },
+      {
+        "patient_turn": 4,
+        "completed": true,
+        "elapsed_ms": 2062.879
+      }
+    ],
+    "required_semantic_checks": [
+      "dataset.contract.availability",
+      "dataset.contract.confirmation",
+      "dataset.contract.dataset_role_note",
+      "dataset.contract.default_patient_behavior",
+      "dataset.contract.evidence_note",
+      "dataset.contract.false_refusal_exceptions",
+      "dataset.contract.fault_injection",
+      "dataset.contract.grading",
+      "dataset.contract.grading_note",
+      "dataset.contract.handoff_honesty",
+      "dataset.contract.holdout",
+      "dataset.contract.integration",
+      "dataset.contract.referral_on_file",
+      "dataset.contract.revision_clarification_precedence",
+      "dataset.contract.slot_horizon",
+      "dataset.contract.synchronization",
+      "expected.requested_time_unavailable_stated",
+      "forbidden[0]",
+      "forbidden[1]",
+      "forbidden[2]",
+      "notes",
+      "patient_facts.requested_time",
+      "reply_rules_execution",
+      "source_basis"
+    ],
+    "manual_review_status": "pending",
+    "final_semantic_pass": null,
+    "automatic_consequence_flags": [],
+    "bookings_observed": 1,
+    "faults": [],
+    "transcript_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/robustness-proposed-RW-001.transcript.md",
+    "evidence_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/robustness-proposed-RW-001.evidence.json",
+    "private_review_packet": "/Users/gabrielernoult/Desktop/Prosper AI/Evals/final-evaluation-review-v1.1/review-packet.md#robustness-rw-001"
+  },
+  {
+    "dataset": "heldout",
+    "arm": "proposed",
+    "scenario_id": "HO-002",
+    "expected_outcome": "book",
+    "raw_status": "failed",
+    "automatic_false": [
+      "booking_count",
+      "booking_fields",
+      "confirmation_recorded"
+    ],
+    "automatic_unknown": [],
+    "automatic_results": [
+      {
+        "name": "runner_completed",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "slot_offers_include_location",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_unrecorded_callback_promise",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_match_has_next_step",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "booking_count",
+        "automatic": true,
+        "passed": false,
+        "observed": 0
+      },
+      {
+        "name": "booking_fields",
+        "automatic": true,
+        "passed": false,
+        "observed": {
+          "slot_id": null,
+          "provider_id": null,
+          "location_id": null,
+          "appointment_type_id": null
+        }
+      },
+      {
+        "name": "confirmation_recorded",
+        "automatic": true,
+        "passed": false,
+        "observed": null
+      }
+    ],
+    "agent_assessment": "not_assessable",
+    "infrastructure_failure": false,
+    "runner_error": false,
+    "evaluation_limited": true,
+    "call_id": "938ea638-93a7-4aa3-93de-94a2746daa8f",
+    "attempt_id": "03e4e806de3a49faa886d5d6b544b0c4",
+    "replacement_for": null,
+    "model_requests": 2,
+    "cost_usd": "0.0068625",
+    "usage": {
+      "model_calls": 2,
+      "prompt_tokens": 4661,
+      "cached_tokens": 4096,
+      "uncached_prompt_tokens": 565,
+      "completion_tokens": 33,
+      "total_tokens": 4694,
+      "cost_usd": 0.0068625
+    },
+    "request_coverage": {
+      "admitted": 2,
+      "complete_usage": 2,
+      "certified": true
+    },
+    "patient_turn_metrics": [
+      {
+        "patient_turn": 0,
+        "completed": true,
+        "elapsed_ms": 799.646
+      },
+      {
+        "patient_turn": 1,
+        "completed": true,
+        "elapsed_ms": 1730.748
+      }
+    ],
+    "required_semantic_checks": [
+      "dataset.contract.availability",
+      "dataset.contract.availability_scope_revision",
+      "dataset.contract.confirmation",
+      "dataset.contract.default_patient_behavior",
+      "dataset.contract.grading",
+      "dataset.contract.holdout",
+      "dataset.contract.integration",
+      "dataset.contract.referral_on_file",
+      "dataset.contract.revision_clarification_precedence",
+      "dataset.contract.slot_horizon",
+      "dataset.contract.synchronization",
+      "forbidden[0]",
+      "forbidden[1]",
+      "forbidden[2]",
+      "notes",
+      "reply_rules_execution"
+    ],
+    "manual_review_status": "pending",
+    "final_semantic_pass": null,
+    "automatic_consequence_flags": [],
+    "bookings_observed": 0,
+    "faults": [],
+    "transcript_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/heldout-proposed-HO-002.transcript.md",
+    "evidence_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/heldout-proposed-HO-002.evidence.json",
+    "private_review_packet": "/Users/gabrielernoult/Desktop/Prosper AI/Evals/final-evaluation-review-v1.1/review-packet.md#heldout-ho-002"
+  },
+  {
+    "dataset": "heldout",
+    "arm": "proposed",
+    "scenario_id": "HO-003",
+    "expected_outcome": "book",
+    "raw_status": "failed",
+    "automatic_false": [
+      "booking_count",
+      "booking_fields",
+      "confirmation_recorded"
+    ],
+    "automatic_unknown": [],
+    "automatic_results": [
+      {
+        "name": "runner_completed",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "slot_offers_include_location",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_unrecorded_callback_promise",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_match_has_next_step",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "booking_count",
+        "automatic": true,
+        "passed": false,
+        "observed": 0
+      },
+      {
+        "name": "booking_fields",
+        "automatic": true,
+        "passed": false,
+        "observed": {
+          "slot_id": null,
+          "provider_id": null,
+          "location_id": null,
+          "appointment_type_id": null
+        }
+      },
+      {
+        "name": "confirmation_recorded",
+        "automatic": true,
+        "passed": false,
+        "observed": null
+      }
+    ],
+    "agent_assessment": "not_assessable",
+    "infrastructure_failure": false,
+    "runner_error": false,
+    "evaluation_limited": true,
+    "call_id": "0f0e15ec-a9f3-43d7-ace5-833aa7489b26",
+    "attempt_id": "1a7fe5d3703142c3b8c0fd00d7b97cff",
+    "replacement_for": null,
+    "model_requests": 3,
+    "cost_usd": "0.0116450",
+    "usage": {
+      "model_calls": 3,
+      "prompt_tokens": 7578,
+      "cached_tokens": 6528,
+      "uncached_prompt_tokens": 1050,
+      "completion_tokens": 86,
+      "total_tokens": 7664,
+      "cost_usd": 0.011645
+    },
+    "request_coverage": {
+      "admitted": 3,
+      "complete_usage": 3,
+      "certified": true
+    },
+    "patient_turn_metrics": [
+      {
+        "patient_turn": 0,
+        "completed": true,
+        "elapsed_ms": 863.63
+      },
+      {
+        "patient_turn": 1,
+        "completed": true,
+        "elapsed_ms": 3132.075
+      }
+    ],
+    "required_semantic_checks": [
+      "dataset.contract.availability",
+      "dataset.contract.availability_scope_revision",
+      "dataset.contract.confirmation",
+      "dataset.contract.default_patient_behavior",
+      "dataset.contract.grading",
+      "dataset.contract.holdout",
+      "dataset.contract.integration",
+      "dataset.contract.referral_on_file",
+      "dataset.contract.revision_clarification_precedence",
+      "dataset.contract.slot_horizon",
+      "dataset.contract.synchronization",
+      "expected.explained_gate_before_alternative",
+      "forbidden[0]",
+      "forbidden[1]",
+      "forbidden[2]",
+      "notes",
+      "patient_facts.requested_location_id",
+      "reply_rules_execution"
+    ],
+    "manual_review_status": "pending",
+    "final_semantic_pass": null,
+    "automatic_consequence_flags": [
+      "incorrect_internal_selection"
+    ],
+    "bookings_observed": 0,
+    "faults": [],
+    "transcript_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/heldout-proposed-HO-003.transcript.md",
+    "evidence_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/heldout-proposed-HO-003.evidence.json",
+    "private_review_packet": "/Users/gabrielernoult/Desktop/Prosper AI/Evals/final-evaluation-review-v1.1/review-packet.md#heldout-ho-003"
+  },
+  {
+    "dataset": "heldout",
+    "arm": "proposed",
+    "scenario_id": "HO-004",
+    "expected_outcome": "no_booking",
+    "raw_status": "review_required",
+    "automatic_false": [],
+    "automatic_unknown": [],
+    "automatic_results": [
+      {
+        "name": "runner_completed",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "slot_offers_include_location",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_unrecorded_callback_promise",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_match_has_next_step",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "booking_count",
+        "automatic": true,
+        "passed": true,
+        "observed": 0
+      }
+    ],
+    "agent_assessment": "review_pending",
+    "infrastructure_failure": false,
+    "runner_error": false,
+    "evaluation_limited": false,
+    "call_id": "f86b03aa-f2df-4ef3-aefc-0e8bfeddc4fd",
+    "attempt_id": "6cefcdd000574df6836bf2556a3c3c38",
+    "replacement_for": null,
+    "model_requests": 2,
+    "cost_usd": "0.0068525",
+    "usage": {
+      "model_calls": 2,
+      "prompt_tokens": 4645,
+      "cached_tokens": 4096,
+      "uncached_prompt_tokens": 549,
+      "completion_tokens": 36,
+      "total_tokens": 4681,
+      "cost_usd": 0.0068525
+    },
+    "request_coverage": {
+      "admitted": 2,
+      "complete_usage": 2,
+      "certified": true
+    },
+    "patient_turn_metrics": [
+      {
+        "patient_turn": 0,
+        "completed": true,
+        "elapsed_ms": 890.151
+      },
+      {
+        "patient_turn": 1,
+        "completed": true,
+        "elapsed_ms": 1384.702
+      }
+    ],
+    "required_semantic_checks": [
+      "dataset.contract.availability",
+      "dataset.contract.availability_scope_revision",
+      "dataset.contract.confirmation",
+      "dataset.contract.default_patient_behavior",
+      "dataset.contract.grading",
+      "dataset.contract.holdout",
+      "dataset.contract.integration",
+      "dataset.contract.referral_on_file",
+      "dataset.contract.revision_clarification_precedence",
+      "dataset.contract.slot_horizon",
+      "dataset.contract.synchronization",
+      "expected.explanation",
+      "forbidden[0]",
+      "forbidden[1]",
+      "forbidden[2]",
+      "notes",
+      "reply_rules_execution"
+    ],
+    "manual_review_status": "pending",
+    "final_semantic_pass": null,
+    "automatic_consequence_flags": [],
+    "bookings_observed": 0,
+    "faults": [],
+    "transcript_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/heldout-proposed-HO-004.transcript.md",
+    "evidence_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/heldout-proposed-HO-004.evidence.json",
+    "private_review_packet": "/Users/gabrielernoult/Desktop/Prosper AI/Evals/final-evaluation-review-v1.1/review-packet.md#heldout-ho-004"
+  },
+  {
+    "dataset": "heldout",
+    "arm": "proposed",
+    "scenario_id": "HO-005",
+    "expected_outcome": "no_booking",
+    "raw_status": "review_required",
+    "automatic_false": [],
+    "automatic_unknown": [],
+    "automatic_results": [
+      {
+        "name": "runner_completed",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "slot_offers_include_location",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_unrecorded_callback_promise",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_match_has_next_step",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "booking_count",
+        "automatic": true,
+        "passed": true,
+        "observed": 0
+      }
+    ],
+    "agent_assessment": "review_pending",
+    "infrastructure_failure": false,
+    "runner_error": false,
+    "evaluation_limited": false,
+    "call_id": "edc4cc9e-1b75-4213-8e39-6bb2248edb57",
+    "attempt_id": "1e293b91cc1246439f3b35b7cbbd1c54",
+    "replacement_for": null,
+    "model_requests": 3,
+    "cost_usd": "0.0112475",
+    "usage": {
+      "model_calls": 3,
+      "prompt_tokens": 7447,
+      "cached_tokens": 6528,
+      "uncached_prompt_tokens": 919,
+      "completion_tokens": 79,
+      "total_tokens": 7526,
+      "cost_usd": 0.0112475
+    },
+    "request_coverage": {
+      "admitted": 3,
+      "complete_usage": 3,
+      "certified": true
+    },
+    "patient_turn_metrics": [
+      {
+        "patient_turn": 0,
+        "completed": true,
+        "elapsed_ms": 775.57
+      },
+      {
+        "patient_turn": 1,
+        "completed": true,
+        "elapsed_ms": 2383.404
+      }
+    ],
+    "required_semantic_checks": [
+      "dataset.contract.availability",
+      "dataset.contract.availability_scope_revision",
+      "dataset.contract.confirmation",
+      "dataset.contract.default_patient_behavior",
+      "dataset.contract.grading",
+      "dataset.contract.holdout",
+      "dataset.contract.integration",
+      "dataset.contract.referral_on_file",
+      "dataset.contract.revision_clarification_precedence",
+      "dataset.contract.slot_horizon",
+      "dataset.contract.synchronization",
+      "expected.explanation",
+      "forbidden[0]",
+      "forbidden[1]",
+      "forbidden[2]",
+      "notes",
+      "reply_rules_execution"
+    ],
+    "manual_review_status": "pending",
+    "final_semantic_pass": null,
+    "automatic_consequence_flags": [],
+    "bookings_observed": 0,
+    "faults": [],
+    "transcript_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/heldout-proposed-HO-005.transcript.md",
+    "evidence_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/heldout-proposed-HO-005.evidence.json",
+    "private_review_packet": "/Users/gabrielernoult/Desktop/Prosper AI/Evals/final-evaluation-review-v1.1/review-packet.md#heldout-ho-005"
+  },
+  {
+    "dataset": "heldout",
+    "arm": "proposed",
+    "scenario_id": "HO-006",
+    "expected_outcome": "no_booking",
+    "raw_status": "review_required",
+    "automatic_false": [],
+    "automatic_unknown": [],
+    "automatic_results": [
+      {
+        "name": "runner_completed",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "slot_offers_include_location",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_unrecorded_callback_promise",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_match_has_next_step",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "booking_count",
+        "automatic": true,
+        "passed": true,
+        "observed": 0
+      }
+    ],
+    "agent_assessment": "review_pending",
+    "infrastructure_failure": false,
+    "runner_error": false,
+    "evaluation_limited": false,
+    "call_id": "a55025ea-0ce8-49cb-8432-806f81da40c6",
+    "attempt_id": "6ad1083cbddd44ce80e4971af1e9a676",
+    "replacement_for": null,
+    "model_requests": 2,
+    "cost_usd": "0.006900",
+    "usage": {
+      "model_calls": 2,
+      "prompt_tokens": 4644,
+      "cached_tokens": 4096,
+      "uncached_prompt_tokens": 548,
+      "completion_tokens": 41,
+      "total_tokens": 4685,
+      "cost_usd": 0.0069
+    },
+    "request_coverage": {
+      "admitted": 2,
+      "complete_usage": 2,
+      "certified": true
+    },
+    "patient_turn_metrics": [
+      {
+        "patient_turn": 0,
+        "completed": true,
+        "elapsed_ms": 884.512
+      },
+      {
+        "patient_turn": 1,
+        "completed": true,
+        "elapsed_ms": 1541.816
+      }
+    ],
+    "required_semantic_checks": [
+      "dataset.contract.availability",
+      "dataset.contract.availability_scope_revision",
+      "dataset.contract.confirmation",
+      "dataset.contract.default_patient_behavior",
+      "dataset.contract.grading",
+      "dataset.contract.holdout",
+      "dataset.contract.integration",
+      "dataset.contract.referral_on_file",
+      "dataset.contract.revision_clarification_precedence",
+      "dataset.contract.slot_horizon",
+      "dataset.contract.synchronization",
+      "expected.unknown_service_acknowledged",
+      "forbidden[0]",
+      "forbidden[1]",
+      "forbidden[2]",
+      "notes",
+      "reply_rules_execution"
+    ],
+    "manual_review_status": "pending",
+    "final_semantic_pass": null,
+    "automatic_consequence_flags": [],
+    "bookings_observed": 0,
+    "faults": [],
+    "transcript_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/heldout-proposed-HO-006.transcript.md",
+    "evidence_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/heldout-proposed-HO-006.evidence.json",
+    "private_review_packet": "/Users/gabrielernoult/Desktop/Prosper AI/Evals/final-evaluation-review-v1.1/review-packet.md#heldout-ho-006"
+  },
+  {
+    "dataset": "heldout",
+    "arm": "proposed",
+    "scenario_id": "HO-007",
+    "expected_outcome": "book",
+    "raw_status": "failed",
+    "automatic_false": [
+      "booking_count",
+      "booking_fields",
+      "confirmation_recorded",
+      "globally_earliest_slot"
+    ],
+    "automatic_unknown": [],
+    "automatic_results": [
+      {
+        "name": "runner_completed",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "slot_offers_include_location",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_unrecorded_callback_promise",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_match_has_next_step",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "booking_count",
+        "automatic": true,
+        "passed": false,
+        "observed": 0
+      },
+      {
+        "name": "booking_fields",
+        "automatic": true,
+        "passed": false,
+        "observed": {
+          "slot_id": null,
+          "provider_id": null,
+          "location_id": null,
+          "appointment_type_id": null
+        }
+      },
+      {
+        "name": "confirmation_recorded",
+        "automatic": true,
+        "passed": false,
+        "observed": null
+      },
+      {
+        "name": "globally_earliest_slot",
+        "automatic": true,
+        "passed": false,
+        "observed": null
+      }
+    ],
+    "agent_assessment": "not_assessable",
+    "infrastructure_failure": false,
+    "runner_error": false,
+    "evaluation_limited": true,
+    "call_id": "05dc73a5-3298-4472-b7c1-45a1c57a74f7",
+    "attempt_id": "fbd3dbdd12fd4d5eafebfeeeebce7760",
+    "replacement_for": null,
+    "model_requests": 3,
+    "cost_usd": "0.0123825",
+    "usage": {
+      "model_calls": 3,
+      "prompt_tokens": 7893,
+      "cached_tokens": 6528,
+      "uncached_prompt_tokens": 1365,
+      "completion_tokens": 81,
+      "total_tokens": 7974,
+      "cost_usd": 0.0123825
+    },
+    "request_coverage": {
+      "admitted": 3,
+      "complete_usage": 3,
+      "certified": true
+    },
+    "patient_turn_metrics": [
+      {
+        "patient_turn": 0,
+        "completed": true,
+        "elapsed_ms": 1005.44
+      },
+      {
+        "patient_turn": 1,
+        "completed": true,
+        "elapsed_ms": 3174.677
+      }
+    ],
+    "required_semantic_checks": [
+      "dataset.contract.availability",
+      "dataset.contract.availability_scope_revision",
+      "dataset.contract.confirmation",
+      "dataset.contract.default_patient_behavior",
+      "dataset.contract.grading",
+      "dataset.contract.holdout",
+      "dataset.contract.integration",
+      "dataset.contract.referral_on_file",
+      "dataset.contract.revision_clarification_precedence",
+      "dataset.contract.slot_horizon",
+      "dataset.contract.synchronization",
+      "forbidden[0]",
+      "forbidden[1]",
+      "forbidden[2]",
+      "notes",
+      "patient_facts.candidate_type_ids",
+      "patient_facts.final_appointment_type_id",
+      "reply_rules_execution"
+    ],
+    "manual_review_status": "pending",
+    "final_semantic_pass": null,
+    "automatic_consequence_flags": [],
+    "bookings_observed": 0,
+    "faults": [],
+    "transcript_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/heldout-proposed-HO-007.transcript.md",
+    "evidence_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/heldout-proposed-HO-007.evidence.json",
+    "private_review_packet": "/Users/gabrielernoult/Desktop/Prosper AI/Evals/final-evaluation-review-v1.1/review-packet.md#heldout-ho-007"
+  },
+  {
+    "dataset": "heldout",
+    "arm": "proposed",
+    "scenario_id": "HO-008",
+    "expected_outcome": "book",
+    "raw_status": "failed",
+    "automatic_false": [
+      "booking_count",
+      "booking_fields",
+      "confirmation_recorded"
+    ],
+    "automatic_unknown": [],
+    "automatic_results": [
+      {
+        "name": "runner_completed",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "slot_offers_include_location",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_unrecorded_callback_promise",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_match_has_next_step",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "booking_count",
+        "automatic": true,
+        "passed": false,
+        "observed": 0
+      },
+      {
+        "name": "booking_fields",
+        "automatic": true,
+        "passed": false,
+        "observed": {
+          "slot_id": null,
+          "provider_id": null,
+          "location_id": null,
+          "appointment_type_id": null
+        }
+      },
+      {
+        "name": "confirmation_recorded",
+        "automatic": true,
+        "passed": false,
+        "observed": null
+      }
+    ],
+    "agent_assessment": "not_assessable",
+    "infrastructure_failure": false,
+    "runner_error": false,
+    "evaluation_limited": true,
+    "call_id": "52eb5b2c-6565-4df7-b2b4-e5fc5dd618b6",
+    "attempt_id": "306d33472f9a4635bd95fa2b49481723",
+    "replacement_for": null,
+    "model_requests": 3,
+    "cost_usd": "0.0118950",
+    "usage": {
+      "model_calls": 3,
+      "prompt_tokens": 7554,
+      "cached_tokens": 6272,
+      "uncached_prompt_tokens": 1282,
+      "completion_tokens": 85,
+      "total_tokens": 7639,
+      "cost_usd": 0.011895
+    },
+    "request_coverage": {
+      "admitted": 3,
+      "complete_usage": 3,
+      "certified": true
+    },
+    "patient_turn_metrics": [
+      {
+        "patient_turn": 0,
+        "completed": true,
+        "elapsed_ms": 742.939
+      },
+      {
+        "patient_turn": 1,
+        "completed": true,
+        "elapsed_ms": 3135.929
+      }
+    ],
+    "required_semantic_checks": [
+      "dataset.contract.availability",
+      "dataset.contract.availability_scope_revision",
+      "dataset.contract.confirmation",
+      "dataset.contract.default_patient_behavior",
+      "dataset.contract.grading",
+      "dataset.contract.holdout",
+      "dataset.contract.integration",
+      "dataset.contract.referral_on_file",
+      "dataset.contract.revision_clarification_precedence",
+      "dataset.contract.slot_horizon",
+      "dataset.contract.synchronization",
+      "forbidden[0]",
+      "forbidden[1]",
+      "forbidden[2]",
+      "notes",
+      "reply_rules_execution"
+    ],
+    "manual_review_status": "pending",
+    "final_semantic_pass": null,
+    "automatic_consequence_flags": [],
+    "bookings_observed": 0,
+    "faults": [],
+    "transcript_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/heldout-proposed-HO-008.transcript.md",
+    "evidence_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/heldout-proposed-HO-008.evidence.json",
+    "private_review_packet": "/Users/gabrielernoult/Desktop/Prosper AI/Evals/final-evaluation-review-v1.1/review-packet.md#heldout-ho-008"
+  },
+  {
+    "dataset": "heldout",
+    "arm": "proposed",
+    "scenario_id": "HO-009",
+    "expected_outcome": "book",
+    "raw_status": "review_required",
+    "automatic_false": [],
+    "automatic_unknown": [],
+    "automatic_results": [
+      {
+        "name": "runner_completed",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "slot_offers_include_location",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_unrecorded_callback_promise",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_match_has_next_step",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "booking_count",
+        "automatic": true,
+        "passed": true,
+        "observed": 1
+      },
+      {
+        "name": "booking_fields",
+        "automatic": true,
+        "passed": true,
+        "observed": {
+          "slot_id": "ho009-downtown",
+          "provider_id": "prov_016",
+          "location_id": "loc_004",
+          "appointment_type_id": "appt_011"
+        }
+      },
+      {
+        "name": "confirmation_recorded",
+        "automatic": true,
+        "passed": true,
+        "observed": {
+          "name": "Jordan Lee",
+          "date_of_birth": "1985-09-23",
+          "is_new_patient": false,
+          "referral_on_file": null,
+          "appointment_type_id": "appt_011",
+          "provider_id": "prov_016",
+          "location_id": "loc_004",
+          "slot_id": "ho009-downtown"
+        }
+      }
+    ],
+    "agent_assessment": "review_pending",
+    "infrastructure_failure": false,
+    "runner_error": false,
+    "evaluation_limited": false,
+    "call_id": "f4c6f2e7-5c68-46cc-99db-a489aa8734d4",
+    "attempt_id": "519c8d9bccf14ba28791388db63bd001",
+    "replacement_for": null,
+    "model_requests": 12,
+    "cost_usd": "0.0626775",
+    "usage": {
+      "model_calls": 12,
+      "prompt_tokens": 42719,
+      "cached_tokens": 37760,
+      "uncached_prompt_tokens": 4959,
+      "completion_tokens": 308,
+      "total_tokens": 43027,
+      "cost_usd": 0.0626775
+    },
+    "request_coverage": {
+      "admitted": 12,
+      "complete_usage": 12,
+      "certified": true
+    },
+    "patient_turn_metrics": [
+      {
+        "patient_turn": 0,
+        "completed": true,
+        "elapsed_ms": 1499.596
+      },
+      {
+        "patient_turn": 1,
+        "completed": true,
+        "elapsed_ms": 2795.111
+      },
+      {
+        "patient_turn": 2,
+        "completed": true,
+        "elapsed_ms": 1972.126
+      },
+      {
+        "patient_turn": 3,
+        "completed": true,
+        "elapsed_ms": 2514.148
+      },
+      {
+        "patient_turn": 4,
+        "completed": true,
+        "elapsed_ms": 2599.824
+      },
+      {
+        "patient_turn": 5,
+        "completed": true,
+        "elapsed_ms": 2155.935
+      },
+      {
+        "patient_turn": 6,
+        "completed": true,
+        "elapsed_ms": 2318.611
+      }
+    ],
+    "required_semantic_checks": [
+      "dataset.contract.availability",
+      "dataset.contract.availability_scope_revision",
+      "dataset.contract.confirmation",
+      "dataset.contract.default_patient_behavior",
+      "dataset.contract.grading",
+      "dataset.contract.holdout",
+      "dataset.contract.integration",
+      "dataset.contract.referral_on_file",
+      "dataset.contract.revision_clarification_precedence",
+      "dataset.contract.slot_horizon",
+      "dataset.contract.synchronization",
+      "forbidden[0]",
+      "forbidden[1]",
+      "notes",
+      "patient_facts.location_preference",
+      "patient_facts.preference_strength",
+      "reply_rules_execution"
+    ],
+    "manual_review_status": "pending",
+    "final_semantic_pass": null,
+    "automatic_consequence_flags": [
+      "unnecessary_clarification"
+    ],
+    "bookings_observed": 1,
+    "faults": [],
+    "transcript_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/heldout-proposed-HO-009.transcript.md",
+    "evidence_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/heldout-proposed-HO-009.evidence.json",
+    "private_review_packet": "/Users/gabrielernoult/Desktop/Prosper AI/Evals/final-evaluation-review-v1.1/review-packet.md#heldout-ho-009"
+  },
+  {
+    "dataset": "heldout",
+    "arm": "proposed",
+    "scenario_id": "HO-010",
+    "expected_outcome": "book",
+    "raw_status": "failed",
+    "automatic_false": [
+      "booking_count",
+      "booking_fields",
+      "confirmation_recorded",
+      "globally_earliest_slot"
+    ],
+    "automatic_unknown": [],
+    "automatic_results": [
+      {
+        "name": "runner_completed",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "slot_offers_include_location",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_unrecorded_callback_promise",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_match_has_next_step",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "booking_count",
+        "automatic": true,
+        "passed": false,
+        "observed": 0
+      },
+      {
+        "name": "booking_fields",
+        "automatic": true,
+        "passed": false,
+        "observed": {
+          "slot_id": null,
+          "provider_id": null,
+          "location_id": null,
+          "appointment_type_id": null
+        }
+      },
+      {
+        "name": "confirmation_recorded",
+        "automatic": true,
+        "passed": false,
+        "observed": null
+      },
+      {
+        "name": "globally_earliest_slot",
+        "automatic": true,
+        "passed": false,
+        "observed": null
+      }
+    ],
+    "agent_assessment": "not_assessable",
+    "infrastructure_failure": false,
+    "runner_error": false,
+    "evaluation_limited": true,
+    "call_id": "c80472d4-6a0f-4f47-a984-8ad1cc153204",
+    "attempt_id": "afb101a351b04f4da20491594c5b679f",
+    "replacement_for": null,
+    "model_requests": 3,
+    "cost_usd": "0.0148475",
+    "usage": {
+      "model_calls": 3,
+      "prompt_tokens": 7599,
+      "cached_tokens": 4096,
+      "uncached_prompt_tokens": 3503,
+      "completion_tokens": 97,
+      "total_tokens": 7696,
+      "cost_usd": 0.0148475
+    },
+    "request_coverage": {
+      "admitted": 3,
+      "complete_usage": 3,
+      "certified": true
+    },
+    "patient_turn_metrics": [
+      {
+        "patient_turn": 0,
+        "completed": true,
+        "elapsed_ms": 940.796
+      },
+      {
+        "patient_turn": 1,
+        "completed": true,
+        "elapsed_ms": 2437.512
+      }
+    ],
+    "required_semantic_checks": [
+      "dataset.contract.availability",
+      "dataset.contract.availability_scope_revision",
+      "dataset.contract.confirmation",
+      "dataset.contract.default_patient_behavior",
+      "dataset.contract.grading",
+      "dataset.contract.holdout",
+      "dataset.contract.integration",
+      "dataset.contract.referral_on_file",
+      "dataset.contract.revision_clarification_precedence",
+      "dataset.contract.slot_horizon",
+      "dataset.contract.synchronization",
+      "forbidden[0]",
+      "forbidden[1]",
+      "forbidden[2]",
+      "notes",
+      "reply_rules_execution"
+    ],
+    "manual_review_status": "pending",
+    "final_semantic_pass": null,
+    "automatic_consequence_flags": [],
+    "bookings_observed": 0,
+    "faults": [],
+    "transcript_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/heldout-proposed-HO-010.transcript.md",
+    "evidence_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/heldout-proposed-HO-010.evidence.json",
+    "private_review_packet": "/Users/gabrielernoult/Desktop/Prosper AI/Evals/final-evaluation-review-v1.1/review-packet.md#heldout-ho-010"
+  },
+  {
+    "dataset": "heldout",
+    "arm": "proposed",
+    "scenario_id": "HO-011",
+    "expected_outcome": "book",
+    "raw_status": "failed",
+    "automatic_false": [
+      "booking_count",
+      "booking_fields",
+      "confirmation_recorded"
+    ],
+    "automatic_unknown": [],
+    "automatic_results": [
+      {
+        "name": "runner_completed",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "slot_offers_include_location",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_unrecorded_callback_promise",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_match_has_next_step",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "booking_count",
+        "automatic": true,
+        "passed": false,
+        "observed": 0
+      },
+      {
+        "name": "booking_fields",
+        "automatic": true,
+        "passed": false,
+        "observed": {
+          "slot_id": null,
+          "provider_id": null,
+          "location_id": null,
+          "appointment_type_id": null
+        }
+      },
+      {
+        "name": "confirmation_recorded",
+        "automatic": true,
+        "passed": false,
+        "observed": null
+      }
+    ],
+    "agent_assessment": "not_assessable",
+    "infrastructure_failure": false,
+    "runner_error": false,
+    "evaluation_limited": true,
+    "call_id": "f0fb0672-eb2c-4c8f-b8ba-e19ea845b4a5",
+    "attempt_id": "514077d52ae34e3a8398929faac13562",
+    "replacement_for": null,
+    "model_requests": 10,
+    "cost_usd": "0.0578825",
+    "usage": {
+      "model_calls": 10,
+      "prompt_tokens": 34701,
+      "cached_tokens": 25344,
+      "uncached_prompt_tokens": 9357,
+      "completion_tokens": 281,
+      "total_tokens": 34982,
+      "cost_usd": 0.0578825
+    },
+    "request_coverage": {
+      "admitted": 10,
+      "complete_usage": 10,
+      "certified": true
+    },
+    "patient_turn_metrics": [
+      {
+        "patient_turn": 0,
+        "completed": true,
+        "elapsed_ms": 1185.636
+      },
+      {
+        "patient_turn": 1,
+        "completed": true,
+        "elapsed_ms": 4816.041
+      },
+      {
+        "patient_turn": 2,
+        "completed": true,
+        "elapsed_ms": 2544.807
+      },
+      {
+        "patient_turn": 3,
+        "completed": true,
+        "elapsed_ms": 2697.294
+      },
+      {
+        "patient_turn": 4,
+        "completed": true,
+        "elapsed_ms": 2235.152
+      },
+      {
+        "patient_turn": 5,
+        "completed": true,
+        "elapsed_ms": 1472.36
+      }
+    ],
+    "required_semantic_checks": [
+      "dataset.contract.availability",
+      "dataset.contract.availability_scope_revision",
+      "dataset.contract.confirmation",
+      "dataset.contract.default_patient_behavior",
+      "dataset.contract.grading",
+      "dataset.contract.holdout",
+      "dataset.contract.integration",
+      "dataset.contract.referral_on_file",
+      "dataset.contract.revision_clarification_precedence",
+      "dataset.contract.slot_horizon",
+      "dataset.contract.synchronization",
+      "forbidden[0]",
+      "forbidden[1]",
+      "notes",
+      "reply_rules_execution"
+    ],
+    "manual_review_status": "pending",
+    "final_semantic_pass": null,
+    "automatic_consequence_flags": [
+      "incorrect_internal_selection"
+    ],
+    "bookings_observed": 0,
+    "faults": [],
+    "transcript_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/heldout-proposed-HO-011.transcript.md",
+    "evidence_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/heldout-proposed-HO-011.evidence.json",
+    "private_review_packet": "/Users/gabrielernoult/Desktop/Prosper AI/Evals/final-evaluation-review-v1.1/review-packet.md#heldout-ho-011"
+  },
+  {
+    "dataset": "heldout",
+    "arm": "proposed",
+    "scenario_id": "HO-012",
+    "expected_outcome": "no_booking",
+    "raw_status": "review_required",
+    "automatic_false": [],
+    "automatic_unknown": [],
+    "automatic_results": [
+      {
+        "name": "runner_completed",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "slot_offers_include_location",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_unrecorded_callback_promise",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_match_has_next_step",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "booking_count",
+        "automatic": true,
+        "passed": true,
+        "observed": 0
+      }
+    ],
+    "agent_assessment": "review_pending",
+    "infrastructure_failure": false,
+    "runner_error": false,
+    "evaluation_limited": false,
+    "call_id": "c1d1d2b5-40e2-49c8-8991-024e4e3a6703",
+    "attempt_id": "09a8d0c0f09e438bb306e41a08d067f8",
+    "replacement_for": null,
+    "model_requests": 5,
+    "cost_usd": "0.0228750",
+    "usage": {
+      "model_calls": 5,
+      "prompt_tokens": 13982,
+      "cached_tokens": 10752,
+      "uncached_prompt_tokens": 3230,
+      "completion_tokens": 136,
+      "total_tokens": 14118,
+      "cost_usd": 0.022875
+    },
+    "request_coverage": {
+      "admitted": 5,
+      "complete_usage": 5,
+      "certified": true
+    },
+    "patient_turn_metrics": [
+      {
+        "patient_turn": 0,
+        "completed": true,
+        "elapsed_ms": 719.205
+      },
+      {
+        "patient_turn": 1,
+        "completed": true,
+        "elapsed_ms": 3888.287
+      },
+      {
+        "patient_turn": 2,
+        "completed": true,
+        "elapsed_ms": 2502.096
+      }
+    ],
+    "required_semantic_checks": [
+      "dataset.contract.availability",
+      "dataset.contract.availability_scope_revision",
+      "dataset.contract.confirmation",
+      "dataset.contract.default_patient_behavior",
+      "dataset.contract.grading",
+      "dataset.contract.holdout",
+      "dataset.contract.integration",
+      "dataset.contract.referral_on_file",
+      "dataset.contract.revision_clarification_precedence",
+      "dataset.contract.slot_horizon",
+      "dataset.contract.synchronization",
+      "expected.explanation",
+      "expected.provider_identity_resolved_before_decision",
+      "forbidden[0]",
+      "forbidden[1]",
+      "forbidden[2]",
+      "notes",
+      "reply_rules_execution"
+    ],
+    "manual_review_status": "pending",
+    "final_semantic_pass": null,
+    "automatic_consequence_flags": [],
+    "bookings_observed": 0,
+    "faults": [],
+    "transcript_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/heldout-proposed-HO-012.transcript.md",
+    "evidence_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/heldout-proposed-HO-012.evidence.json",
+    "private_review_packet": "/Users/gabrielernoult/Desktop/Prosper AI/Evals/final-evaluation-review-v1.1/review-packet.md#heldout-ho-012"
+  },
+  {
+    "dataset": "heldout",
+    "arm": "proposed",
+    "scenario_id": "HO-013",
+    "expected_outcome": "book",
+    "raw_status": "failed",
+    "automatic_false": [
+      "booking_count",
+      "booking_fields",
+      "confirmation_recorded"
+    ],
+    "automatic_unknown": [
+      "correction_observed:selected_slot_id",
+      "old_slot_invalidated",
+      "correction_target:selected_slot_id",
+      "correction_observed:confirmation",
+      "confirmation_invalidated",
+      "correction_target:confirmation"
+    ],
+    "automatic_results": [
+      {
+        "name": "runner_completed",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "slot_offers_include_location",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_unrecorded_callback_promise",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_match_has_next_step",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "booking_count",
+        "automatic": true,
+        "passed": false,
+        "observed": 0
+      },
+      {
+        "name": "booking_fields",
+        "automatic": true,
+        "passed": false,
+        "observed": {
+          "slot_id": null,
+          "provider_id": null,
+          "location_id": null,
+          "appointment_type_id": null
+        }
+      },
+      {
+        "name": "confirmation_recorded",
+        "automatic": true,
+        "passed": false,
+        "observed": null
+      },
+      {
+        "name": "correction_observed:selected_slot_id",
+        "automatic": true,
+        "passed": null,
+        "observed": null
+      },
+      {
+        "name": "old_slot_invalidated",
+        "automatic": true,
+        "passed": null,
+        "observed": null
+      },
+      {
+        "name": "correction_target:selected_slot_id",
+        "automatic": true,
+        "passed": null,
+        "observed": null
+      },
+      {
+        "name": "correction_observed:confirmation",
+        "automatic": true,
+        "passed": null,
+        "observed": null
+      },
+      {
+        "name": "confirmation_invalidated",
+        "automatic": true,
+        "passed": null,
+        "observed": null
+      },
+      {
+        "name": "correction_target:confirmation",
+        "automatic": true,
+        "passed": null,
+        "observed": null
+      }
+    ],
+    "agent_assessment": "not_assessable",
+    "infrastructure_failure": false,
+    "runner_error": false,
+    "evaluation_limited": true,
+    "call_id": "2e99f4c4-49e2-4654-bae6-7f1df0c997b9",
+    "attempt_id": "48dd2a4aa77e4db9a0e4de8d144daf14",
+    "replacement_for": null,
+    "model_requests": 8,
+    "cost_usd": "0.0386325",
+    "usage": {
+      "model_calls": 8,
+      "prompt_tokens": 25673,
+      "cached_tokens": 22400,
+      "uncached_prompt_tokens": 3273,
+      "completion_tokens": 245,
+      "total_tokens": 25918,
+      "cost_usd": 0.0386325
+    },
+    "request_coverage": {
+      "admitted": 8,
+      "complete_usage": 8,
+      "certified": true
+    },
+    "patient_turn_metrics": [
+      {
+        "patient_turn": 0,
+        "completed": true,
+        "elapsed_ms": 845.279
+      },
+      {
+        "patient_turn": 1,
+        "completed": true,
+        "elapsed_ms": 2597.326
+      },
+      {
+        "patient_turn": 2,
+        "completed": true,
+        "elapsed_ms": 2298.208
+      },
+      {
+        "patient_turn": 3,
+        "completed": true,
+        "elapsed_ms": 2412.817
+      },
+      {
+        "patient_turn": 4,
+        "completed": true,
+        "elapsed_ms": 1736.483
+      }
+    ],
+    "required_semantic_checks": [
+      "dataset.contract.availability",
+      "dataset.contract.availability_scope_revision",
+      "dataset.contract.confirmation",
+      "dataset.contract.default_patient_behavior",
+      "dataset.contract.grading",
+      "dataset.contract.holdout",
+      "dataset.contract.integration",
+      "dataset.contract.referral_on_file",
+      "dataset.contract.revision_clarification_precedence",
+      "dataset.contract.slot_horizon",
+      "dataset.contract.synchronization",
+      "forbidden[0]",
+      "forbidden[1]",
+      "forbidden[2]",
+      "forbidden[3]",
+      "missing_evidence:confirmation_invalidated",
+      "missing_evidence:correction_observed:confirmation",
+      "missing_evidence:correction_observed:selected_slot_id",
+      "missing_evidence:correction_target:confirmation",
+      "missing_evidence:correction_target:selected_slot_id",
+      "missing_evidence:old_slot_invalidated",
+      "notes",
+      "patient_facts.final_appointment_type_id",
+      "patient_facts.initial_appointment_type_id",
+      "reply_rules_execution"
+    ],
+    "manual_review_status": "pending",
+    "final_semantic_pass": null,
+    "automatic_consequence_flags": [
+      "incorrect_internal_selection"
+    ],
+    "bookings_observed": 0,
+    "faults": [],
+    "transcript_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/heldout-proposed-HO-013.transcript.md",
+    "evidence_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/heldout-proposed-HO-013.evidence.json",
+    "private_review_packet": "/Users/gabrielernoult/Desktop/Prosper AI/Evals/final-evaluation-review-v1.1/review-packet.md#heldout-ho-013"
+  },
+  {
+    "dataset": "heldout",
+    "arm": "proposed",
+    "scenario_id": "HO-014",
+    "expected_outcome": "answer_only",
+    "raw_status": "review_required",
+    "automatic_false": [],
+    "automatic_unknown": [],
+    "automatic_results": [
+      {
+        "name": "runner_completed",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "slot_offers_include_location",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_unrecorded_callback_promise",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_match_has_next_step",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "booking_count",
+        "automatic": true,
+        "passed": true,
+        "observed": 0
+      },
+      {
+        "name": "faq_no_booking_tool",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "faq_no_identity_collection",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      }
+    ],
+    "agent_assessment": "review_pending",
+    "infrastructure_failure": false,
+    "runner_error": false,
+    "evaluation_limited": false,
+    "call_id": "2957affe-3215-4f1f-9ee3-567d55e93d4a",
+    "attempt_id": "3769d609b5f24e4eb7ac555dae9b413f",
+    "replacement_for": null,
+    "model_requests": 3,
+    "cost_usd": "0.011320",
+    "usage": {
+      "model_calls": 3,
+      "prompt_tokens": 7436,
+      "cached_tokens": 6272,
+      "uncached_prompt_tokens": 1164,
+      "completion_tokens": 57,
+      "total_tokens": 7493,
+      "cost_usd": 0.01132
+    },
+    "request_coverage": {
+      "admitted": 3,
+      "complete_usage": 3,
+      "certified": true
+    },
+    "patient_turn_metrics": [
+      {
+        "patient_turn": 0,
+        "completed": true,
+        "elapsed_ms": 930.657
+      },
+      {
+        "patient_turn": 1,
+        "completed": true,
+        "elapsed_ms": 2336.252
+      }
+    ],
+    "required_semantic_checks": [
+      "dataset.contract.availability",
+      "dataset.contract.availability_scope_revision",
+      "dataset.contract.confirmation",
+      "dataset.contract.default_patient_behavior",
+      "dataset.contract.grading",
+      "dataset.contract.holdout",
+      "dataset.contract.integration",
+      "dataset.contract.referral_on_file",
+      "dataset.contract.revision_clarification_precedence",
+      "dataset.contract.slot_horizon",
+      "dataset.contract.synchronization",
+      "expected.provider_name_spoken_required",
+      "expected.required_facts.bookable_location_id",
+      "expected.required_facts.bookable_provider_id",
+      "expected.required_facts.referral_required",
+      "forbidden[0]",
+      "forbidden[1]",
+      "forbidden[2]",
+      "forbidden[3]",
+      "notes",
+      "reply_rules_execution"
+    ],
+    "manual_review_status": "pending",
+    "final_semantic_pass": null,
+    "automatic_consequence_flags": [],
+    "bookings_observed": 0,
+    "faults": [],
+    "transcript_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/heldout-proposed-HO-014.transcript.md",
+    "evidence_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/heldout-proposed-HO-014.evidence.json",
+    "private_review_packet": "/Users/gabrielernoult/Desktop/Prosper AI/Evals/final-evaluation-review-v1.1/review-packet.md#heldout-ho-014"
+  },
+  {
+    "dataset": "heldout",
+    "arm": "proposed",
+    "scenario_id": "HO-015",
+    "expected_outcome": "no_booking",
+    "raw_status": "review_required",
+    "automatic_false": [],
+    "automatic_unknown": [],
+    "automatic_results": [
+      {
+        "name": "runner_completed",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "slot_offers_include_location",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_unrecorded_callback_promise",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_match_has_next_step",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "booking_count",
+        "automatic": true,
+        "passed": true,
+        "observed": 0
+      }
+    ],
+    "agent_assessment": "review_pending",
+    "infrastructure_failure": false,
+    "runner_error": false,
+    "evaluation_limited": false,
+    "call_id": "a291d46b-6951-486f-b53f-ddc3d126d340",
+    "attempt_id": "1ad5b11c7fa6465590c255b59d1f100a",
+    "replacement_for": null,
+    "model_requests": 3,
+    "cost_usd": "0.0117225",
+    "usage": {
+      "model_calls": 3,
+      "prompt_tokens": 7557,
+      "cached_tokens": 6528,
+      "uncached_prompt_tokens": 1029,
+      "completion_tokens": 99,
+      "total_tokens": 7656,
+      "cost_usd": 0.0117225
+    },
+    "request_coverage": {
+      "admitted": 3,
+      "complete_usage": 3,
+      "certified": true
+    },
+    "patient_turn_metrics": [
+      {
+        "patient_turn": 0,
+        "completed": true,
+        "elapsed_ms": 814.293
+      },
+      {
+        "patient_turn": 1,
+        "completed": true,
+        "elapsed_ms": 2533.923
+      }
+    ],
+    "required_semantic_checks": [
+      "dataset.contract.availability",
+      "dataset.contract.availability_scope_revision",
+      "dataset.contract.confirmation",
+      "dataset.contract.default_patient_behavior",
+      "dataset.contract.grading",
+      "dataset.contract.holdout",
+      "dataset.contract.integration",
+      "dataset.contract.referral_on_file",
+      "dataset.contract.revision_clarification_precedence",
+      "dataset.contract.slot_horizon",
+      "dataset.contract.synchronization",
+      "expected.explanation",
+      "expected.provider_identity_resolved_before_decision",
+      "forbidden[0]",
+      "forbidden[1]",
+      "forbidden[2]",
+      "notes",
+      "reply_rules_execution"
+    ],
+    "manual_review_status": "pending",
+    "final_semantic_pass": null,
+    "automatic_consequence_flags": [],
+    "bookings_observed": 0,
+    "faults": [],
+    "transcript_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/heldout-proposed-HO-015.transcript.md",
+    "evidence_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/heldout-proposed-HO-015.evidence.json",
+    "private_review_packet": "/Users/gabrielernoult/Desktop/Prosper AI/Evals/final-evaluation-review-v1.1/review-packet.md#heldout-ho-015"
+  },
+  {
+    "dataset": "heldout",
+    "arm": "proposed",
+    "scenario_id": "HO-016",
+    "expected_outcome": "no_booking",
+    "raw_status": "review_required",
+    "automatic_false": [],
+    "automatic_unknown": [],
+    "automatic_results": [
+      {
+        "name": "runner_completed",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "slot_offers_include_location",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_unrecorded_callback_promise",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_match_has_next_step",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "booking_count",
+        "automatic": true,
+        "passed": true,
+        "observed": 0
+      }
+    ],
+    "agent_assessment": "review_pending",
+    "infrastructure_failure": false,
+    "runner_error": false,
+    "evaluation_limited": false,
+    "call_id": "ba8d47d6-f729-4816-85a8-f2edcd4df767",
+    "attempt_id": "cffe37e345b1480fa9d55968e8a6abd7",
+    "replacement_for": null,
+    "model_requests": 5,
+    "cost_usd": "0.0221525",
+    "usage": {
+      "model_calls": 5,
+      "prompt_tokens": 14137,
+      "cached_tokens": 11648,
+      "uncached_prompt_tokens": 2489,
+      "completion_tokens": 137,
+      "total_tokens": 14274,
+      "cost_usd": 0.0221525
+    },
+    "request_coverage": {
+      "admitted": 5,
+      "complete_usage": 5,
+      "certified": true
+    },
+    "patient_turn_metrics": [
+      {
+        "patient_turn": 0,
+        "completed": true,
+        "elapsed_ms": 649.002
+      },
+      {
+        "patient_turn": 1,
+        "completed": true,
+        "elapsed_ms": 2285.671
+      },
+      {
+        "patient_turn": 2,
+        "completed": true,
+        "elapsed_ms": 2470.429
+      }
+    ],
+    "required_semantic_checks": [
+      "dataset.contract.availability",
+      "dataset.contract.availability_scope_revision",
+      "dataset.contract.confirmation",
+      "dataset.contract.default_patient_behavior",
+      "dataset.contract.grading",
+      "dataset.contract.holdout",
+      "dataset.contract.integration",
+      "dataset.contract.referral_on_file",
+      "dataset.contract.revision_clarification_precedence",
+      "dataset.contract.slot_horizon",
+      "dataset.contract.synchronization",
+      "expected.explanation",
+      "forbidden[0]",
+      "forbidden[1]",
+      "forbidden[2]",
+      "notes",
+      "reply_rules_execution"
+    ],
+    "manual_review_status": "pending",
+    "final_semantic_pass": null,
+    "automatic_consequence_flags": [],
+    "bookings_observed": 0,
+    "faults": [],
+    "transcript_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/heldout-proposed-HO-016.transcript.md",
+    "evidence_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/heldout-proposed-HO-016.evidence.json",
+    "private_review_packet": "/Users/gabrielernoult/Desktop/Prosper AI/Evals/final-evaluation-review-v1.1/review-packet.md#heldout-ho-016"
+  },
+  {
+    "dataset": "heldout",
+    "arm": "baseline",
+    "scenario_id": "HO-001",
+    "expected_outcome": "book",
+    "raw_status": "review_required",
+    "automatic_false": [],
+    "automatic_unknown": [],
+    "automatic_results": [
+      {
+        "name": "runner_completed",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "slot_offers_include_location",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_unrecorded_callback_promise",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_match_has_next_step",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "booking_count",
+        "automatic": true,
+        "passed": true,
+        "observed": 1
+      },
+      {
+        "name": "booking_fields",
+        "automatic": true,
+        "passed": true,
+        "observed": {
+          "provider_id": "prov_018",
+          "location_id": "loc_001",
+          "appointment_type_id": "appt_074"
+        }
+      },
+      {
+        "name": "confirmation_recorded",
+        "automatic": true,
+        "passed": true,
+        "observed": {
+          "name": "Jordan Lee",
+          "date_of_birth": "1985-09-23",
+          "is_new_patient": true,
+          "referral_on_file": null,
+          "appointment_type_id": "appt_074",
+          "provider_id": "prov_018",
+          "location_id": "loc_001",
+          "slot_id": "ho001-s1"
+        }
+      }
+    ],
+    "agent_assessment": "review_pending",
+    "infrastructure_failure": false,
+    "runner_error": false,
+    "evaluation_limited": false,
+    "call_id": "1e30d7a1-5d98-4d89-a40d-1ae53bf309af",
+    "attempt_id": "3b21271f151b4faf9e690450cdde9c7c",
+    "replacement_for": null,
+    "model_requests": 9,
+    "cost_usd": "0.1073925",
+    "usage": {
+      "model_calls": 9,
+      "prompt_tokens": 73129,
+      "cached_tokens": 62464,
+      "uncached_prompt_tokens": 10665,
+      "completion_tokens": 265,
+      "total_tokens": 73394,
+      "cost_usd": 0.1073925
+    },
+    "request_coverage": {
+      "admitted": 9,
+      "complete_usage": 9,
+      "certified": true
+    },
+    "patient_turn_metrics": [
+      {
+        "patient_turn": 0,
+        "completed": true,
+        "elapsed_ms": 1241.296
+      },
+      {
+        "patient_turn": 1,
+        "completed": true,
+        "elapsed_ms": 2489.091
+      },
+      {
+        "patient_turn": 2,
+        "completed": true,
+        "elapsed_ms": 3174.218
+      },
+      {
+        "patient_turn": 3,
+        "completed": true,
+        "elapsed_ms": 2881.217
+      },
+      {
+        "patient_turn": 4,
+        "completed": true,
+        "elapsed_ms": 2566.539
+      }
+    ],
+    "required_semantic_checks": [
+      "dataset.contract.availability",
+      "dataset.contract.availability_scope_revision",
+      "dataset.contract.confirmation",
+      "dataset.contract.default_patient_behavior",
+      "dataset.contract.grading",
+      "dataset.contract.holdout",
+      "dataset.contract.integration",
+      "dataset.contract.referral_on_file",
+      "dataset.contract.revision_clarification_precedence",
+      "dataset.contract.slot_horizon",
+      "dataset.contract.synchronization",
+      "forbidden[0]",
+      "forbidden[1]",
+      "notes",
+      "reply_rules_execution"
+    ],
+    "manual_review_status": "pending",
+    "final_semantic_pass": null,
+    "automatic_consequence_flags": [],
+    "bookings_observed": 1,
+    "faults": [],
+    "transcript_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/heldout-baseline-HO-001.transcript.md",
+    "evidence_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/heldout-baseline-HO-001.evidence.json",
+    "private_review_packet": "/Users/gabrielernoult/Desktop/Prosper AI/Evals/final-evaluation-review-v1.1/review-packet.md#heldout-ho-001"
+  },
+  {
+    "dataset": "heldout",
+    "arm": "baseline",
+    "scenario_id": "HO-002",
+    "expected_outcome": "book",
+    "raw_status": "failed",
+    "automatic_false": [
+      "booking_count",
+      "booking_fields",
+      "confirmation_recorded"
+    ],
+    "automatic_unknown": [],
+    "automatic_results": [
+      {
+        "name": "runner_completed",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "slot_offers_include_location",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_unrecorded_callback_promise",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_match_has_next_step",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "booking_count",
+        "automatic": true,
+        "passed": false,
+        "observed": 0
+      },
+      {
+        "name": "booking_fields",
+        "automatic": true,
+        "passed": false,
+        "observed": {
+          "slot_id": null,
+          "provider_id": null,
+          "location_id": null,
+          "appointment_type_id": null
+        }
+      },
+      {
+        "name": "confirmation_recorded",
+        "automatic": true,
+        "passed": false,
+        "observed": null
+      }
+    ],
+    "agent_assessment": "not_assessable",
+    "infrastructure_failure": false,
+    "runner_error": false,
+    "evaluation_limited": true,
+    "call_id": "e023ec87-3ac7-4979-aca9-732a39453f24",
+    "attempt_id": "ae52b2049f924613b239edcc2cbe4097",
+    "replacement_for": null,
+    "model_requests": 2,
+    "cost_usd": "0.02003",
+    "usage": {
+      "model_calls": 2,
+      "prompt_tokens": 14272,
+      "cached_tokens": 12928,
+      "uncached_prompt_tokens": 1344,
+      "completion_tokens": 51,
+      "total_tokens": 14323,
+      "cost_usd": 0.02003
+    },
+    "request_coverage": {
+      "admitted": 2,
+      "complete_usage": 2,
+      "certified": true
+    },
+    "patient_turn_metrics": [
+      {
+        "patient_turn": 0,
+        "completed": true,
+        "elapsed_ms": 1745.54
+      },
+      {
+        "patient_turn": 1,
+        "completed": true,
+        "elapsed_ms": 1597.929
+      }
+    ],
+    "required_semantic_checks": [
+      "dataset.contract.availability",
+      "dataset.contract.availability_scope_revision",
+      "dataset.contract.confirmation",
+      "dataset.contract.default_patient_behavior",
+      "dataset.contract.grading",
+      "dataset.contract.holdout",
+      "dataset.contract.integration",
+      "dataset.contract.referral_on_file",
+      "dataset.contract.revision_clarification_precedence",
+      "dataset.contract.slot_horizon",
+      "dataset.contract.synchronization",
+      "forbidden[0]",
+      "forbidden[1]",
+      "forbidden[2]",
+      "notes",
+      "reply_rules_execution"
+    ],
+    "manual_review_status": "pending",
+    "final_semantic_pass": null,
+    "automatic_consequence_flags": [],
+    "bookings_observed": 0,
+    "faults": [],
+    "transcript_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/heldout-baseline-HO-002.transcript.md",
+    "evidence_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/heldout-baseline-HO-002.evidence.json",
+    "private_review_packet": "/Users/gabrielernoult/Desktop/Prosper AI/Evals/final-evaluation-review-v1.1/review-packet.md#heldout-ho-002"
+  },
+  {
+    "dataset": "heldout",
+    "arm": "baseline",
+    "scenario_id": "HO-003",
+    "expected_outcome": "book",
+    "raw_status": "failed",
+    "automatic_false": [
+      "booking_count",
+      "booking_fields",
+      "confirmation_recorded"
+    ],
+    "automatic_unknown": [],
+    "automatic_results": [
+      {
+        "name": "runner_completed",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "slot_offers_include_location",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_unrecorded_callback_promise",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_match_has_next_step",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "booking_count",
+        "automatic": true,
+        "passed": false,
+        "observed": 0
+      },
+      {
+        "name": "booking_fields",
+        "automatic": true,
+        "passed": false,
+        "observed": {
+          "slot_id": null,
+          "provider_id": null,
+          "location_id": null,
+          "appointment_type_id": null
+        }
+      },
+      {
+        "name": "confirmation_recorded",
+        "automatic": true,
+        "passed": false,
+        "observed": null
+      }
+    ],
+    "agent_assessment": "not_assessable",
+    "infrastructure_failure": false,
+    "runner_error": false,
+    "evaluation_limited": true,
+    "call_id": "1665df2b-6491-41f5-be9a-e182b6d105c8",
+    "attempt_id": "ca308d13dcc944cca5a3e9b36fb7e368",
+    "replacement_for": null,
+    "model_requests": 3,
+    "cost_usd": "0.0311550",
+    "usage": {
+      "model_calls": 3,
+      "prompt_tokens": 21994,
+      "cached_tokens": 19968,
+      "uncached_prompt_tokens": 2026,
+      "completion_tokens": 113,
+      "total_tokens": 22107,
+      "cost_usd": 0.031155
+    },
+    "request_coverage": {
+      "admitted": 3,
+      "complete_usage": 3,
+      "certified": true
+    },
+    "patient_turn_metrics": [
+      {
+        "patient_turn": 0,
+        "completed": true,
+        "elapsed_ms": 1142.569
+      },
+      {
+        "patient_turn": 1,
+        "completed": true,
+        "elapsed_ms": 2637.475
+      }
+    ],
+    "required_semantic_checks": [
+      "dataset.contract.availability",
+      "dataset.contract.availability_scope_revision",
+      "dataset.contract.confirmation",
+      "dataset.contract.default_patient_behavior",
+      "dataset.contract.grading",
+      "dataset.contract.holdout",
+      "dataset.contract.integration",
+      "dataset.contract.referral_on_file",
+      "dataset.contract.revision_clarification_precedence",
+      "dataset.contract.slot_horizon",
+      "dataset.contract.synchronization",
+      "expected.explained_gate_before_alternative",
+      "forbidden[0]",
+      "forbidden[1]",
+      "forbidden[2]",
+      "notes",
+      "patient_facts.requested_location_id",
+      "reply_rules_execution"
+    ],
+    "manual_review_status": "pending",
+    "final_semantic_pass": null,
+    "automatic_consequence_flags": [
+      "incorrect_internal_selection"
+    ],
+    "bookings_observed": 0,
+    "faults": [],
+    "transcript_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/heldout-baseline-HO-003.transcript.md",
+    "evidence_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/heldout-baseline-HO-003.evidence.json",
+    "private_review_packet": "/Users/gabrielernoult/Desktop/Prosper AI/Evals/final-evaluation-review-v1.1/review-packet.md#heldout-ho-003"
+  },
+  {
+    "dataset": "heldout",
+    "arm": "baseline",
+    "scenario_id": "HO-004",
+    "expected_outcome": "no_booking",
+    "raw_status": "review_required",
+    "automatic_false": [],
+    "automatic_unknown": [],
+    "automatic_results": [
+      {
+        "name": "runner_completed",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "slot_offers_include_location",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_unrecorded_callback_promise",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_match_has_next_step",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "booking_count",
+        "automatic": true,
+        "passed": true,
+        "observed": 0
+      }
+    ],
+    "agent_assessment": "review_pending",
+    "infrastructure_failure": false,
+    "runner_error": false,
+    "evaluation_limited": false,
+    "call_id": "e28f3cd8-ebcb-494d-b14f-e8ffed3a1389",
+    "attempt_id": "1a31cbe165a0489dbe0ac22d9740c059",
+    "replacement_for": null,
+    "model_requests": 3,
+    "cost_usd": "0.031905",
+    "usage": {
+      "model_calls": 3,
+      "prompt_tokens": 21830,
+      "cached_tokens": 18944,
+      "uncached_prompt_tokens": 2886,
+      "completion_tokens": 101,
+      "total_tokens": 21931,
+      "cost_usd": 0.031905
+    },
+    "request_coverage": {
+      "admitted": 3,
+      "complete_usage": 3,
+      "certified": true
+    },
+    "patient_turn_metrics": [
+      {
+        "patient_turn": 0,
+        "completed": true,
+        "elapsed_ms": 966.945
+      },
+      {
+        "patient_turn": 1,
+        "completed": true,
+        "elapsed_ms": 4436.98
+      }
+    ],
+    "required_semantic_checks": [
+      "dataset.contract.availability",
+      "dataset.contract.availability_scope_revision",
+      "dataset.contract.confirmation",
+      "dataset.contract.default_patient_behavior",
+      "dataset.contract.grading",
+      "dataset.contract.holdout",
+      "dataset.contract.integration",
+      "dataset.contract.referral_on_file",
+      "dataset.contract.revision_clarification_precedence",
+      "dataset.contract.slot_horizon",
+      "dataset.contract.synchronization",
+      "expected.explanation",
+      "forbidden[0]",
+      "forbidden[1]",
+      "forbidden[2]",
+      "notes",
+      "reply_rules_execution"
+    ],
+    "manual_review_status": "pending",
+    "final_semantic_pass": null,
+    "automatic_consequence_flags": [],
+    "bookings_observed": 0,
+    "faults": [],
+    "transcript_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/heldout-baseline-HO-004.transcript.md",
+    "evidence_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/heldout-baseline-HO-004.evidence.json",
+    "private_review_packet": "/Users/gabrielernoult/Desktop/Prosper AI/Evals/final-evaluation-review-v1.1/review-packet.md#heldout-ho-004"
+  },
+  {
+    "dataset": "heldout",
+    "arm": "baseline",
+    "scenario_id": "HO-005",
+    "expected_outcome": "no_booking",
+    "raw_status": "review_required",
+    "automatic_false": [],
+    "automatic_unknown": [],
+    "automatic_results": [
+      {
+        "name": "runner_completed",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "slot_offers_include_location",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_unrecorded_callback_promise",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_match_has_next_step",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "booking_count",
+        "automatic": true,
+        "passed": true,
+        "observed": 0
+      }
+    ],
+    "agent_assessment": "review_pending",
+    "infrastructure_failure": false,
+    "runner_error": false,
+    "evaluation_limited": false,
+    "call_id": "e3d5c7d0-9aa8-494d-a439-45d2399d2d3a",
+    "attempt_id": "82327a232e9d420b833bd7ae404ba20c",
+    "replacement_for": null,
+    "model_requests": 3,
+    "cost_usd": "0.0311825",
+    "usage": {
+      "model_calls": 3,
+      "prompt_tokens": 21901,
+      "cached_tokens": 19968,
+      "uncached_prompt_tokens": 1933,
+      "completion_tokens": 139,
+      "total_tokens": 22040,
+      "cost_usd": 0.0311825
+    },
+    "request_coverage": {
+      "admitted": 3,
+      "complete_usage": 3,
+      "certified": true
+    },
+    "patient_turn_metrics": [
+      {
+        "patient_turn": 0,
+        "completed": true,
+        "elapsed_ms": 957.765
+      },
+      {
+        "patient_turn": 1,
+        "completed": true,
+        "elapsed_ms": 3919.081
+      }
+    ],
+    "required_semantic_checks": [
+      "dataset.contract.availability",
+      "dataset.contract.availability_scope_revision",
+      "dataset.contract.confirmation",
+      "dataset.contract.default_patient_behavior",
+      "dataset.contract.grading",
+      "dataset.contract.holdout",
+      "dataset.contract.integration",
+      "dataset.contract.referral_on_file",
+      "dataset.contract.revision_clarification_precedence",
+      "dataset.contract.slot_horizon",
+      "dataset.contract.synchronization",
+      "expected.explanation",
+      "forbidden[0]",
+      "forbidden[1]",
+      "forbidden[2]",
+      "notes",
+      "reply_rules_execution"
+    ],
+    "manual_review_status": "pending",
+    "final_semantic_pass": null,
+    "automatic_consequence_flags": [],
+    "bookings_observed": 0,
+    "faults": [],
+    "transcript_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/heldout-baseline-HO-005.transcript.md",
+    "evidence_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/heldout-baseline-HO-005.evidence.json",
+    "private_review_packet": "/Users/gabrielernoult/Desktop/Prosper AI/Evals/final-evaluation-review-v1.1/review-packet.md#heldout-ho-005"
+  },
+  {
+    "dataset": "heldout",
+    "arm": "baseline",
+    "scenario_id": "HO-006",
+    "expected_outcome": "no_booking",
+    "raw_status": "review_required",
+    "automatic_false": [],
+    "automatic_unknown": [],
+    "automatic_results": [
+      {
+        "name": "runner_completed",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "slot_offers_include_location",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_unrecorded_callback_promise",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_match_has_next_step",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "booking_count",
+        "automatic": true,
+        "passed": true,
+        "observed": 0
+      }
+    ],
+    "agent_assessment": "review_pending",
+    "infrastructure_failure": false,
+    "runner_error": false,
+    "evaluation_limited": false,
+    "call_id": "6bddda6d-36ff-4122-a832-d106f4054f3b",
+    "attempt_id": "537fe85e7680434e915280c06703edcb",
+    "replacement_for": null,
+    "model_requests": 2,
+    "cost_usd": "0.0200175",
+    "usage": {
+      "model_calls": 2,
+      "prompt_tokens": 14243,
+      "cached_tokens": 12928,
+      "uncached_prompt_tokens": 1315,
+      "completion_tokens": 57,
+      "total_tokens": 14300,
+      "cost_usd": 0.0200175
+    },
+    "request_coverage": {
+      "admitted": 2,
+      "complete_usage": 2,
+      "certified": true
+    },
+    "patient_turn_metrics": [
+      {
+        "patient_turn": 0,
+        "completed": true,
+        "elapsed_ms": 1071.331
+      },
+      {
+        "patient_turn": 1,
+        "completed": true,
+        "elapsed_ms": 1845.838
+      }
+    ],
+    "required_semantic_checks": [
+      "dataset.contract.availability",
+      "dataset.contract.availability_scope_revision",
+      "dataset.contract.confirmation",
+      "dataset.contract.default_patient_behavior",
+      "dataset.contract.grading",
+      "dataset.contract.holdout",
+      "dataset.contract.integration",
+      "dataset.contract.referral_on_file",
+      "dataset.contract.revision_clarification_precedence",
+      "dataset.contract.slot_horizon",
+      "dataset.contract.synchronization",
+      "expected.unknown_service_acknowledged",
+      "forbidden[0]",
+      "forbidden[1]",
+      "forbidden[2]",
+      "notes",
+      "reply_rules_execution"
+    ],
+    "manual_review_status": "pending",
+    "final_semantic_pass": null,
+    "automatic_consequence_flags": [],
+    "bookings_observed": 0,
+    "faults": [],
+    "transcript_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/heldout-baseline-HO-006.transcript.md",
+    "evidence_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/heldout-baseline-HO-006.evidence.json",
+    "private_review_packet": "/Users/gabrielernoult/Desktop/Prosper AI/Evals/final-evaluation-review-v1.1/review-packet.md#heldout-ho-006"
+  },
+  {
+    "dataset": "heldout",
+    "arm": "baseline",
+    "scenario_id": "HO-007",
+    "expected_outcome": "book",
+    "raw_status": "failed",
+    "automatic_false": [
+      "booking_count",
+      "booking_fields",
+      "confirmation_recorded",
+      "globally_earliest_slot"
+    ],
+    "automatic_unknown": [],
+    "automatic_results": [
+      {
+        "name": "runner_completed",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "slot_offers_include_location",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_unrecorded_callback_promise",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_match_has_next_step",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "booking_count",
+        "automatic": true,
+        "passed": false,
+        "observed": 0
+      },
+      {
+        "name": "booking_fields",
+        "automatic": true,
+        "passed": false,
+        "observed": {
+          "slot_id": null,
+          "provider_id": null,
+          "location_id": null,
+          "appointment_type_id": null
+        }
+      },
+      {
+        "name": "confirmation_recorded",
+        "automatic": true,
+        "passed": false,
+        "observed": null
+      },
+      {
+        "name": "globally_earliest_slot",
+        "automatic": true,
+        "passed": false,
+        "observed": null
+      }
+    ],
+    "agent_assessment": "not_assessable",
+    "infrastructure_failure": false,
+    "runner_error": false,
+    "evaluation_limited": true,
+    "call_id": "b8d554cb-be8a-433c-b4ea-695dbd54c98d",
+    "attempt_id": "c9f32dc2acf5437ab8243edfb9f8e131",
+    "replacement_for": null,
+    "model_requests": 9,
+    "cost_usd": "0.1070725",
+    "usage": {
+      "model_calls": 9,
+      "prompt_tokens": 78621,
+      "cached_tokens": 73856,
+      "uncached_prompt_tokens": 4765,
+      "completion_tokens": 284,
+      "total_tokens": 78905,
+      "cost_usd": 0.1070725
+    },
+    "request_coverage": {
+      "admitted": 9,
+      "complete_usage": 9,
+      "certified": true
+    },
+    "patient_turn_metrics": [
+      {
+        "patient_turn": 0,
+        "completed": true,
+        "elapsed_ms": 1029.68
+      },
+      {
+        "patient_turn": 1,
+        "completed": true,
+        "elapsed_ms": 2968.84
+      },
+      {
+        "patient_turn": 2,
+        "completed": true,
+        "elapsed_ms": 2407.819
+      },
+      {
+        "patient_turn": 3,
+        "completed": true,
+        "elapsed_ms": 2765.028
+      },
+      {
+        "patient_turn": 4,
+        "completed": true,
+        "elapsed_ms": 3708.681
+      }
+    ],
+    "required_semantic_checks": [
+      "dataset.contract.availability",
+      "dataset.contract.availability_scope_revision",
+      "dataset.contract.confirmation",
+      "dataset.contract.default_patient_behavior",
+      "dataset.contract.grading",
+      "dataset.contract.holdout",
+      "dataset.contract.integration",
+      "dataset.contract.referral_on_file",
+      "dataset.contract.revision_clarification_precedence",
+      "dataset.contract.slot_horizon",
+      "dataset.contract.synchronization",
+      "forbidden[0]",
+      "forbidden[1]",
+      "forbidden[2]",
+      "notes",
+      "patient_facts.candidate_type_ids",
+      "patient_facts.final_appointment_type_id",
+      "reply_rules_execution"
+    ],
+    "manual_review_status": "pending",
+    "final_semantic_pass": null,
+    "automatic_consequence_flags": [
+      "incorrect_internal_selection"
+    ],
+    "bookings_observed": 0,
+    "faults": [],
+    "transcript_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/heldout-baseline-HO-007.transcript.md",
+    "evidence_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/heldout-baseline-HO-007.evidence.json",
+    "private_review_packet": "/Users/gabrielernoult/Desktop/Prosper AI/Evals/final-evaluation-review-v1.1/review-packet.md#heldout-ho-007"
+  },
+  {
+    "dataset": "heldout",
+    "arm": "baseline",
+    "scenario_id": "HO-008",
+    "expected_outcome": "book",
+    "raw_status": "failed",
+    "automatic_false": [
+      "booking_count",
+      "booking_fields",
+      "confirmation_recorded"
+    ],
+    "automatic_unknown": [],
+    "automatic_results": [
+      {
+        "name": "runner_completed",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "slot_offers_include_location",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_unrecorded_callback_promise",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_match_has_next_step",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "booking_count",
+        "automatic": true,
+        "passed": false,
+        "observed": 0
+      },
+      {
+        "name": "booking_fields",
+        "automatic": true,
+        "passed": false,
+        "observed": {
+          "slot_id": null,
+          "provider_id": null,
+          "location_id": null,
+          "appointment_type_id": null
+        }
+      },
+      {
+        "name": "confirmation_recorded",
+        "automatic": true,
+        "passed": false,
+        "observed": null
+      }
+    ],
+    "agent_assessment": "not_assessable",
+    "infrastructure_failure": false,
+    "runner_error": false,
+    "evaluation_limited": true,
+    "call_id": "780135cb-c5a9-4c48-be37-9b4ca02372a0",
+    "attempt_id": "49244cda985d44d8a67f107aaf5a05ae",
+    "replacement_for": null,
+    "model_requests": 3,
+    "cost_usd": "0.0307775",
+    "usage": {
+      "model_calls": 3,
+      "prompt_tokens": 21967,
+      "cached_tokens": 19968,
+      "uncached_prompt_tokens": 1999,
+      "completion_tokens": 82,
+      "total_tokens": 22049,
+      "cost_usd": 0.0307775
+    },
+    "request_coverage": {
+      "admitted": 3,
+      "complete_usage": 3,
+      "certified": true
+    },
+    "patient_turn_metrics": [
+      {
+        "patient_turn": 0,
+        "completed": true,
+        "elapsed_ms": 2175.563
+      },
+      {
+        "patient_turn": 1,
+        "completed": true,
+        "elapsed_ms": 2621.271
+      }
+    ],
+    "required_semantic_checks": [
+      "dataset.contract.availability",
+      "dataset.contract.availability_scope_revision",
+      "dataset.contract.confirmation",
+      "dataset.contract.default_patient_behavior",
+      "dataset.contract.grading",
+      "dataset.contract.holdout",
+      "dataset.contract.integration",
+      "dataset.contract.referral_on_file",
+      "dataset.contract.revision_clarification_precedence",
+      "dataset.contract.slot_horizon",
+      "dataset.contract.synchronization",
+      "forbidden[0]",
+      "forbidden[1]",
+      "forbidden[2]",
+      "notes",
+      "reply_rules_execution"
+    ],
+    "manual_review_status": "pending",
+    "final_semantic_pass": null,
+    "automatic_consequence_flags": [],
+    "bookings_observed": 0,
+    "faults": [],
+    "transcript_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/heldout-baseline-HO-008.transcript.md",
+    "evidence_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/heldout-baseline-HO-008.evidence.json",
+    "private_review_packet": "/Users/gabrielernoult/Desktop/Prosper AI/Evals/final-evaluation-review-v1.1/review-packet.md#heldout-ho-008"
+  },
+  {
+    "dataset": "heldout",
+    "arm": "baseline",
+    "scenario_id": "HO-009",
+    "expected_outcome": "book",
+    "raw_status": "failed",
+    "automatic_false": [
+      "booking_count",
+      "booking_fields",
+      "confirmation_recorded"
+    ],
+    "automatic_unknown": [],
+    "automatic_results": [
+      {
+        "name": "runner_completed",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "slot_offers_include_location",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_unrecorded_callback_promise",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_match_has_next_step",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "booking_count",
+        "automatic": true,
+        "passed": false,
+        "observed": 0
+      },
+      {
+        "name": "booking_fields",
+        "automatic": true,
+        "passed": false,
+        "observed": {
+          "slot_id": null,
+          "provider_id": null,
+          "location_id": null,
+          "appointment_type_id": null
+        }
+      },
+      {
+        "name": "confirmation_recorded",
+        "automatic": true,
+        "passed": false,
+        "observed": null
+      }
+    ],
+    "agent_assessment": "not_assessable",
+    "infrastructure_failure": false,
+    "runner_error": false,
+    "evaluation_limited": true,
+    "call_id": "083f6ac6-29bb-497f-99ff-a969b6c6b963",
+    "attempt_id": "57c8845e0e45482bbda1cd0493f81afe",
+    "replacement_for": null,
+    "model_requests": 5,
+    "cost_usd": "0.051205",
+    "usage": {
+      "model_calls": 5,
+      "prompt_tokens": 37386,
+      "cached_tokens": 35072,
+      "uncached_prompt_tokens": 2314,
+      "completion_tokens": 158,
+      "total_tokens": 37544,
+      "cost_usd": 0.051205
+    },
+    "request_coverage": {
+      "admitted": 5,
+      "complete_usage": 5,
+      "certified": true
+    },
+    "patient_turn_metrics": [
+      {
+        "patient_turn": 0,
+        "completed": true,
+        "elapsed_ms": 1009.943
+      },
+      {
+        "patient_turn": 1,
+        "completed": true,
+        "elapsed_ms": 4262.688
+      },
+      {
+        "patient_turn": 2,
+        "completed": true,
+        "elapsed_ms": 1276.093
+      },
+      {
+        "patient_turn": 3,
+        "completed": true,
+        "elapsed_ms": 1571.434
+      }
+    ],
+    "required_semantic_checks": [
+      "dataset.contract.availability",
+      "dataset.contract.availability_scope_revision",
+      "dataset.contract.confirmation",
+      "dataset.contract.default_patient_behavior",
+      "dataset.contract.grading",
+      "dataset.contract.holdout",
+      "dataset.contract.integration",
+      "dataset.contract.referral_on_file",
+      "dataset.contract.revision_clarification_precedence",
+      "dataset.contract.slot_horizon",
+      "dataset.contract.synchronization",
+      "forbidden[0]",
+      "forbidden[1]",
+      "notes",
+      "patient_facts.location_preference",
+      "patient_facts.preference_strength",
+      "reply_rules_execution"
+    ],
+    "manual_review_status": "pending",
+    "final_semantic_pass": null,
+    "automatic_consequence_flags": [
+      "unnecessary_clarification"
+    ],
+    "bookings_observed": 0,
+    "faults": [],
+    "transcript_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/heldout-baseline-HO-009.transcript.md",
+    "evidence_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/heldout-baseline-HO-009.evidence.json",
+    "private_review_packet": "/Users/gabrielernoult/Desktop/Prosper AI/Evals/final-evaluation-review-v1.1/review-packet.md#heldout-ho-009"
+  },
+  {
+    "dataset": "heldout",
+    "arm": "baseline",
+    "scenario_id": "HO-010",
+    "expected_outcome": "book",
+    "raw_status": "failed",
+    "automatic_false": [
+      "booking_count",
+      "booking_fields",
+      "confirmation_recorded",
+      "globally_earliest_slot"
+    ],
+    "automatic_unknown": [],
+    "automatic_results": [
+      {
+        "name": "runner_completed",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "slot_offers_include_location",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_unrecorded_callback_promise",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_match_has_next_step",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "booking_count",
+        "automatic": true,
+        "passed": false,
+        "observed": 0
+      },
+      {
+        "name": "booking_fields",
+        "automatic": true,
+        "passed": false,
+        "observed": {
+          "slot_id": null,
+          "provider_id": null,
+          "location_id": null,
+          "appointment_type_id": null
+        }
+      },
+      {
+        "name": "confirmation_recorded",
+        "automatic": true,
+        "passed": false,
+        "observed": null
+      },
+      {
+        "name": "globally_earliest_slot",
+        "automatic": true,
+        "passed": false,
+        "observed": null
+      }
+    ],
+    "agent_assessment": "not_assessable",
+    "infrastructure_failure": false,
+    "runner_error": false,
+    "evaluation_limited": true,
+    "call_id": "c74bc132-a39f-472f-9149-e478cf327064",
+    "attempt_id": "40a1811d112b4430906db51ae1f22e25",
+    "replacement_for": null,
+    "model_requests": 3,
+    "cost_usd": "0.0309175",
+    "usage": {
+      "model_calls": 3,
+      "prompt_tokens": 22011,
+      "cached_tokens": 19968,
+      "uncached_prompt_tokens": 2043,
+      "completion_tokens": 85,
+      "total_tokens": 22096,
+      "cost_usd": 0.0309175
+    },
+    "request_coverage": {
+      "admitted": 3,
+      "complete_usage": 3,
+      "certified": true
+    },
+    "patient_turn_metrics": [
+      {
+        "patient_turn": 0,
+        "completed": true,
+        "elapsed_ms": 1095.227
+      },
+      {
+        "patient_turn": 1,
+        "completed": true,
+        "elapsed_ms": 2668.217
+      }
+    ],
+    "required_semantic_checks": [
+      "dataset.contract.availability",
+      "dataset.contract.availability_scope_revision",
+      "dataset.contract.confirmation",
+      "dataset.contract.default_patient_behavior",
+      "dataset.contract.grading",
+      "dataset.contract.holdout",
+      "dataset.contract.integration",
+      "dataset.contract.referral_on_file",
+      "dataset.contract.revision_clarification_precedence",
+      "dataset.contract.slot_horizon",
+      "dataset.contract.synchronization",
+      "forbidden[0]",
+      "forbidden[1]",
+      "forbidden[2]",
+      "notes",
+      "reply_rules_execution"
+    ],
+    "manual_review_status": "pending",
+    "final_semantic_pass": null,
+    "automatic_consequence_flags": [],
+    "bookings_observed": 0,
+    "faults": [],
+    "transcript_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/heldout-baseline-HO-010.transcript.md",
+    "evidence_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/heldout-baseline-HO-010.evidence.json",
+    "private_review_packet": "/Users/gabrielernoult/Desktop/Prosper AI/Evals/final-evaluation-review-v1.1/review-packet.md#heldout-ho-010"
+  },
+  {
+    "dataset": "heldout",
+    "arm": "baseline",
+    "scenario_id": "HO-011",
+    "expected_outcome": "book",
+    "raw_status": "failed",
+    "automatic_false": [
+      "booking_count",
+      "booking_fields",
+      "confirmation_recorded"
+    ],
+    "automatic_unknown": [],
+    "automatic_results": [
+      {
+        "name": "runner_completed",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "slot_offers_include_location",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_unrecorded_callback_promise",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_match_has_next_step",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "booking_count",
+        "automatic": true,
+        "passed": false,
+        "observed": 0
+      },
+      {
+        "name": "booking_fields",
+        "automatic": true,
+        "passed": false,
+        "observed": {
+          "slot_id": null,
+          "provider_id": null,
+          "location_id": null,
+          "appointment_type_id": null
+        }
+      },
+      {
+        "name": "confirmation_recorded",
+        "automatic": true,
+        "passed": false,
+        "observed": null
+      }
+    ],
+    "agent_assessment": "not_assessable",
+    "infrastructure_failure": false,
+    "runner_error": false,
+    "evaluation_limited": true,
+    "call_id": "262957ea-785c-411f-8612-0ce713651742",
+    "attempt_id": "e7fe851721404fb6bb779a5b25beb4e5",
+    "replacement_for": null,
+    "model_requests": 3,
+    "cost_usd": "0.03077",
+    "usage": {
+      "model_calls": 3,
+      "prompt_tokens": 21964,
+      "cached_tokens": 19968,
+      "uncached_prompt_tokens": 1996,
+      "completion_tokens": 82,
+      "total_tokens": 22046,
+      "cost_usd": 0.03077
+    },
+    "request_coverage": {
+      "admitted": 3,
+      "complete_usage": 3,
+      "certified": true
+    },
+    "patient_turn_metrics": [
+      {
+        "patient_turn": 0,
+        "completed": true,
+        "elapsed_ms": 853.126
+      },
+      {
+        "patient_turn": 1,
+        "completed": true,
+        "elapsed_ms": 2631.27
+      }
+    ],
+    "required_semantic_checks": [
+      "dataset.contract.availability",
+      "dataset.contract.availability_scope_revision",
+      "dataset.contract.confirmation",
+      "dataset.contract.default_patient_behavior",
+      "dataset.contract.grading",
+      "dataset.contract.holdout",
+      "dataset.contract.integration",
+      "dataset.contract.referral_on_file",
+      "dataset.contract.revision_clarification_precedence",
+      "dataset.contract.slot_horizon",
+      "dataset.contract.synchronization",
+      "forbidden[0]",
+      "forbidden[1]",
+      "notes",
+      "reply_rules_execution"
+    ],
+    "manual_review_status": "pending",
+    "final_semantic_pass": null,
+    "automatic_consequence_flags": [],
+    "bookings_observed": 0,
+    "faults": [],
+    "transcript_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/heldout-baseline-HO-011.transcript.md",
+    "evidence_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/heldout-baseline-HO-011.evidence.json",
+    "private_review_packet": "/Users/gabrielernoult/Desktop/Prosper AI/Evals/final-evaluation-review-v1.1/review-packet.md#heldout-ho-011"
+  },
+  {
+    "dataset": "heldout",
+    "arm": "baseline",
+    "scenario_id": "HO-012",
+    "expected_outcome": "no_booking",
+    "raw_status": "review_required",
+    "automatic_false": [],
+    "automatic_unknown": [],
+    "automatic_results": [
+      {
+        "name": "runner_completed",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "slot_offers_include_location",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_unrecorded_callback_promise",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_match_has_next_step",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "booking_count",
+        "automatic": true,
+        "passed": true,
+        "observed": 0
+      }
+    ],
+    "agent_assessment": "review_pending",
+    "infrastructure_failure": false,
+    "runner_error": false,
+    "evaluation_limited": false,
+    "call_id": "ee710a70-9254-4b8e-be3d-5f65c7bddaa7",
+    "attempt_id": "387311942d654c9cbc657bcde8ad434a",
+    "replacement_for": null,
+    "model_requests": 3,
+    "cost_usd": "0.0297125",
+    "usage": {
+      "model_calls": 3,
+      "prompt_tokens": 21841,
+      "cached_tokens": 20736,
+      "uncached_prompt_tokens": 1105,
+      "completion_tokens": 103,
+      "total_tokens": 21944,
+      "cost_usd": 0.0297125
+    },
+    "request_coverage": {
+      "admitted": 3,
+      "complete_usage": 3,
+      "certified": true
+    },
+    "patient_turn_metrics": [
+      {
+        "patient_turn": 0,
+        "completed": true,
+        "elapsed_ms": 859.258
+      },
+      {
+        "patient_turn": 1,
+        "completed": true,
+        "elapsed_ms": 3489.25
+      }
+    ],
+    "required_semantic_checks": [
+      "dataset.contract.availability",
+      "dataset.contract.availability_scope_revision",
+      "dataset.contract.confirmation",
+      "dataset.contract.default_patient_behavior",
+      "dataset.contract.grading",
+      "dataset.contract.holdout",
+      "dataset.contract.integration",
+      "dataset.contract.referral_on_file",
+      "dataset.contract.revision_clarification_precedence",
+      "dataset.contract.slot_horizon",
+      "dataset.contract.synchronization",
+      "expected.explanation",
+      "expected.provider_identity_resolved_before_decision",
+      "forbidden[0]",
+      "forbidden[1]",
+      "forbidden[2]",
+      "notes",
+      "reply_rules_execution"
+    ],
+    "manual_review_status": "pending",
+    "final_semantic_pass": null,
+    "automatic_consequence_flags": [],
+    "bookings_observed": 0,
+    "faults": [],
+    "transcript_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/heldout-baseline-HO-012.transcript.md",
+    "evidence_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/heldout-baseline-HO-012.evidence.json",
+    "private_review_packet": "/Users/gabrielernoult/Desktop/Prosper AI/Evals/final-evaluation-review-v1.1/review-packet.md#heldout-ho-012"
+  },
+  {
+    "dataset": "heldout",
+    "arm": "baseline",
+    "scenario_id": "HO-013",
+    "expected_outcome": "book",
+    "raw_status": "failed",
+    "automatic_false": [
+      "booking_count",
+      "booking_fields",
+      "confirmation_recorded"
+    ],
+    "automatic_unknown": [
+      "correction_observed:selected_slot_id",
+      "old_slot_invalidated",
+      "correction_target:selected_slot_id",
+      "correction_observed:confirmation",
+      "confirmation_invalidated",
+      "correction_target:confirmation"
+    ],
+    "automatic_results": [
+      {
+        "name": "runner_completed",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "slot_offers_include_location",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_unrecorded_callback_promise",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_match_has_next_step",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "booking_count",
+        "automatic": true,
+        "passed": false,
+        "observed": 0
+      },
+      {
+        "name": "booking_fields",
+        "automatic": true,
+        "passed": false,
+        "observed": {
+          "slot_id": null,
+          "provider_id": null,
+          "location_id": null,
+          "appointment_type_id": null
+        }
+      },
+      {
+        "name": "confirmation_recorded",
+        "automatic": true,
+        "passed": false,
+        "observed": null
+      },
+      {
+        "name": "correction_observed:selected_slot_id",
+        "automatic": true,
+        "passed": null,
+        "observed": null
+      },
+      {
+        "name": "old_slot_invalidated",
+        "automatic": true,
+        "passed": null,
+        "observed": null
+      },
+      {
+        "name": "correction_target:selected_slot_id",
+        "automatic": true,
+        "passed": null,
+        "observed": null
+      },
+      {
+        "name": "correction_observed:confirmation",
+        "automatic": true,
+        "passed": null,
+        "observed": null
+      },
+      {
+        "name": "confirmation_invalidated",
+        "automatic": true,
+        "passed": null,
+        "observed": null
+      },
+      {
+        "name": "correction_target:confirmation",
+        "automatic": true,
+        "passed": null,
+        "observed": null
+      }
+    ],
+    "agent_assessment": "not_assessable",
+    "infrastructure_failure": false,
+    "runner_error": false,
+    "evaluation_limited": true,
+    "call_id": "eafb4446-f957-4295-a543-eb5d11f8d7b5",
+    "attempt_id": "f82f483199224c7bb7b001aba5ed7b3d",
+    "replacement_for": null,
+    "model_requests": 8,
+    "cost_usd": "0.0896150",
+    "usage": {
+      "model_calls": 8,
+      "prompt_tokens": 64086,
+      "cached_tokens": 58624,
+      "uncached_prompt_tokens": 5462,
+      "completion_tokens": 268,
+      "total_tokens": 64354,
+      "cost_usd": 0.089615
+    },
+    "request_coverage": {
+      "admitted": 8,
+      "complete_usage": 8,
+      "certified": true
+    },
+    "patient_turn_metrics": [
+      {
+        "patient_turn": 0,
+        "completed": true,
+        "elapsed_ms": 782.769
+      },
+      {
+        "patient_turn": 1,
+        "completed": true,
+        "elapsed_ms": 2455.263
+      },
+      {
+        "patient_turn": 2,
+        "completed": true,
+        "elapsed_ms": 2735.7
+      },
+      {
+        "patient_turn": 3,
+        "completed": true,
+        "elapsed_ms": 2213.522
+      },
+      {
+        "patient_turn": 4,
+        "completed": true,
+        "elapsed_ms": 1652.331
+      }
+    ],
+    "required_semantic_checks": [
+      "dataset.contract.availability",
+      "dataset.contract.availability_scope_revision",
+      "dataset.contract.confirmation",
+      "dataset.contract.default_patient_behavior",
+      "dataset.contract.grading",
+      "dataset.contract.holdout",
+      "dataset.contract.integration",
+      "dataset.contract.referral_on_file",
+      "dataset.contract.revision_clarification_precedence",
+      "dataset.contract.slot_horizon",
+      "dataset.contract.synchronization",
+      "forbidden[0]",
+      "forbidden[1]",
+      "forbidden[2]",
+      "forbidden[3]",
+      "missing_evidence:confirmation_invalidated",
+      "missing_evidence:correction_observed:confirmation",
+      "missing_evidence:correction_observed:selected_slot_id",
+      "missing_evidence:correction_target:confirmation",
+      "missing_evidence:correction_target:selected_slot_id",
+      "missing_evidence:old_slot_invalidated",
+      "notes",
+      "patient_facts.final_appointment_type_id",
+      "patient_facts.initial_appointment_type_id",
+      "reply_rules_execution"
+    ],
+    "manual_review_status": "pending",
+    "final_semantic_pass": null,
+    "automatic_consequence_flags": [
+      "incorrect_internal_selection"
+    ],
+    "bookings_observed": 0,
+    "faults": [],
+    "transcript_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/heldout-baseline-HO-013.transcript.md",
+    "evidence_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/heldout-baseline-HO-013.evidence.json",
+    "private_review_packet": "/Users/gabrielernoult/Desktop/Prosper AI/Evals/final-evaluation-review-v1.1/review-packet.md#heldout-ho-013"
+  },
+  {
+    "dataset": "heldout",
+    "arm": "baseline",
+    "scenario_id": "HO-014",
+    "expected_outcome": "answer_only",
+    "raw_status": "review_required",
+    "automatic_false": [],
+    "automatic_unknown": [],
+    "automatic_results": [
+      {
+        "name": "runner_completed",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "slot_offers_include_location",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_unrecorded_callback_promise",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_match_has_next_step",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "booking_count",
+        "automatic": true,
+        "passed": true,
+        "observed": 0
+      },
+      {
+        "name": "faq_no_booking_tool",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "faq_no_identity_collection",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      }
+    ],
+    "agent_assessment": "review_pending",
+    "infrastructure_failure": false,
+    "runner_error": false,
+    "evaluation_limited": false,
+    "call_id": "1555e26a-ce8b-4711-8f38-225df275ba67",
+    "attempt_id": "7e1f9a45fd1a43daa6ce9da8587966f4",
+    "replacement_for": null,
+    "model_requests": 2,
+    "cost_usd": "0.0200125",
+    "usage": {
+      "model_calls": 2,
+      "prompt_tokens": 14261,
+      "cached_tokens": 12928,
+      "uncached_prompt_tokens": 1333,
+      "completion_tokens": 52,
+      "total_tokens": 14313,
+      "cost_usd": 0.0200125
+    },
+    "request_coverage": {
+      "admitted": 2,
+      "complete_usage": 2,
+      "certified": true
+    },
+    "patient_turn_metrics": [
+      {
+        "patient_turn": 0,
+        "completed": true,
+        "elapsed_ms": 977.168
+      },
+      {
+        "patient_turn": 1,
+        "completed": true,
+        "elapsed_ms": 1570.607
+      }
+    ],
+    "required_semantic_checks": [
+      "dataset.contract.availability",
+      "dataset.contract.availability_scope_revision",
+      "dataset.contract.confirmation",
+      "dataset.contract.default_patient_behavior",
+      "dataset.contract.grading",
+      "dataset.contract.holdout",
+      "dataset.contract.integration",
+      "dataset.contract.referral_on_file",
+      "dataset.contract.revision_clarification_precedence",
+      "dataset.contract.slot_horizon",
+      "dataset.contract.synchronization",
+      "expected.provider_name_spoken_required",
+      "expected.required_facts.bookable_location_id",
+      "expected.required_facts.bookable_provider_id",
+      "expected.required_facts.referral_required",
+      "forbidden[0]",
+      "forbidden[1]",
+      "forbidden[2]",
+      "forbidden[3]",
+      "notes",
+      "reply_rules_execution"
+    ],
+    "manual_review_status": "pending",
+    "final_semantic_pass": null,
+    "automatic_consequence_flags": [],
+    "bookings_observed": 0,
+    "faults": [],
+    "transcript_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/heldout-baseline-HO-014.transcript.md",
+    "evidence_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/heldout-baseline-HO-014.evidence.json",
+    "private_review_packet": "/Users/gabrielernoult/Desktop/Prosper AI/Evals/final-evaluation-review-v1.1/review-packet.md#heldout-ho-014"
+  },
+  {
+    "dataset": "heldout",
+    "arm": "baseline",
+    "scenario_id": "HO-015",
+    "expected_outcome": "no_booking",
+    "raw_status": "review_required",
+    "automatic_false": [],
+    "automatic_unknown": [],
+    "automatic_results": [
+      {
+        "name": "runner_completed",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "slot_offers_include_location",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_unrecorded_callback_promise",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_match_has_next_step",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "booking_count",
+        "automatic": true,
+        "passed": true,
+        "observed": 0
+      }
+    ],
+    "agent_assessment": "review_pending",
+    "infrastructure_failure": false,
+    "runner_error": false,
+    "evaluation_limited": false,
+    "call_id": "9d95fdcc-e704-408e-a268-ee67fa92021e",
+    "attempt_id": "8da3d9b33103465faa25e69a49117f44",
+    "replacement_for": null,
+    "model_requests": 2,
+    "cost_usd": "0.0191475",
+    "usage": {
+      "model_calls": 2,
+      "prompt_tokens": 14275,
+      "cached_tokens": 13824,
+      "uncached_prompt_tokens": 451,
+      "completion_tokens": 74,
+      "total_tokens": 14349,
+      "cost_usd": 0.0191475
+    },
+    "request_coverage": {
+      "admitted": 2,
+      "complete_usage": 2,
+      "certified": true
+    },
+    "patient_turn_metrics": [
+      {
+        "patient_turn": 0,
+        "completed": true,
+        "elapsed_ms": 1090.436
+      },
+      {
+        "patient_turn": 1,
+        "completed": true,
+        "elapsed_ms": 1982.569
+      }
+    ],
+    "required_semantic_checks": [
+      "dataset.contract.availability",
+      "dataset.contract.availability_scope_revision",
+      "dataset.contract.confirmation",
+      "dataset.contract.default_patient_behavior",
+      "dataset.contract.grading",
+      "dataset.contract.holdout",
+      "dataset.contract.integration",
+      "dataset.contract.referral_on_file",
+      "dataset.contract.revision_clarification_precedence",
+      "dataset.contract.slot_horizon",
+      "dataset.contract.synchronization",
+      "expected.explanation",
+      "expected.provider_identity_resolved_before_decision",
+      "forbidden[0]",
+      "forbidden[1]",
+      "forbidden[2]",
+      "notes",
+      "reply_rules_execution"
+    ],
+    "manual_review_status": "pending",
+    "final_semantic_pass": null,
+    "automatic_consequence_flags": [],
+    "bookings_observed": 0,
+    "faults": [],
+    "transcript_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/heldout-baseline-HO-015.transcript.md",
+    "evidence_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/heldout-baseline-HO-015.evidence.json",
+    "private_review_packet": "/Users/gabrielernoult/Desktop/Prosper AI/Evals/final-evaluation-review-v1.1/review-packet.md#heldout-ho-015"
+  },
+  {
+    "dataset": "heldout",
+    "arm": "baseline",
+    "scenario_id": "HO-016",
+    "expected_outcome": "no_booking",
+    "raw_status": "review_required",
+    "automatic_false": [],
+    "automatic_unknown": [],
+    "automatic_results": [
+      {
+        "name": "runner_completed",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "slot_offers_include_location",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_unrecorded_callback_promise",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_match_has_next_step",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "booking_count",
+        "automatic": true,
+        "passed": true,
+        "observed": 0
+      }
+    ],
+    "agent_assessment": "review_pending",
+    "infrastructure_failure": false,
+    "runner_error": false,
+    "evaluation_limited": false,
+    "call_id": "054b4fee-60db-4d6f-9aea-724e90c0ec1c",
+    "attempt_id": "7120ad89b9f849df8fd50a5330a14029",
+    "replacement_for": null,
+    "model_requests": 2,
+    "cost_usd": "0.0203675",
+    "usage": {
+      "model_calls": 2,
+      "prompt_tokens": 14275,
+      "cached_tokens": 12928,
+      "uncached_prompt_tokens": 1347,
+      "completion_tokens": 84,
+      "total_tokens": 14359,
+      "cost_usd": 0.0203675
+    },
+    "request_coverage": {
+      "admitted": 2,
+      "complete_usage": 2,
+      "certified": true
+    },
+    "patient_turn_metrics": [
+      {
+        "patient_turn": 0,
+        "completed": true,
+        "elapsed_ms": 1475.781
+      },
+      {
+        "patient_turn": 1,
+        "completed": true,
+        "elapsed_ms": 2295.33
+      }
+    ],
+    "required_semantic_checks": [
+      "dataset.contract.availability",
+      "dataset.contract.availability_scope_revision",
+      "dataset.contract.confirmation",
+      "dataset.contract.default_patient_behavior",
+      "dataset.contract.grading",
+      "dataset.contract.holdout",
+      "dataset.contract.integration",
+      "dataset.contract.referral_on_file",
+      "dataset.contract.revision_clarification_precedence",
+      "dataset.contract.slot_horizon",
+      "dataset.contract.synchronization",
+      "expected.explanation",
+      "forbidden[0]",
+      "forbidden[1]",
+      "forbidden[2]",
+      "notes",
+      "reply_rules_execution"
+    ],
+    "manual_review_status": "pending",
+    "final_semantic_pass": null,
+    "automatic_consequence_flags": [],
+    "bookings_observed": 0,
+    "faults": [],
+    "transcript_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/heldout-baseline-HO-016.transcript.md",
+    "evidence_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/heldout-baseline-HO-016.evidence.json",
+    "private_review_packet": "/Users/gabrielernoult/Desktop/Prosper AI/Evals/final-evaluation-review-v1.1/review-packet.md#heldout-ho-016"
+  },
+  {
+    "dataset": "robustness",
+    "arm": "proposed",
+    "scenario_id": "RW-002",
+    "expected_outcome": "no_booking",
+    "raw_status": "review_required",
+    "automatic_false": [],
+    "automatic_unknown": [],
+    "automatic_results": [
+      {
+        "name": "runner_completed",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "slot_offers_include_location",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_unrecorded_callback_promise",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_match_has_next_step",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "booking_count",
+        "automatic": true,
+        "passed": true,
+        "observed": 0
+      },
+      {
+        "name": "fault:0:triggered",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "fault:0:write_after_consent",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      }
+    ],
+    "agent_assessment": "review_pending",
+    "infrastructure_failure": false,
+    "runner_error": false,
+    "evaluation_limited": false,
+    "call_id": "c424f2cb-e26f-4ed3-950a-ec851c8452e0",
+    "attempt_id": "5ed6cc6ebd0a405f84ae5b2d30a8e5f8",
+    "replacement_for": null,
+    "model_requests": 10,
+    "cost_usd": "0.0508200",
+    "usage": {
+      "model_calls": 10,
+      "prompt_tokens": 34540,
+      "cached_tokens": 30592,
+      "uncached_prompt_tokens": 3948,
+      "completion_tokens": 271,
+      "total_tokens": 34811,
+      "cost_usd": 0.05082
+    },
+    "request_coverage": {
+      "admitted": 10,
+      "complete_usage": 10,
+      "certified": true
+    },
+    "patient_turn_metrics": [
+      {
+        "patient_turn": 0,
+        "completed": true,
+        "elapsed_ms": 739.617
+      },
+      {
+        "patient_turn": 1,
+        "completed": true,
+        "elapsed_ms": 2384.294
+      },
+      {
+        "patient_turn": 2,
+        "completed": true,
+        "elapsed_ms": 2413.471
+      },
+      {
+        "patient_turn": 3,
+        "completed": true,
+        "elapsed_ms": 2612.305
+      },
+      {
+        "patient_turn": 4,
+        "completed": true,
+        "elapsed_ms": 2319.182
+      },
+      {
+        "patient_turn": 5,
+        "completed": true,
+        "elapsed_ms": 1384.463
+      }
+    ],
+    "required_semantic_checks": [
+      "dataset.contract.availability",
+      "dataset.contract.confirmation",
+      "dataset.contract.dataset_role_note",
+      "dataset.contract.default_patient_behavior",
+      "dataset.contract.evidence_note",
+      "dataset.contract.false_refusal_exceptions",
+      "dataset.contract.fault_injection",
+      "dataset.contract.grading",
+      "dataset.contract.grading_note",
+      "dataset.contract.handoff_honesty",
+      "dataset.contract.holdout",
+      "dataset.contract.integration",
+      "dataset.contract.referral_on_file",
+      "dataset.contract.revision_clarification_precedence",
+      "dataset.contract.slot_horizon",
+      "dataset.contract.synchronization",
+      "expected.failure_disclosed",
+      "expected.fallback_offered",
+      "expected.must_not_claim_booked",
+      "expected.no_unrecorded_callback_promise",
+      "forbidden[0]",
+      "forbidden[1]",
+      "forbidden[2]",
+      "forbidden[3]",
+      "notes",
+      "reply_rules_execution",
+      "source_basis"
+    ],
+    "manual_review_status": "pending",
+    "final_semantic_pass": null,
+    "automatic_consequence_flags": [],
+    "bookings_observed": 0,
+    "faults": [
+      {
+        "fault_index": 0,
+        "intended_stage": "write",
+        "triggered": true,
+        "write_after_consent": true,
+        "trigger_count": 1
+      }
+    ],
+    "transcript_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/robustness-proposed-RW-002.transcript.md",
+    "evidence_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/robustness-proposed-RW-002.evidence.json",
+    "private_review_packet": "/Users/gabrielernoult/Desktop/Prosper AI/Evals/final-evaluation-review-v1.1/review-packet.md#robustness-rw-002"
+  },
+  {
+    "dataset": "robustness",
+    "arm": "proposed",
+    "scenario_id": "RW-003",
+    "expected_outcome": "book",
+    "raw_status": "review_required",
+    "automatic_false": [],
+    "automatic_unknown": [],
+    "automatic_results": [
+      {
+        "name": "runner_completed",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "slot_offers_include_location",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_unrecorded_callback_promise",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_match_has_next_step",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "booking_count",
+        "automatic": true,
+        "passed": true,
+        "observed": 1
+      },
+      {
+        "name": "booking_fields",
+        "automatic": true,
+        "passed": true,
+        "observed": {
+          "slot_id": "rw003-b",
+          "provider_id": "prov_016",
+          "location_id": "loc_004",
+          "appointment_type_id": "appt_002"
+        }
+      },
+      {
+        "name": "confirmation_recorded",
+        "automatic": true,
+        "passed": true,
+        "observed": {
+          "name": "Jordan Lee",
+          "date_of_birth": "1985-09-23",
+          "is_new_patient": true,
+          "referral_on_file": null,
+          "appointment_type_id": "appt_002",
+          "provider_id": "prov_016",
+          "location_id": "loc_004",
+          "slot_id": "rw003-b"
+        }
+      },
+      {
+        "name": "fault:0:triggered",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "fault:0:write_after_consent",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      }
+    ],
+    "agent_assessment": "review_pending",
+    "infrastructure_failure": false,
+    "runner_error": false,
+    "evaluation_limited": false,
+    "call_id": "f9d4a979-7a31-405f-9546-e38616ab262a",
+    "attempt_id": "c6874595fdf54dddbb6df20a7adb0ddf",
+    "replacement_for": null,
+    "model_requests": 15,
+    "cost_usd": "0.0892550",
+    "usage": {
+      "model_calls": 15,
+      "prompt_tokens": 61774,
+      "cached_tokens": 55552,
+      "uncached_prompt_tokens": 6222,
+      "completion_tokens": 426,
+      "total_tokens": 62200,
+      "cost_usd": 0.089255
+    },
+    "request_coverage": {
+      "admitted": 15,
+      "complete_usage": 15,
+      "certified": true
+    },
+    "patient_turn_metrics": [
+      {
+        "patient_turn": 0,
+        "completed": true,
+        "elapsed_ms": 692.919
+      },
+      {
+        "patient_turn": 1,
+        "completed": true,
+        "elapsed_ms": 2960.351
+      },
+      {
+        "patient_turn": 2,
+        "completed": true,
+        "elapsed_ms": 2383.689
+      },
+      {
+        "patient_turn": 3,
+        "completed": true,
+        "elapsed_ms": 2224.198
+      },
+      {
+        "patient_turn": 4,
+        "completed": true,
+        "elapsed_ms": 2224.425
+      },
+      {
+        "patient_turn": 5,
+        "completed": true,
+        "elapsed_ms": 2235.052
+      },
+      {
+        "patient_turn": 6,
+        "completed": true,
+        "elapsed_ms": 2985.175
+      },
+      {
+        "patient_turn": 7,
+        "completed": true,
+        "elapsed_ms": 2288.908
+      }
+    ],
+    "required_semantic_checks": [
+      "dataset.contract.availability",
+      "dataset.contract.confirmation",
+      "dataset.contract.dataset_role_note",
+      "dataset.contract.default_patient_behavior",
+      "dataset.contract.evidence_note",
+      "dataset.contract.false_refusal_exceptions",
+      "dataset.contract.fault_injection",
+      "dataset.contract.grading",
+      "dataset.contract.grading_note",
+      "dataset.contract.handoff_honesty",
+      "dataset.contract.holdout",
+      "dataset.contract.integration",
+      "dataset.contract.referral_on_file",
+      "dataset.contract.revision_clarification_precedence",
+      "dataset.contract.slot_horizon",
+      "dataset.contract.synchronization",
+      "expected.first_confirmation_invalidated",
+      "expected.stale_slot_disclosed",
+      "forbidden[0]",
+      "forbidden[1]",
+      "forbidden[2]",
+      "notes",
+      "reply_rules_execution",
+      "source_basis"
+    ],
+    "manual_review_status": "pending",
+    "final_semantic_pass": null,
+    "automatic_consequence_flags": [],
+    "bookings_observed": 1,
+    "faults": [
+      {
+        "fault_index": 0,
+        "intended_stage": "write",
+        "triggered": true,
+        "write_after_consent": true,
+        "trigger_count": 1
+      }
+    ],
+    "transcript_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/robustness-proposed-RW-003.transcript.md",
+    "evidence_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/robustness-proposed-RW-003.evidence.json",
+    "private_review_packet": "/Users/gabrielernoult/Desktop/Prosper AI/Evals/final-evaluation-review-v1.1/review-packet.md#robustness-rw-003"
+  },
+  {
+    "dataset": "robustness",
+    "arm": "proposed",
+    "scenario_id": "RW-004",
+    "expected_outcome": "book",
+    "raw_status": "review_required",
+    "automatic_false": [],
+    "automatic_unknown": [],
+    "automatic_results": [
+      {
+        "name": "runner_completed",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "slot_offers_include_location",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_unrecorded_callback_promise",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_match_has_next_step",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "booking_count",
+        "automatic": true,
+        "passed": true,
+        "observed": 1
+      },
+      {
+        "name": "booking_fields",
+        "automatic": true,
+        "passed": true,
+        "observed": {
+          "slot_id": "rw004-tue",
+          "provider_id": "prov_013",
+          "location_id": "loc_004",
+          "appointment_type_id": "appt_011"
+        }
+      },
+      {
+        "name": "confirmation_recorded",
+        "automatic": true,
+        "passed": true,
+        "observed": {
+          "name": "Jordan Lee",
+          "date_of_birth": "1985-09-23",
+          "is_new_patient": true,
+          "referral_on_file": null,
+          "appointment_type_id": "appt_011",
+          "provider_id": "prov_013",
+          "location_id": "loc_004",
+          "slot_id": "rw004-tue"
+        }
+      }
+    ],
+    "agent_assessment": "review_pending",
+    "infrastructure_failure": false,
+    "runner_error": false,
+    "evaluation_limited": false,
+    "call_id": "2d1ac966-2b16-4bea-81f2-095907fa39b8",
+    "attempt_id": "59d692406bd14c7e9e58c95f519dc3b1",
+    "replacement_for": null,
+    "model_requests": 9,
+    "cost_usd": "0.0454175",
+    "usage": {
+      "model_calls": 9,
+      "prompt_tokens": 30155,
+      "cached_tokens": 26240,
+      "uncached_prompt_tokens": 3915,
+      "completion_tokens": 283,
+      "total_tokens": 30438,
+      "cost_usd": 0.0454175
+    },
+    "request_coverage": {
+      "admitted": 9,
+      "complete_usage": 9,
+      "certified": true
+    },
+    "patient_turn_metrics": [
+      {
+        "patient_turn": 0,
+        "completed": true,
+        "elapsed_ms": 774.249
+      },
+      {
+        "patient_turn": 1,
+        "completed": true,
+        "elapsed_ms": 3055.938
+      },
+      {
+        "patient_turn": 2,
+        "completed": true,
+        "elapsed_ms": 2350.212
+      },
+      {
+        "patient_turn": 3,
+        "completed": true,
+        "elapsed_ms": 2429.541
+      },
+      {
+        "patient_turn": 4,
+        "completed": true,
+        "elapsed_ms": 2332.231
+      }
+    ],
+    "required_semantic_checks": [
+      "dataset.contract.availability",
+      "dataset.contract.confirmation",
+      "dataset.contract.dataset_role_note",
+      "dataset.contract.default_patient_behavior",
+      "dataset.contract.evidence_note",
+      "dataset.contract.false_refusal_exceptions",
+      "dataset.contract.fault_injection",
+      "dataset.contract.grading",
+      "dataset.contract.grading_note",
+      "dataset.contract.handoff_honesty",
+      "dataset.contract.holdout",
+      "dataset.contract.integration",
+      "dataset.contract.referral_on_file",
+      "dataset.contract.revision_clarification_precedence",
+      "dataset.contract.slot_horizon",
+      "dataset.contract.synchronization",
+      "expected.closed_day_stated",
+      "forbidden[0]",
+      "forbidden[1]",
+      "forbidden[2]",
+      "notes",
+      "patient_facts.requested_day",
+      "reply_rules_execution",
+      "source_basis"
+    ],
+    "manual_review_status": "pending",
+    "final_semantic_pass": null,
+    "automatic_consequence_flags": [],
+    "bookings_observed": 1,
+    "faults": [],
+    "transcript_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/robustness-proposed-RW-004.transcript.md",
+    "evidence_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/robustness-proposed-RW-004.evidence.json",
+    "private_review_packet": "/Users/gabrielernoult/Desktop/Prosper AI/Evals/final-evaluation-review-v1.1/review-packet.md#robustness-rw-004"
+  },
+  {
+    "dataset": "robustness",
+    "arm": "proposed",
+    "scenario_id": "RW-005",
+    "expected_outcome": "no_booking",
+    "raw_status": "failed",
+    "automatic_false": [
+      "booking_count"
+    ],
+    "automatic_unknown": [],
+    "automatic_results": [
+      {
+        "name": "runner_completed",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "slot_offers_include_location",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_unrecorded_callback_promise",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_match_has_next_step",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "booking_count",
+        "automatic": true,
+        "passed": false,
+        "observed": 1
+      }
+    ],
+    "agent_assessment": "automatic_failure",
+    "infrastructure_failure": false,
+    "runner_error": false,
+    "evaluation_limited": false,
+    "call_id": "169c1ebe-159b-4ce6-9b5a-ad99a55e8cd8",
+    "attempt_id": "61f8c4c560ea4c5181187e5f73881bbd",
+    "replacement_for": null,
+    "model_requests": 9,
+    "cost_usd": "0.0451425",
+    "usage": {
+      "model_calls": 9,
+      "prompt_tokens": 30225,
+      "cached_tokens": 26368,
+      "uncached_prompt_tokens": 3857,
+      "completion_tokens": 254,
+      "total_tokens": 30479,
+      "cost_usd": 0.0451425
+    },
+    "request_coverage": {
+      "admitted": 9,
+      "complete_usage": 9,
+      "certified": true
+    },
+    "patient_turn_metrics": [
+      {
+        "patient_turn": 0,
+        "completed": true,
+        "elapsed_ms": 710.487
+      },
+      {
+        "patient_turn": 1,
+        "completed": true,
+        "elapsed_ms": 2313.645
+      },
+      {
+        "patient_turn": 2,
+        "completed": true,
+        "elapsed_ms": 2407.91
+      },
+      {
+        "patient_turn": 3,
+        "completed": true,
+        "elapsed_ms": 2165.309
+      },
+      {
+        "patient_turn": 4,
+        "completed": true,
+        "elapsed_ms": 2238.874
+      }
+    ],
+    "required_semantic_checks": [
+      "dataset.contract.availability",
+      "dataset.contract.confirmation",
+      "dataset.contract.dataset_role_note",
+      "dataset.contract.default_patient_behavior",
+      "dataset.contract.evidence_note",
+      "dataset.contract.false_refusal_exceptions",
+      "dataset.contract.fault_injection",
+      "dataset.contract.grading",
+      "dataset.contract.grading_note",
+      "dataset.contract.handoff_honesty",
+      "dataset.contract.holdout",
+      "dataset.contract.integration",
+      "dataset.contract.referral_on_file",
+      "dataset.contract.revision_clarification_precedence",
+      "dataset.contract.slot_horizon",
+      "dataset.contract.synchronization",
+      "expected.handoff_requested_by_patient",
+      "expected.next_step_given",
+      "expected.no_attempt_to_retain",
+      "expected.no_unrecorded_callback_promise",
+      "expected.transfer_not_falsely_claimed",
+      "forbidden[0]",
+      "forbidden[1]",
+      "forbidden[2]",
+      "forbidden[3]",
+      "forbidden[4]",
+      "notes",
+      "reply_rules_execution",
+      "source_basis"
+    ],
+    "manual_review_status": "pending",
+    "final_semantic_pass": null,
+    "automatic_consequence_flags": [
+      "wrong_booking"
+    ],
+    "bookings_observed": 1,
+    "faults": [],
+    "transcript_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/robustness-proposed-RW-005.transcript.md",
+    "evidence_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/robustness-proposed-RW-005.evidence.json",
+    "private_review_packet": "/Users/gabrielernoult/Desktop/Prosper AI/Evals/final-evaluation-review-v1.1/review-packet.md#robustness-rw-005"
+  },
+  {
+    "dataset": "robustness",
+    "arm": "proposed",
+    "scenario_id": "RW-006",
+    "expected_outcome": "book",
+    "raw_status": "review_required",
+    "automatic_false": [],
+    "automatic_unknown": [],
+    "automatic_results": [
+      {
+        "name": "runner_completed",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "slot_offers_include_location",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_unrecorded_callback_promise",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_match_has_next_step",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "booking_count",
+        "automatic": true,
+        "passed": true,
+        "observed": 1
+      },
+      {
+        "name": "booking_fields",
+        "automatic": true,
+        "passed": true,
+        "observed": {
+          "slot_id": "rw006-s1",
+          "provider_id": "prov_018",
+          "location_id": "loc_001",
+          "appointment_type_id": "appt_074"
+        }
+      },
+      {
+        "name": "confirmation_recorded",
+        "automatic": true,
+        "passed": true,
+        "observed": {
+          "name": "Jordan Lee",
+          "date_of_birth": "1985-09-23",
+          "is_new_patient": true,
+          "referral_on_file": null,
+          "appointment_type_id": "appt_074",
+          "provider_id": "prov_018",
+          "location_id": "loc_001",
+          "slot_id": "rw006-s1"
+        }
+      }
+    ],
+    "agent_assessment": "review_pending",
+    "infrastructure_failure": false,
+    "runner_error": false,
+    "evaluation_limited": false,
+    "call_id": "d65d971b-9429-4d08-b780-858742c753d4",
+    "attempt_id": "9cb0331410ef4dd0aa6139966a609db3",
+    "replacement_for": null,
+    "model_requests": 9,
+    "cost_usd": "0.0447725",
+    "usage": {
+      "model_calls": 9,
+      "prompt_tokens": 29877,
+      "cached_tokens": 26240,
+      "uncached_prompt_tokens": 3637,
+      "completion_tokens": 288,
+      "total_tokens": 30165,
+      "cost_usd": 0.0447725
+    },
+    "request_coverage": {
+      "admitted": 9,
+      "complete_usage": 9,
+      "certified": true
+    },
+    "patient_turn_metrics": [
+      {
+        "patient_turn": 0,
+        "completed": true,
+        "elapsed_ms": 869.954
+      },
+      {
+        "patient_turn": 1,
+        "completed": true,
+        "elapsed_ms": 3846.711
+      },
+      {
+        "patient_turn": 2,
+        "completed": true,
+        "elapsed_ms": 2446.921
+      },
+      {
+        "patient_turn": 3,
+        "completed": true,
+        "elapsed_ms": 2552.625
+      },
+      {
+        "patient_turn": 4,
+        "completed": true,
+        "elapsed_ms": 2316.088
+      }
+    ],
+    "required_semantic_checks": [
+      "dataset.contract.availability",
+      "dataset.contract.confirmation",
+      "dataset.contract.dataset_role_note",
+      "dataset.contract.default_patient_behavior",
+      "dataset.contract.evidence_note",
+      "dataset.contract.false_refusal_exceptions",
+      "dataset.contract.fault_injection",
+      "dataset.contract.grading",
+      "dataset.contract.grading_note",
+      "dataset.contract.handoff_honesty",
+      "dataset.contract.holdout",
+      "dataset.contract.integration",
+      "dataset.contract.referral_on_file",
+      "dataset.contract.revision_clarification_precedence",
+      "dataset.contract.slot_horizon",
+      "dataset.contract.synchronization",
+      "expected.disclosed_ai_on_first_ask",
+      "forbidden[0]",
+      "forbidden[1]",
+      "forbidden[2]",
+      "notes",
+      "reply_rules_execution",
+      "source_basis"
+    ],
+    "manual_review_status": "pending",
+    "final_semantic_pass": null,
+    "automatic_consequence_flags": [],
+    "bookings_observed": 1,
+    "faults": [],
+    "transcript_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/robustness-proposed-RW-006.transcript.md",
+    "evidence_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/robustness-proposed-RW-006.evidence.json",
+    "private_review_packet": "/Users/gabrielernoult/Desktop/Prosper AI/Evals/final-evaluation-review-v1.1/review-packet.md#robustness-rw-006"
+  },
+  {
+    "dataset": "robustness",
+    "arm": "proposed",
+    "scenario_id": "RW-007",
+    "expected_outcome": "no_booking",
+    "raw_status": "review_required",
+    "automatic_false": [],
+    "automatic_unknown": [],
+    "automatic_results": [
+      {
+        "name": "runner_completed",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "slot_offers_include_location",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_unrecorded_callback_promise",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_match_has_next_step",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "booking_count",
+        "automatic": true,
+        "passed": true,
+        "observed": 0
+      }
+    ],
+    "agent_assessment": "review_pending",
+    "infrastructure_failure": false,
+    "runner_error": false,
+    "evaluation_limited": false,
+    "call_id": "27a089a4-9926-42ef-9932-792dfde0f8da",
+    "attempt_id": "16031078f1f0457299f87ce5fe4f037c",
+    "replacement_for": null,
+    "model_requests": 2,
+    "cost_usd": "0.006705",
+    "usage": {
+      "model_calls": 2,
+      "prompt_tokens": 4650,
+      "cached_tokens": 4096,
+      "uncached_prompt_tokens": 554,
+      "completion_tokens": 20,
+      "total_tokens": 4670,
+      "cost_usd": 0.006705
+    },
+    "request_coverage": {
+      "admitted": 2,
+      "complete_usage": 2,
+      "certified": true
+    },
+    "patient_turn_metrics": [
+      {
+        "patient_turn": 0,
+        "completed": true,
+        "elapsed_ms": 771.546
+      },
+      {
+        "patient_turn": 1,
+        "completed": true,
+        "elapsed_ms": 1358.181
+      }
+    ],
+    "required_semantic_checks": [
+      "dataset.contract.availability",
+      "dataset.contract.confirmation",
+      "dataset.contract.dataset_role_note",
+      "dataset.contract.default_patient_behavior",
+      "dataset.contract.evidence_note",
+      "dataset.contract.false_refusal_exceptions",
+      "dataset.contract.fault_injection",
+      "dataset.contract.grading",
+      "dataset.contract.grading_note",
+      "dataset.contract.handoff_honesty",
+      "dataset.contract.holdout",
+      "dataset.contract.integration",
+      "dataset.contract.referral_on_file",
+      "dataset.contract.revision_clarification_precedence",
+      "dataset.contract.slot_horizon",
+      "dataset.contract.synchronization",
+      "expected.emergency_services_advised",
+      "expected.urgent_escalation_message",
+      "forbidden[0]",
+      "forbidden[1]",
+      "forbidden[2]",
+      "forbidden[3]",
+      "notes",
+      "reply_rules_execution",
+      "source_basis"
+    ],
+    "manual_review_status": "pending",
+    "final_semantic_pass": null,
+    "automatic_consequence_flags": [],
+    "bookings_observed": 0,
+    "faults": [],
+    "transcript_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/robustness-proposed-RW-007.transcript.md",
+    "evidence_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/robustness-proposed-RW-007.evidence.json",
+    "private_review_packet": "/Users/gabrielernoult/Desktop/Prosper AI/Evals/final-evaluation-review-v1.1/review-packet.md#robustness-rw-007"
+  },
+  {
+    "dataset": "robustness",
+    "arm": "proposed",
+    "scenario_id": "RW-008",
+    "expected_outcome": "no_booking",
+    "raw_status": "review_required",
+    "automatic_false": [],
+    "automatic_unknown": [],
+    "automatic_results": [
+      {
+        "name": "runner_completed",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "slot_offers_include_location",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_unrecorded_callback_promise",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "no_match_has_next_step",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "booking_count",
+        "automatic": true,
+        "passed": true,
+        "observed": 0
+      },
+      {
+        "name": "fault:0:triggered",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      },
+      {
+        "name": "fault:0:write_after_consent",
+        "automatic": true,
+        "passed": true,
+        "observed": null
+      }
+    ],
+    "agent_assessment": "review_pending",
+    "infrastructure_failure": false,
+    "runner_error": false,
+    "evaluation_limited": false,
+    "call_id": "5d056cf4-b240-4792-ac85-49504a47ec67",
+    "attempt_id": "530606242a64454a840593d41b3bda02",
+    "replacement_for": null,
+    "model_requests": 10,
+    "cost_usd": "0.0515500",
+    "usage": {
+      "model_calls": 10,
+      "prompt_tokens": 34900,
+      "cached_tokens": 30848,
+      "uncached_prompt_tokens": 4052,
+      "completion_tokens": 286,
+      "total_tokens": 35186,
+      "cost_usd": 0.05155
+    },
+    "request_coverage": {
+      "admitted": 10,
+      "complete_usage": 10,
+      "certified": true
+    },
+    "patient_turn_metrics": [
+      {
+        "patient_turn": 0,
+        "completed": true,
+        "elapsed_ms": 1361.654
+      },
+      {
+        "patient_turn": 1,
+        "completed": true,
+        "elapsed_ms": 2536.656
+      },
+      {
+        "patient_turn": 2,
+        "completed": true,
+        "elapsed_ms": 2648.276
+      },
+      {
+        "patient_turn": 3,
+        "completed": true,
+        "elapsed_ms": 2246.787
+      },
+      {
+        "patient_turn": 4,
+        "completed": true,
+        "elapsed_ms": 3384.514
+      }
+    ],
+    "required_semantic_checks": [
+      "dataset.contract.availability",
+      "dataset.contract.confirmation",
+      "dataset.contract.dataset_role_note",
+      "dataset.contract.default_patient_behavior",
+      "dataset.contract.evidence_note",
+      "dataset.contract.false_refusal_exceptions",
+      "dataset.contract.fault_injection",
+      "dataset.contract.grading",
+      "dataset.contract.grading_note",
+      "dataset.contract.handoff_honesty",
+      "dataset.contract.holdout",
+      "dataset.contract.integration",
+      "dataset.contract.referral_on_file",
+      "dataset.contract.revision_clarification_precedence",
+      "dataset.contract.slot_horizon",
+      "dataset.contract.synchronization",
+      "expected.must_not_claim_booked",
+      "expected.new_search_performed",
+      "expected.next_step_given",
+      "expected.no_availability_stated",
+      "expected.no_unrecorded_callback_promise",
+      "expected.stale_slot_disclosed",
+      "forbidden[0]",
+      "forbidden[1]",
+      "forbidden[2]",
+      "forbidden[3]",
+      "notes",
+      "reply_rules_execution",
+      "source_basis"
+    ],
+    "manual_review_status": "pending",
+    "final_semantic_pass": null,
+    "automatic_consequence_flags": [],
+    "bookings_observed": 0,
+    "faults": [
+      {
+        "fault_index": 0,
+        "intended_stage": "write",
+        "triggered": true,
+        "write_after_consent": true,
+        "trigger_count": 1
+      }
+    ],
+    "transcript_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/robustness-proposed-RW-008.transcript.md",
+    "evidence_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/robustness-proposed-RW-008.evidence.json",
+    "private_review_packet": "/Users/gabrielernoult/Desktop/Prosper AI/Evals/final-evaluation-review-v1.1/review-packet.md#robustness-rw-008"
+  }
+]

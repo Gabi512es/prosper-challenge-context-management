@@ -1,0 +1,235 @@
+{
+  "revision_version": "reviewed-conversational-v1",
+  "scope_preserved_fully": false,
+  "scope_change": "Conversational held-out copy no longer tests capability-invalid availability ingestion",
+  "assets": {
+    "heldout": {
+      "original_path": "/Users/gabrielernoult/Documents/prosper_heldout_scenarios.json",
+      "original_sha256": "d41abdad3defe405a48becc55a97d4d153c3c3b27a4eff5f5518db8a2dedd1b6",
+      "revised_path": "/Users/gabrielernoult/Desktop/Prosper AI/Evals/revised-evaluation-v1/heldout.reviewed.json",
+      "revised_sha256": "94dcf459ad8d0e13f89981aefb8afb6492982e3d611a0cd50a22a2bf7be72fea",
+      "scenarios": 16
+    },
+    "robustness": {
+      "original_path": "/Users/gabrielernoult/Documents/prosper_robustness_scenarios.json",
+      "original_sha256": "c5de085b51996c51afaa9dbc3b40c392452d0eec28760b422ced2a6f74aa6c19",
+      "revised_path": "/Users/gabrielernoult/Desktop/Prosper AI/Evals/revised-evaluation-v1/robustness.reviewed.json",
+      "revised_sha256": "2c2ce46ce4864b7b6a18153ffa1a353d279b67f3c340155f0b1712937f3ebebd",
+      "scenarios": 8
+    }
+  },
+  "removed_record_evidence": "/Users/gabrielernoult/Desktop/Prosper AI/Evals/revised-evaluation-v1/removed-initializer-records.json",
+  "removed_record_evidence_sha256": "963e623e55b507022b881c8b451d87eb36b84d8c1b90b6e426e92679c3a705d8",
+  "exact_change_manifest_sha256": "daf11cd1a7df1ca570b42c9cb766786628d8577b7aace75289f670e49c7b9f77",
+  "change_index": [
+    {
+      "dataset": "heldout",
+      "pointer": "/contract/evaluation_revision",
+      "operation": "add",
+      "before_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+      "after_sha256": "a0a94a76844062c4e7fa8b7a9bd6507970860e93944a68b7404a9cfde7851386"
+    },
+    {
+      "dataset": "heldout",
+      "pointer": "/contract/revision_clarification_precedence",
+      "operation": "add",
+      "before_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+      "after_sha256": "c12541c7b14e7076a14970321d13d58bec117881a2601ce327769ff67a303578"
+    },
+    {
+      "dataset": "heldout",
+      "pointer": "/contract/availability_scope_revision",
+      "operation": "add",
+      "before_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+      "after_sha256": "1380568ff964224541a26c1af5c128010dd1a1fc23a1f64faebbf56b8e813ff6"
+    },
+    {
+      "dataset": "heldout",
+      "pointer": "/scenarios/1/availability_fixture",
+      "operation": "replace",
+      "before_sha256": "b4d13b88082871b5da8695f4d8f617d8b08079011e08229f42d07bb7d2947daa",
+      "after_sha256": "0c89d8035e5e291d00f77e734562f7eff855e8ee2f650c02080bdaa4d7bb7eb2"
+    },
+    {
+      "dataset": "heldout",
+      "pointer": "/scenarios/1/notes",
+      "operation": "replace",
+      "before_sha256": "c294cdfcc5064182a6db7e77bf50ded73f111a8eb72513174e678135226df61e",
+      "after_sha256": "bd855057a9b35b437277f23ac3415ec9d5f80371c21ee945cbc9292a4f563664"
+    },
+    {
+      "dataset": "heldout",
+      "pointer": "/scenarios/2/availability_fixture",
+      "operation": "replace",
+      "before_sha256": "bffb6d06534a1d03a0c87a0bdb9ae33fe0c4b50293353af9c2f0428483b07616",
+      "after_sha256": "c0458f5e8454cf8fca444375d881b4f1ef7941277a81f311ec471a2e5cfaff05"
+    },
+    {
+      "dataset": "heldout",
+      "pointer": "/scenarios/2/notes",
+      "operation": "replace",
+      "before_sha256": "9ad5015bb88483c8dbac0d7ecf299625fd8ccb042bdd75e181abe94f68dbe06a",
+      "after_sha256": "30fe9aece56bec1dedd0ce8e074b9b85d3cd107d2977c3b2014525ef4912d513"
+    },
+    {
+      "dataset": "heldout",
+      "pointer": "/scenarios/3/reply_rules",
+      "operation": "replace",
+      "before_sha256": "3e50160d8e3a194a9ca764d9b6d815258ee8df10b4653288208bc4215fa6dde8",
+      "after_sha256": "93e1ddb5928054c7247c877e5d6f977b089e78bd967758130d000276633c706b"
+    },
+    {
+      "dataset": "heldout",
+      "pointer": "/scenarios/3/notes",
+      "operation": "replace",
+      "before_sha256": "9546df990c1fc1c913f58d7f883ac98145251b51aa237a8ee80bc9d23b24de57",
+      "after_sha256": "fc91183beb88bfd793a9ee39cbd8fdc915c3c5214e367c1d52f3e7041a9f03cb"
+    },
+    {
+      "dataset": "heldout",
+      "pointer": "/scenarios/3/patient_script",
+      "operation": "add",
+      "before_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+      "after_sha256": "45fdcf3bc341f36673ae930a8669765c268a80e5fa60f9f135bffba8cfea8528"
+    },
+    {
+      "dataset": "heldout",
+      "pointer": "/scenarios/4/reply_rules",
+      "operation": "replace",
+      "before_sha256": "8c5d5f68b07816ab0109e07632cd31d81a9a24947fcc29f73dc0624b33dff386",
+      "after_sha256": "d4c869db6113355385867545e9eb0b631fe4fc07e101d9eff24ce0d42a1b089e"
+    },
+    {
+      "dataset": "heldout",
+      "pointer": "/scenarios/4/notes",
+      "operation": "replace",
+      "before_sha256": "819d237e76736101b52d2ac100527fde45069f6524b01a12f5f957b378a1c854",
+      "after_sha256": "712cea39535d7957b9528e5d17223a7e0c4c1783a89c61c6f4cf6e5bca54bd77"
+    },
+    {
+      "dataset": "heldout",
+      "pointer": "/scenarios/4/patient_script",
+      "operation": "add",
+      "before_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+      "after_sha256": "45fdcf3bc341f36673ae930a8669765c268a80e5fa60f9f135bffba8cfea8528"
+    },
+    {
+      "dataset": "heldout",
+      "pointer": "/scenarios/5/reply_rules",
+      "operation": "replace",
+      "before_sha256": "5e48f55d920e43b87ec47af599b5e2789cc55b66379be74f69c6a67276d1836f",
+      "after_sha256": "ef1f88a4d185964381315e197e2cedc7a3465f60a73bf0ccc548b10564c78f5d"
+    },
+    {
+      "dataset": "heldout",
+      "pointer": "/scenarios/5/notes",
+      "operation": "replace",
+      "before_sha256": "83f802cae92b1bc437a3d1ae2a67eadaa46581257f5c6b79600faf7d25655236",
+      "after_sha256": "f255e082328de7c1002d3c29959b662c7e27d4424b5957a31648308702417ddf"
+    },
+    {
+      "dataset": "heldout",
+      "pointer": "/scenarios/5/reply_rules",
+      "operation": "replace",
+      "before_sha256": "ef1f88a4d185964381315e197e2cedc7a3465f60a73bf0ccc548b10564c78f5d",
+      "after_sha256": "023cf61e03a514d48f56f7d5d525eb2c2dd89fe12ac95bec00bcbfd0aedcc3de"
+    },
+    {
+      "dataset": "heldout",
+      "pointer": "/scenarios/5/patient_script",
+      "operation": "add",
+      "before_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+      "after_sha256": "d77402d3553804988c4adbce870a242d66a7aaf95daa372f61bf9b68e20df7ab"
+    },
+    {
+      "dataset": "heldout",
+      "pointer": "/scenarios/7/availability_fixture",
+      "operation": "replace",
+      "before_sha256": "2106d5a1e9d384aea76183e4250ad400de6c76000c288afac869023bced00111",
+      "after_sha256": "ea3f0d2387103721fdaa76d29dcef0e0e611f4ac297f3061aa98ae38fc79f1e2"
+    },
+    {
+      "dataset": "heldout",
+      "pointer": "/scenarios/7/notes",
+      "operation": "replace",
+      "before_sha256": "f9c7855ea0303e72c5810129dc7c7c3c131eb9ee0bd675b8fb401ba310256bd8",
+      "after_sha256": "4c2e364bd52c28c43e5b9caab991f8eac41fa9d7e102a75823607485f2d0c8be"
+    },
+    {
+      "dataset": "heldout",
+      "pointer": "/scenarios/13/reply_rules",
+      "operation": "replace",
+      "before_sha256": "17c3848e5d959da1909eea70043263e73377818b343401a47f2521ccf384ccc0",
+      "after_sha256": "35cf8caf4990ae74d2eec4bcc4a4f2f03fcd2b65ad917a124710da597562f055"
+    },
+    {
+      "dataset": "heldout",
+      "pointer": "/scenarios/13/notes",
+      "operation": "replace",
+      "before_sha256": "f94d87e86353b24fb2404fc81630d868fd2360ddb464b3f9fcee3948a9827826",
+      "after_sha256": "507793b3dbfaf442884c70b4cd10a7d57ccb49f7226ea035dc6ed1a4556f89c4"
+    },
+    {
+      "dataset": "heldout",
+      "pointer": "/scenarios/13/expected/provider_name_spoken_required",
+      "operation": "add",
+      "before_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+      "after_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa"
+    },
+    {
+      "dataset": "robustness",
+      "pointer": "/contract/evaluation_revision",
+      "operation": "add",
+      "before_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+      "after_sha256": "a0a94a76844062c4e7fa8b7a9bd6507970860e93944a68b7404a9cfde7851386"
+    },
+    {
+      "dataset": "robustness",
+      "pointer": "/contract/revision_clarification_precedence",
+      "operation": "add",
+      "before_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+      "after_sha256": "c12541c7b14e7076a14970321d13d58bec117881a2601ce327769ff67a303578"
+    },
+    {
+      "dataset": "robustness",
+      "pointer": "/contract/false_refusal_exceptions",
+      "operation": "add",
+      "before_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+      "after_sha256": "28b1271fa48aad7550a26028b9fa0faa328e07e91b84ee1945e23b896664f690"
+    },
+    {
+      "dataset": "robustness",
+      "pointer": "/contract/grading_note",
+      "operation": "replace",
+      "before_sha256": "e547c8164a11453f619feceeed237db3b4936ea48be4af3f53ef6fd1ed6638b1",
+      "after_sha256": "0fc38ae5a84b4d30d32272d9e48022269b2b7abe990c21f2ee9f952389e64ff8"
+    },
+    {
+      "dataset": "robustness",
+      "pointer": "/scenarios/2/opening",
+      "operation": "replace",
+      "before_sha256": "237804e32ab7b6e6af2d0765b4cbdccf10f84e7fbd497af1902fb0d39ce4ae4e",
+      "after_sha256": "20b5cedbed4b5562175952735df1ffa1d8aec927ac2fbd83ad00e688860c5437"
+    },
+    {
+      "dataset": "robustness",
+      "pointer": "/scenarios/2/patient_facts/preference",
+      "operation": "add",
+      "before_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+      "after_sha256": "f99a184fbb40663c9b860ed9b53b9876922f16a0bcb2c33f26c8576a6bc68a81"
+    },
+    {
+      "dataset": "robustness",
+      "pointer": "/scenarios/2/notes",
+      "operation": "replace",
+      "before_sha256": "1a294a01891ab73c8be8da1d784bcc7759fc8f576ac3d49de2a9e6411918c1b1",
+      "after_sha256": "5b0d7f9ccb38bf0cb4bcbf874df6bde6a948296c584e472aa912e740895fec0e"
+    }
+  ],
+  "removed_slot_labels": [
+    "ho002-bad-site",
+    "ho003-bad-site",
+    "ho008-nocap-1",
+    "ho008-nocap-2"
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "frozen_files_unchanged_against_historical_pin": {
+    "agent_builder/__init__.py": true,
+    "agent_builder/builder.py": true,
+    "agent_builder/schema.py": true,
+    "agent_runtime.py": true,
+    "agents/catalog_scheduler.json": true,
+    "baseline_agent.py": true,
+    "data/catalog.json": true,
+    "evals/dev_matrix.py": true,
+    "evals/final_preflight.py": true,
+    "evals/loader.py": true,
+    "evals/scorer.py": true,
+    "evals/spend_guard.py": true,
+    "evals/text_integration.py": true,
+    "metrics_logging.py": true,
+    "scheduling/__init__.py": true,
+    "scheduling/catalog.py": true,
+    "scheduling/demo.py": true,
+    "scheduling/engine.py": true,
+    "scheduling/models.py": true,
+    "scheduling/opening_hours.py": true,
+    "scheduling_agent.py": true,
+    "scheduling_dialogue.py": true,
+    "text_runner.py": true
+  },
+  "historical_pin_unchanged": true,
+  "historical_archive_unchanged": true,
+  "proposed_baseline_shared_behavior_changed": false,
+  "paid_calls": 0
+}

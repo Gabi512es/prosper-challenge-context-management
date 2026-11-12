@@ -1,0 +1,20 @@
+{
+  "method": "One primary severity per failed repetition. Unnecessary-question counts are assistant turns requesting an already supplied fact/choice or an irrelevant choice after a hard unavailable-provider request. Legitimate disambiguation, first spelling checks, safety confirmations and permission to change constraints are excluded. Additional counts below do not duplicate driver_events. Raw scorer results are unchanged.",
+  "proposed-v2": {
+    "DEV-001/2": {"severity": "infrastructure_timeout", "evidence": "First patient turn exceeded 45 seconds; response usage arrived after about 61 seconds; one cleanup follow-up request has unknown usage. No retry."},
+    "DEV-002/3": {"severity": "unnecessary_question", "additional_unnecessary_questions": 1, "question_turn_indices": [8], "evidence": "Three status requests; the patient answered twice. The driver logged the second request; the exhausted third request is counted here."},
+    "DEV-007/1": {"severity": "false_patient_statement", "evidence": "After Please have a staff member confirm the intended service, agent says unable to transfer without an explicit request. The requested catalog-distinction explanation is also missing."},
+    "DEV-007/2": {"severity": "missing_explanation_or_next_step", "evidence": "After the staff-confirmation request the only reply is No transfer or callback is recorded."},
+    "DEV-007/3": {"severity": "missing_explanation_or_next_step", "additional_unnecessary_questions": 1, "question_turn_indices": [4], "evidence": "Tells the patient to choose either service after the patient explicitly said they cannot choose; never explains the undocumented distinction."},
+    "DEV-011/1": {"severity": "unnecessary_question", "additional_unnecessary_questions": 1, "question_turn_indices": [4], "evidence": "After the requested spelling is supplied, the controller asks for a service instead of finishing the hard-provider no-match."},
+    "DEV-011/3": {"severity": "evaluator_false_failure", "evidence": "Final reply clearly says I didn't find any provider with the name Dr. Zephyr Imaginary. All assertions except runner_completed pass. Completion matcher lacks didn't find, so the script exhausts. No result is promoted to pass."}
+  },
+  "baseline": {
+    "DEV-002/1": {"severity": "unnecessary_question", "additional_unnecessary_questions": 1, "question_turn_indices": [8], "evidence": "Three status requests; the patient answered twice. The driver logged the second request; the exhausted third request is counted here."},
+    "DEV-007/1": {"severity": "missing_explanation_or_next_step", "additional_unnecessary_questions": 1, "question_turn_indices": [4], "evidence": "After cannot choose and a staff request, asks to search earliest appointments for either service; missing clinical-distinction explanation."},
+    "DEV-007/2": {"severity": "missing_explanation_or_next_step", "additional_unnecessary_questions": 1, "question_turn_indices": [4], "evidence": "After cannot choose and a staff request, asks to proceed with one of the services; no catalog-distinction explanation."},
+    "DEV-007/3": {"severity": "missing_explanation_or_next_step", "evidence": "After the staff request, reply is only No transfer or callback is recorded; no explanation or next step."},
+    "DEV-011/1": {"severity": "evaluator_false_failure", "evidence": "Does not match any provider in our catalog is a valid named no-match but is absent from acknowledgement/completion phrase lists. Verify the name also lacks the spelling trigger. Raw failure retained."},
+    "DEV-011/3": {"severity": "internal_tool_resolution_error", "additional_unnecessary_questions": 1, "question_turn_indices": [2], "evidence": "Model submits provider_id=prov_unknown. Runtime rejects it. Patient sees provider id filter didn't match and Which catalog option did you mean instead of an unknown-provider explanation. No booking attempt."}
+  }
+}

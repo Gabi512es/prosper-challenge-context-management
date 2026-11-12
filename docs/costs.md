@@ -75,4 +75,154 @@ Each eval run ID links to its raw usage file. Default-log session IDs link to `t
 
 ## Future spend rule
 
-Before any paid run, show an estimate. If the estimate is **over $1**, wait for the user's go. Smoke runs are limited to booking/resolution-path changes, one run per selected case. Never run a full matrix without explicit approval, regardless of estimate. This documentation-only audit requires no smoke.
+Current rule in AGENTS.md: before any paid run, show an estimate and wait for
+explicit authorization, regardless of amount. Batch booking/resolution-path
+fixes before an approved smoke; no paid runs for docs, logs, tests or prompt
+wording alone. Full matrices need explicit approval. The conditional 2026-11-10
+scaling authorization applied only to the completed step below.
+
+## 2026-11-10: step 6b scaling addendum
+
+The earlier audit tables are their historical snapshot, not a current all-time
+total. This addendum covers the revised scaling experiment only; comparison
+measurements are separately documented in docs/comparison-evaluator-v5.md.
+Purpose: development scaling measurement, with the search-only variant
+explicitly exploratory. No held-out evaluation or voice/audio charge included.
+
+| Phase | Model calls | Prompt tokens | Actual cached reads | Completion tokens | Actual USD |
+|---|---:|---:|---:|---:|---:|
+| Indexed proposed x5 | 60 | 500,482 | 462,976 | 1,673 | 0.689215 |
+| Full-catalog baseline x5 | 56 | 1,775,158 | 1,685,376 | 1,703 | 2.348205 |
+| Indexed proposed x10 | 27 | 387,438 | 366,848 | 777 | 0.517805 |
+| Exploratory search-only x10 | 28 | 71,610 | 46,976 | 825 | 0.128555 |
+| Exploratory search-only x50 | 30 | 75,032 | 52,992 | 812 | 0.129460 |
+| **Step 6b total** | **201** | **2,809,720** | **2,615,168** | **5,790** | **3.813240** |
+
+All usage known. At dated GPT-4o rates (2026-11-07, reverified 2026-11-10),
+cached reads cost $3.268960, uncached input $0.486380, output $0.057900. No
+additional cache-write charge; cache population is included in ordinary input.
+Separate cache-write tokens/cost attribution are not reported, therefore null.
+ElevenLabs/voice cost: not measured. Indexed x50: projection only, no API charge.
+
+Estimate $4.704535; authorized hard global cap $8; actual $3.813240. No retries.
+Run prefix scaling-v3-20261110-092924-e2cde6, with phase suffixes
+proposed-indexed-x05, baseline-x05, proposed-indexed-x10,
+exploratory-search-only-x10 and exploratory-search-only-x50. Each has its own
+JSONL under backend/logs/evals/. Raw report is the same prefix plus
+.results.json; manual analysis .analysis.json. Full receipts and findings:
+docs/scaling-v3-results.md. These charges are not added to the historical grand
+total above, which predates other separately recorded runs.
+
+
+## 2026-11-10: approved final-evaluation attempts (infrastructure failures)
+
+This addendum is separate from the historical ledger snapshot above. Both batches
+stopped on the first report checkpoint; no retries, repairs or extra experiments.
+Purpose: final measurement attempt, not a successful completed measurement.
+
+| Batch / arm | Saved model calls | Prompt | Cached input | Completion | Known USD |
+|---|---:|---:|---:|---:|---:|
+| Revised held-out / proposed (HO-001 attempt only) | 9 | 29,747 | 24,064 | 241 | 0.0466975 |
+| Revised robustness / proposed (RW-001 attempt only) | 9 | 30,281 | 26,368 | 289 | 0.0456325 |
+| **Recorded subtotal** | **18** | **60,028** | **50,432** | **530** | **0.0923300** |
+
+All saved rows have complete usage. Complete request coverage/final exposure is
+unknown because terminal checkpoints failed; the raw zero-cost initial journals
+are stale. No missing request is priced as zero. Dated 2026-11-07 rates: uncached
+input $2.50/M, cached $1.25/M, output $10/M. Cached reads $0.0630400, uncached input
+$0.0239900, output $0.0053000. Additional cache-write fee $0 under that rate card;
+separate write-token and population attribution unreported. No baseline calls;
+voice/STT/TTS not measured. Separate approved caps were $5 and $2, with full
+$0.32512 per-request reserves. Final ledger/reserve unknown; see execution report.
+
+Raw run IDs: external-v1.1-heldout-20261110-153532-72eb74 and
+external-v1.1-robustness-20261110-153646-ed8563. Complete surviving receipts and
+provenance: docs/results/final-evaluation/summary.json; narrative:
+docs/final-evaluation-execution.md. These are partial infrastructure attempts,
+not a completed held-out or robustness accuracy measurement.
+
+
+## 2026-11-10: serialization repair and offline restart preparation
+
+No new paid calls or spend. Tests use public DEV/synthetic data and SDK stubs;
+their temporary usage logs are not billable receipts and are excluded. Prior
+$0.0923300 known partial-attempt subtotal remains unchanged; original agent outcomes
+are unknown. Historical total exposure can only be conditionally bounded by the
+$5/$2 original caps, not certified from populated metric rows. New restart expected
+incremental cost $1.76, fresh cap proposals $5/$2, all pending new approval.
+Full bounds and budget caveats: docs/external-infrastructure-v1.2.md and
+`docs/results/external-restart-budget-v1.2.json`. No old cost entry is overwritten.
+
+
+## 2026-11-10: completed approved external-infra-v1.2 final restart
+
+Purpose: final evaluation measurement, separate from DEV/scaling and the two
+historical failed infrastructure attempts. Run `external-infra-v1.2-restart-20261110-175004-ec9627`, forty unique jobs once,
+two linked replacements first. Fresh caps held-out $5, robustness $2; no retries.
+
+| Batch / arm | Requests | Prompt | Cached | Uncached | Completion | USD |
+|---|---:|---:|---:|---:|---:|---:|
+| Held-out proposed | 76 | 228,081 | 187,264 | 40,817 | 2,053 | 0.3566525 |
+| Held-out baseline | 62 | 478,056 | 435,072 | 42,984 | 1,998 | 0.6712800 |
+| Robustness proposed | 73 | 256,473 | 226,432 | 30,041 | 2,114 | 0.3792825 |
+| **Restart total** | **211** | **962,610** | **848,768** | **113,842** | **6,165** | **1.4072150** |
+
+All admissions, usage, closed statuses and metric rows reconcile; no missing
+usage or outstanding new exposure. Dated rates unchanged. Cache reads $1.0609600,
+uncached input $0.2846050, output $0.0616500. Additional cache-write fee $0 under
+that rate card; separate write tokens/population attribution unreported. No
+voice/STT/TTS cost measured. Prior $0.0923300 known partial-attempt cost remains
+separate with unresolved coverage; cumulative known $1.4995450, not a certified
+old invoice total. Raw status 24 review-required/16 failed, not semantic accuracy.
+No extra calls are authorized by unused caps. Details: docs/final-evaluation-restart-v1.2.md.
+
+
+## 2026-11-12: total measured OpenAI spend to date
+
+One total of the OpenAI (gpt-4o) spend measured so far: the 2026-11-09 ledger
+snapshot above plus every paid run recorded after it. No API calls were made
+for this calculation. Each later line was also recomputed offline from its raw
+usage JSONL in backend/logs/evals/ (deduplicated by call_id and turn, dated
+2026-11-07 rates) and matches its documented figure exactly. A file listing of
+backend/logs/evals/ found no paid eval run after the snapshot other than these.
+
+| # | Line | USD | Source |
+|---:|---|---:|---|
+| 1 | Ledger snapshot through smoke-20261109-120039-2466b7 (1,729 model calls, 38 with unknown usage) | 7.7238625 | docs/costs.md (snapshot above) |
+| 2 | smoke-20261109-122509-3adf22 | 0.1543100 | docs/decisions.md (2026-11-09, geographic site choice and approved capped smoke) |
+| 3 | smoke-20261109-123934-da8fb2 | 0.1707825 | docs/decisions.md (2026-11-09, approved recovery-v6 four-case smoke) |
+| 4 | smoke-20261109-124555-cc5280 | 0.1139125 | docs/decisions.md (2026-11-09, closed catalog filters and capped two-case smoke) |
+| 5 | smoke-20261109-124918-eeeec1 | 0.0404675 | docs/decisions.md (2026-11-09, DEV-012-only $0.08 smoke) |
+| 6 | smoke-20261109-125320-fae71b | 0.1100000 | docs/decisions.md (2026-11-09, lazy catalog validation and observed-cost admission) |
+| 7 | smoke-20261109-131238-90cbfb | 0.2273650 | docs/decisions.md (2026-11-09, approved slots-v7 four-case smoke) |
+| 8 | dev-matrix-20261109-150315-454f33 (first official proposed matrix) | 1.0117100 | docs/decisions.md (2026-11-09, official frozen proposed measurement) |
+| 9 | comparison-proposed-v2-20261109-180827-8752c3 (known part) | 1.0954425 | docs/decisions.md (2026-11-09, completed fresh v5 comparison); docs/comparison-evaluator-v5.md |
+| 10 | comparison-baseline-20261109-182321-c4ee5f | 2.2780400 | docs/decisions.md (2026-11-09, completed fresh v5 comparison); docs/comparison-evaluator-v5.md |
+| 11 | Scaling step 6b, five phases | 3.8132400 | docs/costs.md (2026-11-10, step 6b scaling addendum) |
+| 12 | First final-evaluation attempts, stopped by a serialization bug | 0.0923300 | docs/costs.md (2026-11-10, approved final-evaluation attempts) |
+| 13 | Final evaluation restart, 40 conversations | 1.4072150 | docs/costs.md (2026-11-10, completed approved external-infra-v1.2 final restart) |
+| 14 | smoke-20261112-164821-2fe6d5 (v2.1) | 0.2417925 | docs/decisions.md (2026-11-12, v2.1 working-tree smoke) |
+| | Lines 2 to 14, after the snapshot | 10.7566075 | sum |
+| | **Total measured OpenAI spend** | **18.4804700** | sum of lines 1 to 14 |
+
+**Total measured OpenAI spend to date: $18.4804700.** This is a sum of known,
+logged charges at the recorded rates, not an invoice. It is a lower bound:
+
+- **Not measured, so not included:**
+  - the 38 snapshot rows with unknown usage;
+  - one comparison-proposed request with unreported usage (maximum exposure
+    $0.32512, documented separately);
+  - the unresolved request coverage of the first final-evaluation attempts
+    (line 12 counts only their saved rows).
+- **Voice sessions after the 2026-11-09 snapshot are not measured in this
+  total.** That includes the voice calls of November 9 to 12. Their OpenAI rows
+  exist in the local, git-ignored turns.jsonl but were never ledgered.
+- **ElevenLabs speech-to-text and text-to-speech are not measured** anywhere in
+  this project. Neither are coding-agent usage, infrastructure or taxes.
+- **Local refusals are not charges.** The three null-usage rows in the
+  budget-stopped smokes (lines 4 and 5) are requests refused by the local
+  budget guard before dispatch.
+
+The API keys were provided by Prosper. This total therefore comes only from the
+author's own usage logs. It was not checked against the OpenAI or ElevenLabs
+provider dashboards.

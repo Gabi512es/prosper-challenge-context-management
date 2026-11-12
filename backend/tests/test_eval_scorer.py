@@ -22,7 +22,7 @@ class EvalScorerTest(unittest.TestCase):
         cls.scenarios = {item["id"]: item for item in data["scenarios"]}
 
     def test_canonical_scorer_version_is_explicit(self):
-        self.assertEqual(SCORER_VERSION, "dev-v4-voice-gaps")
+        self.assertEqual(SCORER_VERSION, "dev-eval-v5-recovery")
 
     def test_dev_007_requires_catalog_distinction_explanation(self):
         good = self._score(
@@ -78,10 +78,22 @@ class EvalScorerTest(unittest.TestCase):
             "DEV-011",
             "I couldn't find Dr. Zephyr Imaginary in our catalog.",
         )
-        weak = self._score("DEV-011", "I couldn't find that provider.")
+        weak = self._score("DEV-011", "I couldn't complete that request.")
 
         self.assertTrue(self._assertion(good, "unknown_provider_explained"))
         self.assertFalse(self._assertion(weak, "unknown_provider_explained"))
+
+    def test_contextual_unknown_provider_does_not_require_name_echo(self):
+        for text in ("I couldn't find that provider.",
+                     "I couldn't find a provider with that name. Could you repeat or spell the first name and surname?"):
+            self.assertTrue(self._assertion(self._score("DEV-011", text), "unknown_provider_explained"))
+
+    def test_unknown_provider_explanation_rejects_wrong_entity_and_no_availability(self):
+        for text in ("I couldn't find appointments with that provider.",
+                     "I couldn't find Dr. Maria Garcia.",
+                     "Dr. Zephyr Imaginary is available. I couldn't find Dr. Maria Garcia.",
+                     "I couldn't find Dr. Zephyr Imaginary's availability."):
+            self.assertFalse(self._assertion(self._score("DEV-011", text), "unknown_provider_explained"), text)
 
     def _score(self, scenario_id: str, assistant_text: str) -> dict:
         scenario = self.scenarios[scenario_id]

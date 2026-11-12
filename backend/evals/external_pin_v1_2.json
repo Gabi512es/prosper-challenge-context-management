@@ -1,0 +1,69 @@
+{
+  "version": "external-eval-v1.1",
+  "infrastructure_version": "external-infra-v1.2",
+  "files": {
+    "agent_builder/__init__.py": "87056dac5b30139625452e4512a4f4105cfce92086b70d1ed1dd0239f07cfb9e",
+    "agent_builder/builder.py": "75cd2d4e09850b5d501d2faba94dcfd355b4e497978f3dec5d2a83ddbfce97b0",
+    "agent_builder/schema.py": "5dee6ea59eb39ff3ce66be56bc8776659db18fa2c8128d240c406c32d1405534",
+    "agent_runtime.py": "35d5faffb9c5a92d535e59f4ba8457927bde8633a8834d2d2db17455b75d0dc1",
+    "agents/catalog_scheduler.json": "40db1b587b5790ab2c92bc642edbc55e67f0d44ebd8d4f1267de29e1e86ebdc5",
+    "baseline_agent.py": "92c1ac39774b3588ebc05d010a29f035af070b237ce125c8e122657f686d7c7b",
+    "data/catalog.json": "5837bc09e8337f469dccd649f408b9f69f8f11a5741856deb3b02e604867902a",
+    "evals/dev_matrix.py": "88c87696202d4d0b9d9784e68f87a29804339ae0a89fc8cc4b3bd8075145e857",
+    "evals/external_budget.py": "8506fb34b47cfbc1d156b37607923af556f6383747daf297fed8d198e6e68968",
+    "evals/external_config.json": "97e54fe59f65c3e931c1c4865d8bd74a99a79cd59f883c6186ca426376aa24e1",
+    "evals/external_contract.py": "a215dcfba509f885694713bc2b17a31084fb603c76299ac34fbfab29c4f39766",
+    "evals/external_eval.py": "a2cccb79bf0a7ee96b265ce4ac6a584abe43dd98c5af91b4725e5a1149868046",
+    "evals/external_io.py": "2efb714fef1156fc6e244e43ef2894983a517ed2b9ab408708b6c30805d0a581",
+    "evals/external_restart_v1_2.json": "bf9674be6c7c71db9b6465332da22e123592578128381f081e98854ad6f1a8f7",
+    "evals/external_score.py": "9da9a91d964d47f1be4784b4ba5c3a47fdb9104ec51278a49d5d11b66fdd9611",
+    "evals/final_preflight.py": "bc9c44c505ee82d18a8fe05d8dab20c5d08adaa3fc919a3a9756200c6598ee1d",
+    "evals/loader.py": "7cc86ceb2c92a0e0cb826db890156672147f1a433fbcffbd535827253abec8c2",
+    "evals/preflight_reviewed.py": "c9c487f4338b187935e5445fbd23806a528bdc92894d4fef82b7968739bd23b5",
+    "evals/review_rubric_v1_1.json": "054cbbd261440e29d0c7bdf6749bbff56ac38023f11cdf130d1efef31d08e686",
+    "evals/revise_assets.py": "cf674e966fe7f23582fc0b76f1fc5f4289c1a470e175447bc85a17212646ba89",
+    "evals/scorer.py": "b4a66e4d491b486168eb09c52b84fa9ad3287a9e19d9600305eae11331d5c638",
+    "evals/spend_guard.py": "4cde22fc306b16ab937a587d61ddfe661cadc63ea72052867bc582d40a84eb25",
+    "evals/text_integration.py": "ed17dbcb5d0b208fd73c4ffddc3632f0559c8f997f8de2c7822a4f82560904ca",
+    "evals/write_faults.py": "90a7e250b0ea28bba92795794d00c8a9d2771d6963276b53f9e3898e38b282c7",
+    "metrics_logging.py": "06bb8906312c5f05aa31c3178f2b693385fbfde690c09d623a98338642d55021",
+    "scheduling/__init__.py": "ed8bb4cc15cbfd8fe4c0560c8b8c52906f8e3b94363bb7939ea0b2230847b32c",
+    "scheduling/catalog.py": "97d59d41e14d2af58b1e1273b1264b343411c5e40feb50e579c703bf75268696",
+    "scheduling/demo.py": "ef47492d8b865ceba85c2d477f77ea16bea751f80e5653367fbdd03c0929f6b7",
+    "scheduling/engine.py": "3b049a8833246b207cc08bb4844ef6602b9ab7932d81205716102a24dba8f9b7",
+    "scheduling/models.py": "81ce51343910c3924b7bf334a4a488bbf5033d476382267a6e026f18f5f5900e",
+    "scheduling/opening_hours.py": "11031054f2318e7143363c8b239b1f355409a425603e2a34ea77ebafa544228e",
+    "scheduling_agent.py": "f18decb90afc244ee4d7aedd53f2e974ea0e86d4c949c45f029364ab5efbdf2e",
+    "scheduling_dialogue.py": "1c0cfb031d65e82b9a94556d1fbe1f1c38f7b190705f217d2b56908c9093ce85",
+    "tests/test_external_adapter.py": "75f94210fb8375a883964ae4f0f8c8b8762979220f7073f945244f5603bfd496",
+    "tests/test_external_persistence.py": "57a5a0535a8840f50c17fbf567e8da85d13d7a56613ef96f776e73a958eced53",
+    "tests/test_external_write_faults.py": "7e49cd7833d40dcbef7b18f604d1763199ad6d34b221cc01bae9be50b728081a",
+    "text_runner.py": "23953002a35fe0495c0411af2fa612242a4791f1e34c599801ec65ae979efc9d"
+  },
+  "offline_evidence_sha256": "027443d82f84e8d269b58b91371220ab078b7a2514864707f0895d84eefacfd5",
+  "configuration_sha256": "97e54fe59f65c3e931c1c4865d8bd74a99a79cd59f883c6186ca426376aa24e1",
+  "paid_authorized": false,
+  "asset_manifest_sha256": "0ea5f28a78ff05bc0aeb34fab16d8d6fb6890e48ee7c568df3364346d3b58920",
+  "git_commit": "a5b124f7aa3ffa9d7ebcd32a7f76c837c95486c8",
+  "catalog_blob_sha": "8e5091080383d598ae18acce084c7dcd6522ab14",
+  "agent_identities": {
+    "proposed": {
+      "agent_id": "catalog_scheduler",
+      "agent_revision": "40db1b587b5790ab2c92bc642edbc55e67f0d44ebd8d4f1267de29e1e86ebdc5",
+      "availability_mode": "eval_fixture"
+    },
+    "baseline": {
+      "agent_id": "full_catalog_baseline",
+      "agent_revision": "68d02acb9a89a72c279c3410001e2b184438abce7f7c714ce39a0e87ddf4f623",
+      "availability_mode": "eval_fixture",
+      "catalog_prefix_sha256": "baea1382762b1177e7f21a5070a6dd38724fc910c965905b9eb9f96458436e4f"
+    }
+  },
+  "legacy_evaluator_behavior_sha256": "97117348b6d00263d60c0561381841e3fc50e843873a53b60e827a8c7415a996",
+  "packages": {
+    "pipecat-ai": "1.4.0",
+    "pipecat-ai-flows": "1.4.0",
+    "openai": "2.54.0",
+    "tiktoken": "0.14.0"
+  }
+}

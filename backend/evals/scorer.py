@@ -2,9 +2,10 @@
 
 import re
 from typing import Any
+from .version import EVALUATOR_VERSION
 
 
-SCORER_VERSION = "dev-v4-voice-gaps"
+SCORER_VERSION = EVALUATOR_VERSION
 
 
 def evaluate_run(scenario: dict, run: Any) -> dict:
@@ -197,7 +198,7 @@ def evaluate_run(scenario: dict, run: Any) -> dict:
         requested_name = _requested_provider_name(scenario["opening"])
         check(
             "unknown_provider_explained",
-            acknowledged and requested_name is not None and _name_is_mentioned(requested_name, text),
+            requested_name is not None and unknown_provider_explained(scenario, run.transcript),
             text,
         )
 
@@ -227,6 +228,33 @@ def evaluate_run(scenario: dict, run: Any) -> dict:
 def normalize_transcript_text(value: str) -> str:
     """Normalize typography without weakening scenario-declared content checks."""
     return value.casefold().replace("\u2018", "'").replace("\u2019", "'")
+
+
+def unknown_provider_explained(scenario, transcript):
+    """Accept a named or unambiguous contextual no-match, never no availability."""
+    requested = _requested_provider_name(scenario["opening"])
+    if not requested:
+        return False
+    patient_texts = [scenario["opening"], *(m.get("text", "") for m in transcript if m.get("role") == "patient")]
+    references = {_requested_provider_name(t).casefold() for t in patient_texts if _requested_provider_name(t)}
+    unique_reference = len(references) == 1 and all(len(re.findall(r"\bdr\.?\s+", t, re.I)) <= 1 for t in patient_texts)
+    absent = ("couldn't find", "could not find", "unable to find", "cannot find", "can't find",
+              "not found", "no provider", "not in our", "don't have")
+    for message in transcript:
+        if message.get("role") != "assistant":
+            continue
+        text = normalize_transcript_text(message.get("text", "")).replace("dr.", "dr")
+        for clause in re.split(r"[.!?]", text):
+            if not any(phrase in clause for phrase in absent):
+                continue
+            if re.search(r"\b(?:slots?|appointments?|availability)\b", clause):
+                continue
+            if _name_is_mentioned(requested, clause):
+                return True
+            contextual = re.search(r"\b(?:that provider|that doctor|that clinician|(?:provider|doctor|clinician) with that name)\b", clause)
+            if unique_reference and contextual and not re.search(r"\bdr\s+", clause):
+                return True
+    return False
 
 
 def general_conversation_checks(transcript, catalog) -> dict:

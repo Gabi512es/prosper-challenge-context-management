@@ -1,0 +1,27 @@
+{
+  "infrastructure_version": "external-infra-v1.2",
+  "pin_verified": true,
+  "dataset_hashes_unchanged": true,
+  "old_attempt_history_and_costs_unchanged": true,
+  "completed_jobs": 40,
+  "per_conversation_files": 40,
+  "exported_transcripts": 40,
+  "request_coverage": {
+    "reserved": 211,
+    "sdk_complete_usage": 211,
+    "closed": 211,
+    "metric_rows": 211,
+    "request_exceptions": 0,
+    "unresolved_request_ids": [],
+    "all_complete_usage": true,
+    "all_requests_accounted": true,
+    "no_new_outstanding_exposure_usd": "0",
+    "no_new_missing_usage_requests": true
+  },
+  "observed_provider_model_ids": [
+    "gpt-4o-2024-08-06"
+  ],
+  "paid_retries": 0,
+  "extra_experiments": 0,
+  "final_semantic_pass_rates": null
+}

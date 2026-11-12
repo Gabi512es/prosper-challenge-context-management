@@ -1,0 +1,241 @@
+{
+  "scope_preserved_fully": false,
+  "scope_change": "Conversational held-out copy no longer tests capability-invalid availability ingestion",
+  "originals_unchanged": true,
+  "removed_records": 4,
+  "offline_initializer_rejections": 4,
+  "exact_change_manifest_sha256": "daf11cd1a7df1ca570b42c9cb766786628d8577b7aace75289f670e49c7b9f77",
+  "assets": {
+    "heldout": {
+      "original_path": "/Users/gabrielernoult/Documents/prosper_heldout_scenarios.json",
+      "original_sha256": "d41abdad3defe405a48becc55a97d4d153c3c3b27a4eff5f5518db8a2dedd1b6",
+      "revised_path": "/Users/gabrielernoult/Desktop/Prosper AI/Evals/revised-evaluation-v1/heldout.reviewed.json",
+      "revised_sha256": "94dcf459ad8d0e13f89981aefb8afb6492982e3d611a0cd50a22a2bf7be72fea",
+      "scenarios": 16,
+      "normalized_path": "/Users/gabrielernoult/Desktop/Prosper AI/Evals/revised-evaluation-v1/heldout.boundary-v1.1.json",
+      "normalized_sha256": "94dcf459ad8d0e13f89981aefb8afb6492982e3d611a0cd50a22a2bf7be72fea",
+      "normalization": "fault aliases and explicit write stage only; availability unchanged"
+    },
+    "robustness": {
+      "original_path": "/Users/gabrielernoult/Documents/prosper_robustness_scenarios.json",
+      "original_sha256": "c5de085b51996c51afaa9dbc3b40c392452d0eec28760b422ced2a6f74aa6c19",
+      "revised_path": "/Users/gabrielernoult/Desktop/Prosper AI/Evals/revised-evaluation-v1/robustness.reviewed.json",
+      "revised_sha256": "2c2ce46ce4864b7b6a18153ffa1a353d279b67f3c340155f0b1712937f3ebebd",
+      "scenarios": 8,
+      "normalized_path": "/Users/gabrielernoult/Desktop/Prosper AI/Evals/revised-evaluation-v1/robustness.boundary-v1.1.json",
+      "normalized_sha256": "3bdc968cabea2a5825e30b0e1003eeea6a7631d5580e6a7364fe726ee9eb60ed",
+      "normalization": "fault aliases and explicit write stage only; availability unchanged"
+    }
+  },
+  "sets": {
+    "heldout": {
+      "schema_compatible": true,
+      "scenarios": 16,
+      "fixture_records": 27,
+      "engine_fixture_arrays_accepted": 16,
+      "original_outcomes_and_booking_identities_preserved": true,
+      "requiring_manual_review": 16,
+      "manual_review_field_paths": [
+        "dataset.contract.availability",
+        "dataset.contract.availability_scope_revision",
+        "dataset.contract.confirmation",
+        "dataset.contract.default_patient_behavior",
+        "dataset.contract.grading",
+        "dataset.contract.holdout",
+        "dataset.contract.integration",
+        "dataset.contract.referral_on_file",
+        "dataset.contract.revision_clarification_precedence",
+        "dataset.contract.slot_horizon",
+        "dataset.contract.synchronization",
+        "expected.explained_gate_before_alternative",
+        "expected.explanation",
+        "expected.provider_identity_resolved_before_decision",
+        "expected.provider_name_spoken_required",
+        "expected.required_facts.bookable_location_id",
+        "expected.required_facts.bookable_provider_id",
+        "expected.required_facts.referral_required",
+        "expected.unknown_service_acknowledged",
+        "forbidden[0]",
+        "forbidden[1]",
+        "forbidden[2]",
+        "forbidden[3]",
+        "notes",
+        "patient_facts.candidate_type_ids",
+        "patient_facts.final_appointment_type_id",
+        "patient_facts.initial_appointment_type_id",
+        "patient_facts.location_preference",
+        "patient_facts.preference_strength",
+        "patient_facts.requested_location_id",
+        "reply_rules_execution"
+      ],
+      "automatic_assertion_names": [
+        "booking_count",
+        "booking_fields",
+        "confirmation_invalidated",
+        "confirmation_recorded",
+        "correction_observed:confirmation",
+        "correction_observed:selected_slot_id",
+        "correction_target:confirmation",
+        "correction_target:selected_slot_id",
+        "faq_no_booking_tool",
+        "faq_no_identity_collection",
+        "globally_earliest_slot",
+        "no_match_has_next_step",
+        "no_unrecorded_callback_promise",
+        "old_slot_invalidated",
+        "runner_completed",
+        "slot_offers_include_location"
+      ]
+    },
+    "robustness": {
+      "schema_compatible": true,
+      "scenarios": 8,
+      "fixture_records": 11,
+      "engine_fixture_arrays_accepted": 8,
+      "original_outcomes_and_booking_identities_preserved": true,
+      "requiring_manual_review": 8,
+      "manual_review_field_paths": [
+        "dataset.contract.availability",
+        "dataset.contract.confirmation",
+        "dataset.contract.dataset_role_note",
+        "dataset.contract.default_patient_behavior",
+        "dataset.contract.evidence_note",
+        "dataset.contract.false_refusal_exceptions",
+        "dataset.contract.fault_injection",
+        "dataset.contract.grading",
+        "dataset.contract.grading_note",
+        "dataset.contract.handoff_honesty",
+        "dataset.contract.holdout",
+        "dataset.contract.integration",
+        "dataset.contract.referral_on_file",
+        "dataset.contract.revision_clarification_precedence",
+        "dataset.contract.slot_horizon",
+        "dataset.contract.synchronization",
+        "expected.closed_day_stated",
+        "expected.disclosed_ai_on_first_ask",
+        "expected.emergency_services_advised",
+        "expected.failure_disclosed",
+        "expected.fallback_offered",
+        "expected.first_confirmation_invalidated",
+        "expected.handoff_requested_by_patient",
+        "expected.must_not_claim_booked",
+        "expected.new_search_performed",
+        "expected.next_step_given",
+        "expected.no_attempt_to_retain",
+        "expected.no_availability_stated",
+        "expected.no_unrecorded_callback_promise",
+        "expected.requested_time_unavailable_stated",
+        "expected.stale_slot_disclosed",
+        "expected.transfer_not_falsely_claimed",
+        "expected.urgent_escalation_message",
+        "forbidden[0]",
+        "forbidden[1]",
+        "forbidden[2]",
+        "forbidden[3]",
+        "forbidden[4]",
+        "notes",
+        "patient_facts.requested_day",
+        "patient_facts.requested_time",
+        "reply_rules_execution",
+        "source_basis"
+      ],
+      "automatic_assertion_names": [
+        "booking_count",
+        "booking_fields",
+        "confirmation_recorded",
+        "fault:0:triggered",
+        "fault:0:write_after_consent",
+        "no_match_has_next_step",
+        "no_unrecorded_callback_promise",
+        "runner_completed",
+        "slot_offers_include_location"
+      ]
+    }
+  },
+  "fault_protocol_checks": [
+    {
+      "scenario_label": "RW-002",
+      "protocol_ready": true,
+      "phase_one_triggered": false,
+      "before_consent_triggered": false,
+      "consent_recorded": true,
+      "write_returned_structured_error": true,
+      "booking_created": false,
+      "fault_evidence": [
+        {
+          "fault_index": 0,
+          "intended_stage": "write",
+          "triggered": true,
+          "write_after_consent": true,
+          "trigger_count": 2
+        }
+      ],
+      "slot_loss_persists": null,
+      "fault_recovery_by_agent_verified": false
+    },
+    {
+      "scenario_label": "RW-003",
+      "protocol_ready": true,
+      "phase_one_triggered": false,
+      "before_consent_triggered": false,
+      "consent_recorded": true,
+      "write_returned_structured_error": true,
+      "booking_created": false,
+      "fault_evidence": [
+        {
+          "fault_index": 0,
+          "intended_stage": "write",
+          "triggered": true,
+          "write_after_consent": true,
+          "trigger_count": 1
+        }
+      ],
+      "slot_loss_persists": true,
+      "fault_recovery_by_agent_verified": false
+    },
+    {
+      "scenario_label": "RW-008",
+      "protocol_ready": true,
+      "phase_one_triggered": false,
+      "before_consent_triggered": false,
+      "consent_recorded": true,
+      "write_returned_structured_error": true,
+      "booking_created": false,
+      "fault_evidence": [
+        {
+          "fault_index": 0,
+          "intended_stage": "write",
+          "triggered": true,
+          "write_after_consent": true,
+          "trigger_count": 1
+        }
+      ],
+      "slot_loss_persists": true,
+      "fault_recovery_by_agent_verified": false
+    }
+  ],
+  "manual_review": {
+    "required_conversation_reviews": 40,
+    "heldout": 32,
+    "robustness": 8,
+    "incomplete_review_can_pass": false,
+    "rubric_path": "backend/evals/review_rubric_v1_1.json",
+    "estimated_minutes_per_transcript": [
+      3,
+      5
+    ],
+    "estimated_total_hours": [
+      2,
+      3.33
+    ]
+  },
+  "paid_execution_performed": false,
+  "saturday_fixture_records_preserved": 1,
+  "fault_protocol_compatible": true,
+  "rubric_sha256": "054cbbd261440e29d0c7bdf6749bbff56ac38023f11cdf130d1efef31d08e686",
+  "version": "external-eval-v1.1",
+  "pin_verified": true,
+  "api_calls": 0,
+  "scenario_contents_printed": false,
+  "adapter_pin_sha256": "529c0714f452d158d91fcde98237d0728fa17775e89ab3e7a84e5f34721259e5"
+}

@@ -1,0 +1,125 @@
+{
+  "timestamp": "2026-11-10T16:49:38.917722+00:00",
+  "approval_reference": "user-approval-2026-11-10-1649UTC-restart40-v1.2-fresh-heldout5-robustness2",
+  "infrastructure_version": "external-infra-v1.2",
+  "evaluator_version": "external-eval-v1.1",
+  "pin_sha256": "032f9418860c650afbe3771ca947f7afc15b82cc5cda5ebdae1b5fbaf04375c8",
+  "plan_sha256": "bf9674be6c7c71db9b6465332da22e123592578128381f081e98854ad6f1a8f7",
+  "rubric_sha256": "054cbbd261440e29d0c7bdf6749bbff56ac38023f11cdf130d1efef31d08e686",
+  "git_commit": "a5b124f7aa3ffa9d7ebcd32a7f76c837c95486c8",
+  "agent_identities": {
+    "proposed": {
+      "agent_id": "catalog_scheduler",
+      "agent_revision": "40db1b587b5790ab2c92bc642edbc55e67f0d44ebd8d4f1267de29e1e86ebdc5",
+      "availability_mode": "eval_fixture"
+    },
+    "baseline": {
+      "agent_id": "full_catalog_baseline",
+      "agent_revision": "68d02acb9a89a72c279c3410001e2b184438abce7f7c714ce39a0e87ddf4f623",
+      "availability_mode": "eval_fixture",
+      "catalog_prefix_sha256": "baea1382762b1177e7f21a5070a6dd38724fc910c965905b9eb9f96458436e4f"
+    }
+  },
+  "dataset_hashes": {
+    "heldout": {
+      "original_path": "/Users/gabrielernoult/Documents/prosper_heldout_scenarios.json",
+      "original_sha256": "d41abdad3defe405a48becc55a97d4d153c3c3b27a4eff5f5518db8a2dedd1b6",
+      "revised_path": "/Users/gabrielernoult/Desktop/Prosper AI/Evals/revised-evaluation-v1/heldout.reviewed.json",
+      "revised_sha256": "94dcf459ad8d0e13f89981aefb8afb6492982e3d611a0cd50a22a2bf7be72fea",
+      "scenarios": 16,
+      "normalized_path": "/Users/gabrielernoult/Desktop/Prosper AI/Evals/revised-evaluation-v1/heldout.boundary-v1.1.json",
+      "normalized_sha256": "94dcf459ad8d0e13f89981aefb8afb6492982e3d611a0cd50a22a2bf7be72fea",
+      "normalization": "fault aliases and explicit write stage only; availability unchanged"
+    },
+    "robustness": {
+      "original_path": "/Users/gabrielernoult/Documents/prosper_robustness_scenarios.json",
+      "original_sha256": "c5de085b51996c51afaa9dbc3b40c392452d0eec28760b422ced2a6f74aa6c19",
+      "revised_path": "/Users/gabrielernoult/Desktop/Prosper AI/Evals/revised-evaluation-v1/robustness.reviewed.json",
+      "revised_sha256": "2c2ce46ce4864b7b6a18153ffa1a353d279b67f3c340155f0b1712937f3ebebd",
+      "scenarios": 8,
+      "normalized_path": "/Users/gabrielernoult/Desktop/Prosper AI/Evals/revised-evaluation-v1/robustness.boundary-v1.1.json",
+      "normalized_sha256": "3bdc968cabea2a5825e30b0e1003eeea6a7631d5580e6a7364fe726ee9eb60ed",
+      "normalization": "fault aliases and explicit write stage only; availability unchanged"
+    }
+  },
+  "configuration": {
+    "version": "external-eval-v1.1",
+    "source_contract": "reviewed-conversational-v1; boundary fault mapping v1.1",
+    "model": "gpt-4o",
+    "context_strategy": "APPEND",
+    "parallel_tool_calls": false,
+    "temperature": "not explicitly set by frozen runtime",
+    "provider_snapshot": "gpt-4o alias; not pinned",
+    "availability_mode": "eval_fixture",
+    "now": "2026-11-07T00:00:00-08:00",
+    "max_patient_turns": 9,
+    "patient_turn_timeout_seconds": 45,
+    "concurrency": 1,
+    "sdk_retries": 0,
+    "timeout_retries": false,
+    "max_input_tokens": 128000,
+    "max_completion_tokens": 512,
+    "pricing_as_of": "2026-11-07",
+    "prices_per_million_usd": {
+      "input": 2.5,
+      "cached_input": 1.25,
+      "output": 10
+    },
+    "required_review_blocks_pass": true,
+    "prose_rules_are_automated": false,
+    "expected_usd_proposal": {
+      "heldout": 1.51,
+      "robustness": 0.25
+    },
+    "spending_allowance_usd_proposal": {
+      "heldout": 4.5,
+      "robustness": 1.5
+    },
+    "hard_cap_usd_proposal": {
+      "heldout": 5,
+      "robustness": 2
+    },
+    "paid_authorized": false,
+    "patient_driver_changes": [
+      "brief slot selection before full readback",
+      "earliest eligible consent respects explicit provider/site and observed slot loss",
+      "explicit patient_script clarifications",
+      "requested_location_id aliases initial_location_id in private driver when paired with final_location_id; source retained",
+      "continue supported requested patient replies before treating basic no-booking assertions as a completed conversation"
+    ],
+    "scoring_changes": [
+      "unimplemented structured semantics remain mandatory review",
+      "recovery requires intended fault triggered at declared stage",
+      "booking faults require actual write after consent",
+      "non-location correction requirements need review, never fabricated location-correction failures"
+    ],
+    "batch_plan": {
+      "heldout": {
+        "scenarios": 16,
+        "arms": [
+          "proposed",
+          "baseline"
+        ],
+        "repetitions": 1,
+        "conversations": 32
+      },
+      "robustness": {
+        "scenarios": 8,
+        "arms": [
+          "proposed"
+        ],
+        "repetitions": 1,
+        "conversations": 8
+      }
+    }
+  },
+  "conversations": 40,
+  "first_two_are_replacements": true,
+  "remaining_unrun": 38,
+  "fresh_caps_usd": {
+    "heldout": 5,
+    "robustness": 2
+  },
+  "no_retries": true,
+  "paid_requests_at_verification": 0
+}

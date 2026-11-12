@@ -1,0 +1,37 @@
+{
+  "version": "external-eval-v1.1",
+  "infrastructure_version": "external-infra-v1.2",
+  "api_calls": 0,
+  "paid_authorized": false,
+  "dataset_hashes": {
+    "heldout": {
+      "original_path": "/Users/gabrielernoult/Documents/prosper_heldout_scenarios.json",
+      "original_sha256": "d41abdad3defe405a48becc55a97d4d153c3c3b27a4eff5f5518db8a2dedd1b6",
+      "revised_path": "/Users/gabrielernoult/Desktop/Prosper AI/Evals/revised-evaluation-v1/heldout.reviewed.json",
+      "revised_sha256": "94dcf459ad8d0e13f89981aefb8afb6492982e3d611a0cd50a22a2bf7be72fea",
+      "scenarios": 16,
+      "normalized_path": "/Users/gabrielernoult/Desktop/Prosper AI/Evals/revised-evaluation-v1/heldout.boundary-v1.1.json",
+      "normalized_sha256": "94dcf459ad8d0e13f89981aefb8afb6492982e3d611a0cd50a22a2bf7be72fea",
+      "normalization": "fault aliases and explicit write stage only; availability unchanged"
+    },
+    "robustness": {
+      "original_path": "/Users/gabrielernoult/Documents/prosper_robustness_scenarios.json",
+      "original_sha256": "c5de085b51996c51afaa9dbc3b40c392452d0eec28760b422ced2a6f74aa6c19",
+      "revised_path": "/Users/gabrielernoult/Desktop/Prosper AI/Evals/revised-evaluation-v1/robustness.reviewed.json",
+      "revised_sha256": "2c2ce46ce4864b7b6a18153ffa1a353d279b67f3c340155f0b1712937f3ebebd",
+      "scenarios": 8,
+      "normalized_path": "/Users/gabrielernoult/Desktop/Prosper AI/Evals/revised-evaluation-v1/robustness.boundary-v1.1.json",
+      "normalized_sha256": "3bdc968cabea2a5825e30b0e1003eeea6a7631d5580e6a7364fe726ee9eb60ed",
+      "normalization": "fault aliases and explicit write stage only; availability unchanged"
+    }
+  },
+  "adapter_pin_sha256": "032f9418860c650afbe3771ca947f7afc15b82cc5cda5ebdae1b5fbaf04375c8",
+  "restart_plan_sha256": "bf9674be6c7c71db9b6465332da22e123592578128381f081e98854ad6f1a8f7",
+  "conversations": 40,
+  "replacements_first": 2,
+  "previously_unrun": 38,
+  "batch_counts": {
+    "heldout": 32,
+    "robustness": 8
+  }
+}

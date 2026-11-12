@@ -9,6 +9,31 @@ from pipecat.frames.frames import (TranscriptionFrame, LLMTextFrame,
 from pipecat.processors.frame_processor import FrameProcessor
 
 
+# A repeat request must be the WHOLE utterance, not a word found anywhere in
+# it: "pardon" and "sorry" are common interjections inside a real selection
+# or correction ("Sorry, can we do Richmond instead?"), the same class of bug
+# as matching "ENT" inside "patient". An optional leading "sorry" plus one
+# recognized repeat phrase, with only trailing punctuation after, is the only
+# shape that counts.
+REPEAT_REQUEST_RE = re.compile(
+    r"""^\s*
+    (?:sorry[,.]?\s*)?
+    (?:
+        what\s+did\s+you\s+say
+      | (?:could|can)\s+you\s+(?:please\s+)?
+            (?:repeat(?:\s+(?:that|it))?|say\s+(?:that|it)\s+again)(?:\s+please)?
+      | say\s+(?:that|it)\s+again(?:\s+please)?
+      | repeat(?:\s+(?:that|it))?(?:\s+please)?
+      | come\s+again
+      | pardon(?:\s+me)?
+      | sorry
+    )
+    \s*[?.!,]*\s*$
+    """,
+    re.IGNORECASE | re.VERBOSE,
+)
+
+
 class SchedulingDialogue:
     def __init__(self, engine):
         self.engine = engine
@@ -31,6 +56,11 @@ class SchedulingDialogue:
         self.partial_birth_date = None
         self.catalog_answer = False
         self.last_resolution = None
+        # The last spoken multi-slot offer, with its service/provider/site
+        # context. It is durable dialogue state: an interruption or a side
+        # question must never roll the conversation back behind this choice.
+        self.slot_options = None
+        self.repeat_requested = False
 
     def next_step(self):
         """Single ordered source for the next missing slot; engine owns facts."""
@@ -69,6 +99,11 @@ class SchedulingDialogue:
             stage, question = "identity_confirmation", self.identity_message()
         elif state.selected_slot_id and state.confirmation is None:
             stage, question = "consent", None
+        elif self.slot_options and state.offered_slot_ids:
+            # A pending slot choice survives interruptions and side questions.
+            # The engine clears offered_slot_ids whenever constraints change,
+            # which retires a stale choice here automatically.
+            stage, question = "slot_choice", self.slot_options
         else:
             stage, question = "offer", None
         self.stage = stage
@@ -76,7 +111,7 @@ class SchedulingDialogue:
 
     def booking_gate(self):
         step = self.next_step()
-        if step["stage"] in {"offer", "consent", "complete"}:
+        if step["stage"] in {"offer", "slot_choice", "consent", "complete"}:
             return None
         if step["stage"] in {"identity", "identity_confirmation"}:
             return self.require_identity()
@@ -118,6 +153,50 @@ class SchedulingDialogue:
             self.engine.state.hard_constraints.difference_update({"provider", "provider_id", "location", "location_id"})
             self.enable_global_soonest()
 
+    def offer_options(self, slots):
+        """Render a multi-slot choice with its service/provider/site context.
+
+        The context is stated once; per-slot location or provider is repeated
+        only when it differs between the offered slots.
+        """
+        providers = list(dict.fromkeys(slot["provider"] for slot in slots))
+        locations = list(dict.fromkeys(slot["location"] for slot in slots))
+        rendered = []
+        for slot in slots:
+            start = datetime.fromisoformat(slot["start"])
+            item = (start.strftime("%A %B %d").replace(" 0", " ")
+                    + " at " + start.strftime("%I:%M %p").lstrip("0"))
+            if len(locations) > 1:
+                item += f" at {slot['location']}"
+            if len(providers) > 1:
+                item += f" with {slot['provider']}"
+            rendered.append(item)
+        service = re.sub(r"^an? ", "", self.spoken_service(slots[0]["service"]))
+        context = f"For your {service}"
+        if len(providers) == 1:
+            context += f" with {providers[0]}"
+        if len(locations) == 1:
+            context += f" at {locations[0]}"
+        self.slot_options = (context + ", I have " + " or ".join(rendered)
+                             + ". Which works for you?")
+        return self.slot_options
+
+    def mentions_offered_slot(self, text):
+        """True when the text already presents one of the offered slots."""
+        for slot_id in self.engine.state.offered_slot_ids:
+            slot = self.engine._slots.get(slot_id)
+            if slot is None:
+                continue
+            day = re.search(
+                rf"\b{slot.start.strftime('%B')}\s+{slot.start.day}(?:st|nd|rd|th)?\b",
+                text, re.I)
+            hour = int(slot.start.strftime("%I"))
+            minute = slot.start.strftime("%M")
+            time = re.search(rf"\b{hour}(?::{minute})?\s*(?:a\.?m\.?|p\.?m\.?|o'clock)\b", text, re.I)
+            if day and time:
+                return True
+        return False
+
     def site_choices(self):
         names = [item["name"] for item in self.engine.eligible_locations()]
         if names:
@@ -149,8 +228,11 @@ class SchedulingDialogue:
         return None
 
     def avoid_repeated_question(self, text):
-        if "?" not in text:
-            self.last_code_question = None
+        # Questions and statements both enter the history: a looping canned
+        # statement is as much a dead end as a looping question.
+        if text not in self.question_history:
+            self.last_code_question = text if "?" in text else None
+            self.question_history.append(text)
             return text
         if text in self.question_history:
             step = self.next_step()
@@ -160,6 +242,8 @@ class SchedulingDialogue:
                 "identity_confirmation": self.identity_message().replace("is that right?", "are these details correct?") if all(self.identity()) else "Please confirm your identity.",
                 "provider": "Please spell the provider's first name and surname, or say any eligible provider.",
                 "service": "Please name the service you want to schedule.",
+                "slot_choice": ("To continue, please pick one of these. " + self.slot_options
+                                if self.slot_options else "Which of the offered times works for you?"),
             }
             alternative = alternatives.get(step["stage"], text)
             if alternative == text or alternative in self.question_history:
@@ -224,6 +308,10 @@ class SchedulingDialogue:
         self.patient_text = text
         self.pending = None
         self.waiting = bool(re.search(r"\b(wait|stop|hold on)\b", text, re.I))
+        # An explicit repeat request gets the pending choice once, verbatim.
+        # The whole utterance must be a repeat request; a word match anywhere
+        # in it is not enough (see REPEAT_REQUEST_RE).
+        self.repeat_requested = bool(REPEAT_REQUEST_RE.fullmatch(text))
         affirmative = self.is_affirmative(text)
         identity_answer = self.identity_readback is not None
         if identity_answer and affirmative and self.identity_readback == self.identity():
@@ -387,7 +475,20 @@ class BookingSpeech(FrameProcessor):
                 self.d.waiting = False
                 self.d.pending = None
             elif step["question"]:
-                text = step["question"]
+                spoken = text.strip()
+                if step["stage"] == "slot_choice" and self.d.pending is None:
+                    if self.d.repeat_requested or not spoken or step["question"] in spoken:
+                        # A repeat request gets the choice once, nothing else.
+                        text = step["question"]
+                    elif self.d.mentions_offered_slot(spoken):
+                        # Never two slot presentations in one turn: the model
+                        # already named an offered slot, so nothing is appended.
+                        text = spoken
+                    else:
+                        # A side answer first, then the choice with its context.
+                        text = spoken + " " + step["question"]
+                else:
+                    text = step["question"]
                 self.d.pending = None
                 if step["stage"] == "identity_confirmation":
                     self.d.identity_readback = self.d.identity()
@@ -400,12 +501,21 @@ class BookingSpeech(FrameProcessor):
                 if kind == "prepare":
                     self.d.readback = (slot["slot_id"], self.d.engine._current_snapshot(slot["slot_id"]))
             elif active and step["stage"] == "offer":
-                text = "Your details are confirmed. I'll check the available appointments."
+                # Never claim a check is happening: no tool ran in this turn.
+                text = "Would you like me to search for available appointments now?"
             if re.search(r"hold on|connect you|staff.{0,15}follow up|someone.{0,15}reach out", text, re.I):
                 contacts = self.d.engine._clinic_contacts()
                 text = "No transfer or callback is recorded. " + " ".join(
                     f"You can call {c['location']} at {c['phone']}." for c in contacts[:1])
             if text:
+                if self.d.repeat_requested and step["stage"] == "slot_choice":
+                    # An explicit repeat request is never a loop: say the
+                    # choice verbatim and leave the repeat history untouched.
+                    self.d.repeat_requested = False
+                    await self.push_frame(LLMTextFrame(text))
+                    self.text = []
+                    await self.push_frame(frame, direction)
+                    return
                 revised = self.d.avoid_repeated_question(text)
                 if revised != text:
                     self.d.readback = None

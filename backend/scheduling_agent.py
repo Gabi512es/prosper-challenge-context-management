@@ -144,13 +144,13 @@ def build_scheduling_tool_registry(
                 return identity_step
             if engine.dialogue.location_conflict:
                 return {"status": "clarify", "code": "location_conflict"}
+            engine.dialogue.slot_options = None
             result = engine.find_slots(args.get("horizon_days", 7))
             if len(result.get("slots", [])) == 1:
                 result["booking_phase"] = await book_appointment({"slot_id": result["slots"][0]["slot_id"]}, flow_manager)
             elif result.get("slots"):
-                from datetime import datetime
-                choices = [f"{datetime.fromisoformat(s['start']).strftime('%A %B %d at %I:%M %p')} at {s['location']}" for s in result["slots"][:3]]
-                engine.dialogue.pending = ("options", "; ".join(choices) + ". Which slot would you like?")
+                # One context sentence (service, provider, site), then the times.
+                engine.dialogue.pending = ("options", engine.dialogue.offer_options(result["slots"][:3]))
                 result["next_action"] = "ask_patient_to_choose_then_call_book_appointment"
             else:
                 message = engine.dialogue.capability_message(result)

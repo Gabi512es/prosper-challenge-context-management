@@ -1,0 +1,126 @@
+{
+  "version": "external-eval-v1.1",
+  "configuration": {
+    "version": "external-eval-v1.1",
+    "source_contract": "reviewed-conversational-v1; boundary fault mapping v1.1",
+    "model": "gpt-4o",
+    "context_strategy": "APPEND",
+    "parallel_tool_calls": false,
+    "temperature": "not explicitly set by frozen runtime",
+    "provider_snapshot": "gpt-4o alias; not pinned",
+    "availability_mode": "eval_fixture",
+    "now": "2026-11-07T00:00:00-08:00",
+    "max_patient_turns": 9,
+    "patient_turn_timeout_seconds": 45,
+    "concurrency": 1,
+    "sdk_retries": 0,
+    "timeout_retries": false,
+    "max_input_tokens": 128000,
+    "max_completion_tokens": 512,
+    "pricing_as_of": "2026-11-07",
+    "prices_per_million_usd": {
+      "input": 2.5,
+      "cached_input": 1.25,
+      "output": 10
+    },
+    "required_review_blocks_pass": true,
+    "prose_rules_are_automated": false,
+    "expected_usd_proposal": {
+      "heldout": 1.51,
+      "robustness": 0.25
+    },
+    "spending_allowance_usd_proposal": {
+      "heldout": 4.5,
+      "robustness": 1.5
+    },
+    "hard_cap_usd_proposal": {
+      "heldout": 5,
+      "robustness": 2
+    },
+    "paid_authorized": false,
+    "patient_driver_changes": [
+      "brief slot selection before full readback",
+      "earliest eligible consent respects explicit provider/site and observed slot loss",
+      "explicit patient_script clarifications",
+      "requested_location_id aliases initial_location_id in private driver when paired with final_location_id; source retained",
+      "continue supported requested patient replies before treating basic no-booking assertions as a completed conversation"
+    ],
+    "scoring_changes": [
+      "unimplemented structured semantics remain mandatory review",
+      "recovery requires intended fault triggered at declared stage",
+      "booking faults require actual write after consent",
+      "non-location correction requirements need review, never fabricated location-correction failures"
+    ],
+    "batch_plan": {
+      "heldout": {
+        "scenarios": 16,
+        "arms": [
+          "proposed",
+          "baseline"
+        ],
+        "repetitions": 1,
+        "conversations": 32
+      },
+      "robustness": {
+        "scenarios": 8,
+        "arms": [
+          "proposed"
+        ],
+        "repetitions": 1,
+        "conversations": 8
+      }
+    }
+  },
+  "configuration_sha256": "97e54fe59f65c3e931c1c4865d8bd74a99a79cd59f883c6186ca426376aa24e1",
+  "adapter_pin_sha256": "529c0714f452d158d91fcde98237d0728fa17775e89ab3e7a84e5f34721259e5",
+  "approval_reference": "user-approval-2026-11-10-heldout32-cap5-robustness8-cap2-once-no-retries",
+  "run_id": "external-v1.1-robustness-20261110-153646-ed8563",
+  "runs": [],
+  "complete": false,
+  "metrics_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-v1.1-robustness-20261110-153646-ed8563.jsonl",
+  "batch": "robustness",
+  "dataset_hashes": {
+    "heldout": {
+      "original_path": "/Users/gabrielernoult/Documents/prosper_heldout_scenarios.json",
+      "original_sha256": "d41abdad3defe405a48becc55a97d4d153c3c3b27a4eff5f5518db8a2dedd1b6",
+      "revised_path": "/Users/gabrielernoult/Desktop/Prosper AI/Evals/revised-evaluation-v1/heldout.reviewed.json",
+      "revised_sha256": "94dcf459ad8d0e13f89981aefb8afb6492982e3d611a0cd50a22a2bf7be72fea",
+      "scenarios": 16,
+      "normalized_path": "/Users/gabrielernoult/Desktop/Prosper AI/Evals/revised-evaluation-v1/heldout.boundary-v1.1.json",
+      "normalized_sha256": "94dcf459ad8d0e13f89981aefb8afb6492982e3d611a0cd50a22a2bf7be72fea",
+      "normalization": "fault aliases and explicit write stage only; availability unchanged"
+    },
+    "robustness": {
+      "original_path": "/Users/gabrielernoult/Documents/prosper_robustness_scenarios.json",
+      "original_sha256": "c5de085b51996c51afaa9dbc3b40c392452d0eec28760b422ced2a6f74aa6c19",
+      "revised_path": "/Users/gabrielernoult/Desktop/Prosper AI/Evals/revised-evaluation-v1/robustness.reviewed.json",
+      "revised_sha256": "2c2ce46ce4864b7b6a18153ffa1a353d279b67f3c340155f0b1712937f3ebebd",
+      "scenarios": 8,
+      "normalized_path": "/Users/gabrielernoult/Desktop/Prosper AI/Evals/revised-evaluation-v1/robustness.boundary-v1.1.json",
+      "normalized_sha256": "3bdc968cabea2a5825e30b0e1003eeea6a7631d5580e6a7364fe726ee9eb60ed",
+      "normalization": "fault aliases and explicit write stage only; availability unchanged"
+    }
+  },
+  "pending_attempt": {
+    "dataset": "robustness",
+    "arm": "proposed",
+    "scenario_id": "RW-001",
+    "repetition": 1
+  },
+  "budget": {
+    "limit_usd": "2",
+    "reported_cost_usd": "0",
+    "accounted_usd": "0",
+    "requests": 0,
+    "stopped": false,
+    "stop_reason": null,
+    "unreported_requests": 0,
+    "unreported_cost_usd": "0",
+    "unreported_exposure_bound_usd": "0.00000",
+    "unknown_usage": false,
+    "forecast": "Not used for admission; full per-request ceiling reserved before sending",
+    "per_request_reserved_usd": "0.32512",
+    "exposure_bound_valid": true,
+    "assumptions": "Provider enforces <=128000 input, <=512 output, dated GPT-4o rates, no extra model/tool fees, each request guarded, no retries"
+  }
+}

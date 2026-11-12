@@ -1,0 +1,345 @@
+{
+  "plan_version": "external-restart-v1.2",
+  "infrastructure_version": "external-infra-v1.2",
+  "evaluator_semantics": "external-eval-v1.1",
+  "paid_authorized": false,
+  "replacement_selection": "only the two recorded infrastructure failures, irrespective of agent outcomes",
+  "remaining_selection": "all 38 recorded not-run conversations",
+  "historical_inventory": "docs/results/final-evaluation/conversations.json",
+  "historical_inventory_sha256": "c8137a28510afa81e183ab9157c0d41b173117b11e36140451d6204cf3e24817",
+  "original_attempts_summary_sha256": "0c9ca6ebf9d7b4b400880774d5e83a83d8e8f6d163923b4572bac6534bbdbcaa",
+  "conversations": [
+    {
+      "batch": "heldout",
+      "arm": "proposed",
+      "scenario_id": "HO-001",
+      "prior_status": "infrastructure_failure",
+      "repetition": 1,
+      "replacement_for": {
+        "run_id": "external-v1.1-heldout-20261110-153532-72eb74",
+        "call_id": "c62fb921-e9c3-48d2-8d44-f7ef422be8ad",
+        "scenario_id": "HO-001",
+        "status": "infrastructure_failure",
+        "agent_outcome": "unknown"
+      }
+    },
+    {
+      "batch": "robustness",
+      "arm": "proposed",
+      "scenario_id": "RW-001",
+      "prior_status": "infrastructure_failure",
+      "repetition": 1,
+      "replacement_for": {
+        "run_id": "external-v1.1-robustness-20261110-153646-ed8563",
+        "call_id": "26258f04-1173-412f-8a81-27c5d3dfba83",
+        "scenario_id": "RW-001",
+        "status": "infrastructure_failure",
+        "agent_outcome": "unknown"
+      }
+    },
+    {
+      "batch": "heldout",
+      "arm": "proposed",
+      "scenario_id": "HO-002",
+      "prior_status": "not_run",
+      "repetition": 1,
+      "replacement_for": null
+    },
+    {
+      "batch": "heldout",
+      "arm": "proposed",
+      "scenario_id": "HO-003",
+      "prior_status": "not_run",
+      "repetition": 1,
+      "replacement_for": null
+    },
+    {
+      "batch": "heldout",
+      "arm": "proposed",
+      "scenario_id": "HO-004",
+      "prior_status": "not_run",
+      "repetition": 1,
+      "replacement_for": null
+    },
+    {
+      "batch": "heldout",
+      "arm": "proposed",
+      "scenario_id": "HO-005",
+      "prior_status": "not_run",
+      "repetition": 1,
+      "replacement_for": null
+    },
+    {
+      "batch": "heldout",
+      "arm": "proposed",
+      "scenario_id": "HO-006",
+      "prior_status": "not_run",
+      "repetition": 1,
+      "replacement_for": null
+    },
+    {
+      "batch": "heldout",
+      "arm": "proposed",
+      "scenario_id": "HO-007",
+      "prior_status": "not_run",
+      "repetition": 1,
+      "replacement_for": null
+    },
+    {
+      "batch": "heldout",
+      "arm": "proposed",
+      "scenario_id": "HO-008",
+      "prior_status": "not_run",
+      "repetition": 1,
+      "replacement_for": null
+    },
+    {
+      "batch": "heldout",
+      "arm": "proposed",
+      "scenario_id": "HO-009",
+      "prior_status": "not_run",
+      "repetition": 1,
+      "replacement_for": null
+    },
+    {
+      "batch": "heldout",
+      "arm": "proposed",
+      "scenario_id": "HO-010",
+      "prior_status": "not_run",
+      "repetition": 1,
+      "replacement_for": null
+    },
+    {
+      "batch": "heldout",
+      "arm": "proposed",
+      "scenario_id": "HO-011",
+      "prior_status": "not_run",
+      "repetition": 1,
+      "replacement_for": null
+    },
+    {
+      "batch": "heldout",
+      "arm": "proposed",
+      "scenario_id": "HO-012",
+      "prior_status": "not_run",
+      "repetition": 1,
+      "replacement_for": null
+    },
+    {
+      "batch": "heldout",
+      "arm": "proposed",
+      "scenario_id": "HO-013",
+      "prior_status": "not_run",
+      "repetition": 1,
+      "replacement_for": null
+    },
+    {
+      "batch": "heldout",
+      "arm": "proposed",
+      "scenario_id": "HO-014",
+      "prior_status": "not_run",
+      "repetition": 1,
+      "replacement_for": null
+    },
+    {
+      "batch": "heldout",
+      "arm": "proposed",
+      "scenario_id": "HO-015",
+      "prior_status": "not_run",
+      "repetition": 1,
+      "replacement_for": null
+    },
+    {
+      "batch": "heldout",
+      "arm": "proposed",
+      "scenario_id": "HO-016",
+      "prior_status": "not_run",
+      "repetition": 1,
+      "replacement_for": null
+    },
+    {
+      "batch": "heldout",
+      "arm": "baseline",
+      "scenario_id": "HO-001",
+      "prior_status": "not_run",
+      "repetition": 1,
+      "replacement_for": null
+    },
+    {
+      "batch": "heldout",
+      "arm": "baseline",
+      "scenario_id": "HO-002",
+      "prior_status": "not_run",
+      "repetition": 1,
+      "replacement_for": null
+    },
+    {
+      "batch": "heldout",
+      "arm": "baseline",
+      "scenario_id": "HO-003",
+      "prior_status": "not_run",
+      "repetition": 1,
+      "replacement_for": null
+    },
+    {
+      "batch": "heldout",
+      "arm": "baseline",
+      "scenario_id": "HO-004",
+      "prior_status": "not_run",
+      "repetition": 1,
+      "replacement_for": null
+    },
+    {
+      "batch": "heldout",
+      "arm": "baseline",
+      "scenario_id": "HO-005",
+      "prior_status": "not_run",
+      "repetition": 1,
+      "replacement_for": null
+    },
+    {
+      "batch": "heldout",
+      "arm": "baseline",
+      "scenario_id": "HO-006",
+      "prior_status": "not_run",
+      "repetition": 1,
+      "replacement_for": null
+    },
+    {
+      "batch": "heldout",
+      "arm": "baseline",
+      "scenario_id": "HO-007",
+      "prior_status": "not_run",
+      "repetition": 1,
+      "replacement_for": null
+    },
+    {
+      "batch": "heldout",
+      "arm": "baseline",
+      "scenario_id": "HO-008",
+      "prior_status": "not_run",
+      "repetition": 1,
+      "replacement_for": null
+    },
+    {
+      "batch": "heldout",
+      "arm": "baseline",
+      "scenario_id": "HO-009",
+      "prior_status": "not_run",
+      "repetition": 1,
+      "replacement_for": null
+    },
+    {
+      "batch": "heldout",
+      "arm": "baseline",
+      "scenario_id": "HO-010",
+      "prior_status": "not_run",
+      "repetition": 1,
+      "replacement_for": null
+    },
+    {
+      "batch": "heldout",
+      "arm": "baseline",
+      "scenario_id": "HO-011",
+      "prior_status": "not_run",
+      "repetition": 1,
+      "replacement_for": null
+    },
+    {
+      "batch": "heldout",
+      "arm": "baseline",
+      "scenario_id": "HO-012",
+      "prior_status": "not_run",
+      "repetition": 1,
+      "replacement_for": null
+    },
+    {
+      "batch": "heldout",
+      "arm": "baseline",
+      "scenario_id": "HO-013",
+      "prior_status": "not_run",
+      "repetition": 1,
+      "replacement_for": null
+    },
+    {
+      "batch": "heldout",
+      "arm": "baseline",
+      "scenario_id": "HO-014",
+      "prior_status": "not_run",
+      "repetition": 1,
+      "replacement_for": null
+    },
+    {
+      "batch": "heldout",
+      "arm": "baseline",
+      "scenario_id": "HO-015",
+      "prior_status": "not_run",
+      "repetition": 1,
+      "replacement_for": null
+    },
+    {
+      "batch": "heldout",
+      "arm": "baseline",
+      "scenario_id": "HO-016",
+      "prior_status": "not_run",
+      "repetition": 1,
+      "replacement_for": null
+    },
+    {
+      "batch": "robustness",
+      "arm": "proposed",
+      "scenario_id": "RW-002",
+      "prior_status": "not_run",
+      "repetition": 1,
+      "replacement_for": null
+    },
+    {
+      "batch": "robustness",
+      "arm": "proposed",
+      "scenario_id": "RW-003",
+      "prior_status": "not_run",
+      "repetition": 1,
+      "replacement_for": null
+    },
+    {
+      "batch": "robustness",
+      "arm": "proposed",
+      "scenario_id": "RW-004",
+      "prior_status": "not_run",
+      "repetition": 1,
+      "replacement_for": null
+    },
+    {
+      "batch": "robustness",
+      "arm": "proposed",
+      "scenario_id": "RW-005",
+      "prior_status": "not_run",
+      "repetition": 1,
+      "replacement_for": null
+    },
+    {
+      "batch": "robustness",
+      "arm": "proposed",
+      "scenario_id": "RW-006",
+      "prior_status": "not_run",
+      "repetition": 1,
+      "replacement_for": null
+    },
+    {
+      "batch": "robustness",
+      "arm": "proposed",
+      "scenario_id": "RW-007",
+      "prior_status": "not_run",
+      "repetition": 1,
+      "replacement_for": null
+    },
+    {
+      "batch": "robustness",
+      "arm": "proposed",
+      "scenario_id": "RW-008",
+      "prior_status": "not_run",
+      "repetition": 1,
+      "replacement_for": null
+    }
+  ]
+}

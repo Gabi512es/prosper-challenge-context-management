@@ -1,0 +1,30 @@
+{
+  "method": "Metadata/builders only; no TextAgentSession, runtime client or API request created.",
+  "packages": {
+    "pipecat-ai": "1.4.0",
+    "pipecat-ai-flows": "1.4.0",
+    "openai": "2.54.0",
+    "tiktoken": "0.14.0"
+  },
+  "agents": {
+    "proposed": {
+      "metadata": {
+        "agent_id": "catalog_scheduler",
+        "agent_revision": "40db1b587b5790ab2c92bc642edbc55e67f0d44ebd8d4f1267de29e1e86ebdc5",
+        "availability_mode": "eval_fixture"
+      },
+      "model": "gpt-4o",
+      "source_file": "backend/agents/catalog_scheduler.json"
+    },
+    "baseline": {
+      "metadata": {
+        "agent_id": "full_catalog_baseline",
+        "agent_revision": "68d02acb9a89a72c279c3410001e2b184438abce7f7c714ce39a0e87ddf4f623",
+        "availability_mode": "eval_fixture",
+        "catalog_prefix_sha256": "baea1382762b1177e7f21a5070a6dd38724fc910c965905b9eb9f96458436e4f"
+      },
+      "model": "gpt-4o",
+      "source_file": "backend/agents/catalog_scheduler.json"
+    }
+  }
+}

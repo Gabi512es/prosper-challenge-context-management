@@ -1,0 +1,40 @@
+{
+  "status": "proposal; no paid authorization",
+  "basis": "original official x1 usage only; entire incomplete-usage conversation excluded, not priced as zero",
+  "profiles": {
+    "proposed": {
+      "source_run_id": "comparison-proposed-v2-20261109-180827-8752c3",
+      "complete_usage_conversations": 35,
+      "excluded_incomplete": 1,
+      "mean_usd": 0.03110371428571428,
+      "cold_mean_usd": 0.052315142857142866
+    },
+    "baseline": {
+      "source_run_id": "comparison-baseline-20261109-182321-c4ee5f",
+      "complete_usage_conversations": 36,
+      "excluded_incomplete": 0,
+      "mean_usd": 0.06327888888888888,
+      "cold_mean_usd": 0.11474555555555556
+    }
+  },
+  "batches": {
+    "heldout": {
+      "conversations": 32,
+      "expected_proxy_usd": 1.5101216507936506,
+      "cold_plus_50pct_calls_proxy_usd": 4.0094567619047625,
+      "spending_allowance_usd_proposal": 4.5,
+      "hard_cap_usd_proposal": 5
+    },
+    "robustness": {
+      "conversations": 8,
+      "expected_proxy_usd": 0.24882971428571424,
+      "cold_plus_50pct_calls_proxy_usd": 0.6277817142857144,
+      "spending_allowance_usd_proposal": 1.5,
+      "hard_cap_usd_proposal": 2
+    }
+  },
+  "expected_total_proxy_usd": 1.758951365079365,
+  "spending_allowance_total_usd_proposal": 6,
+  "hard_caps_total_usd_proposal": 7,
+  "uncertainty": "Private scenario mix, revised patient driver, recovery rounds, cache state, alias model variability, and missing/in-flight usage. Neither proxy nor allowance is a billing bound."
+}

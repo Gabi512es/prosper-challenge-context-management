@@ -79,7 +79,10 @@ class DialogueTest(unittest.IsolatedAsyncioTestCase):
         speech.push_frame = AsyncMock()
         await speech.process_frame(LLMFullResponseEndFrame(), FrameDirection.DOWNSTREAM)
         text = speech.push_frame.call_args_list[0].args[0].text
-        self.assertIn("Which slot would you like?", text)
+        self.assertIn("Which works for you?", text)
+        # The offer names the service, provider and site once, as context.
+        self.assertIn("knee MRI", text)
+        self.assertIn("Linda Ramirez", text)
         self.assertIn("Downtown Health Center", text)
         self.assertNotIn("born", text)
         self.assertNotIn("Shall I book", text)

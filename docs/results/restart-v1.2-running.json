@@ -1,0 +1,25 @@
+{
+  "timestamp": "2026-11-10T17:02:34.583454+00:00",
+  "status": "completed",
+  "processes": [],
+  "tool_session_id": 14851,
+  "run_id": "external-infra-v1.2-restart-20261110-175004-ec9627",
+  "approval": "fresh heldout $5, robustness $2, 40 jobs once",
+  "no_other_evaluator_should_be_started": true,
+  "previous_processes": [
+    {
+      "pid": 73794,
+      "elapsed": "00:47",
+      "command": ".venv/bin/python -m evals.external_eval run-paid --batch restart --restart-plan /Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/evals/external_restart_v1_2.json --heldout-path /Users/gabrielernoult/Desktop/Prosper AI/Evals/revised-evaluation-v1/heldout.reviewed.json --robustness-path /Users/gabrielernoult/Desktop/Prosper AI/Evals/revised-evaluation-v1/robustness.reviewed.json --heldout-max-cost-usd 5 --robustness-max-cost-usd 2 --approval-ref user-approval-2026-11-10-1649UTC-restart40-v1.2-fresh-heldout5-robustness2"
+    }
+  ],
+  "exit_status": 0,
+  "completed_conversations": 40,
+  "raw_status_counts": {
+    "review_required": 24,
+    "failed": 16
+  },
+  "cost_usd": "1.4072150",
+  "report": "docs/final-evaluation-restart-v1.2.md",
+  "no_more_paid_calls_authorized": true
+}

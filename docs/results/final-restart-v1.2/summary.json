@@ -1,0 +1,375 @@
+{
+  "run_id": "external-infra-v1.2-restart-20261110-175004-ec9627",
+  "timestamp": "2026-11-10T16:58:06.378832+00:00",
+  "complete": true,
+  "planned": 40,
+  "attempted": 40,
+  "unique_jobs": 40,
+  "replacements_first": true,
+  "replacement_count": 2,
+  "retries": 0,
+  "extra_experiments": 0,
+  "infrastructure_version": "external-infra-v1.2",
+  "evaluator_semantics": "external-eval-v1.1",
+  "pin_sha256": "032f9418860c650afbe3771ca947f7afc15b82cc5cda5ebdae1b5fbaf04375c8",
+  "restart_plan_sha256": "bf9674be6c7c71db9b6465332da22e123592578128381f081e98854ad6f1a8f7",
+  "rubric_sha256": "054cbbd261440e29d0c7bdf6749bbff56ac38023f11cdf130d1efef31d08e686",
+  "git_commit": "a5b124f7aa3ffa9d7ebcd32a7f76c837c95486c8",
+  "agents": {
+    "proposed": {
+      "agent_id": "catalog_scheduler",
+      "agent_revision": "40db1b587b5790ab2c92bc642edbc55e67f0d44ebd8d4f1267de29e1e86ebdc5",
+      "availability_mode": "eval_fixture"
+    },
+    "baseline": {
+      "agent_id": "full_catalog_baseline",
+      "agent_revision": "68d02acb9a89a72c279c3410001e2b184438abce7f7c714ce39a0e87ddf4f623",
+      "availability_mode": "eval_fixture",
+      "catalog_prefix_sha256": "baea1382762b1177e7f21a5070a6dd38724fc910c965905b9eb9f96458436e4f"
+    }
+  },
+  "dataset_hashes": {
+    "heldout": {
+      "original_path": "/Users/gabrielernoult/Documents/prosper_heldout_scenarios.json",
+      "original_sha256": "d41abdad3defe405a48becc55a97d4d153c3c3b27a4eff5f5518db8a2dedd1b6",
+      "revised_path": "/Users/gabrielernoult/Desktop/Prosper AI/Evals/revised-evaluation-v1/heldout.reviewed.json",
+      "revised_sha256": "94dcf459ad8d0e13f89981aefb8afb6492982e3d611a0cd50a22a2bf7be72fea",
+      "scenarios": 16,
+      "normalized_path": "/Users/gabrielernoult/Desktop/Prosper AI/Evals/revised-evaluation-v1/heldout.boundary-v1.1.json",
+      "normalized_sha256": "94dcf459ad8d0e13f89981aefb8afb6492982e3d611a0cd50a22a2bf7be72fea",
+      "normalization": "fault aliases and explicit write stage only; availability unchanged"
+    },
+    "robustness": {
+      "original_path": "/Users/gabrielernoult/Documents/prosper_robustness_scenarios.json",
+      "original_sha256": "c5de085b51996c51afaa9dbc3b40c392452d0eec28760b422ced2a6f74aa6c19",
+      "revised_path": "/Users/gabrielernoult/Desktop/Prosper AI/Evals/revised-evaluation-v1/robustness.reviewed.json",
+      "revised_sha256": "2c2ce46ce4864b7b6a18153ffa1a353d279b67f3c340155f0b1712937f3ebebd",
+      "scenarios": 8,
+      "normalized_path": "/Users/gabrielernoult/Desktop/Prosper AI/Evals/revised-evaluation-v1/robustness.boundary-v1.1.json",
+      "normalized_sha256": "3bdc968cabea2a5825e30b0e1003eeea6a7631d5580e6a7364fe726ee9eb60ed",
+      "normalization": "fault aliases and explicit write stage only; availability unchanged"
+    }
+  },
+  "pricing_as_of": "2026-11-07",
+  "prices_per_million_usd": {
+    "input": 2.5,
+    "cached_input": 1.25,
+    "output": 10
+  },
+  "groups": {
+    "heldout/proposed": {
+      "conversations": 16,
+      "raw_status_counts": {
+        "review_required": 9,
+        "failed": 7
+      },
+      "all_automatic_checks_true": 9,
+      "any_automatic_false": 7,
+      "any_automatic_unknown": 1,
+      "final_semantic_pass_rate": null,
+      "manual_reviews_complete": 0,
+      "requiring_manual_review": 16,
+      "agent_assessment_counts": {
+        "review_pending": 9,
+        "not_assessable": 7
+      },
+      "infrastructure_failures": 0,
+      "runner_errors": 0,
+      "evaluation_limited": 7,
+      "model_requests": 76,
+      "model_metric_rows": 76,
+      "complete_sdk_usage_requests": 76,
+      "unknown_sdk_usage_requests": 0,
+      "request_coverage_certified": true,
+      "prompt_tokens": 228081,
+      "cached_input_tokens": 187264,
+      "uncached_input_tokens": 40817,
+      "completion_tokens": 2053,
+      "total_tokens": 230134,
+      "known_cost_usd": "0.3566525",
+      "complete_cost_usd": "0.3566525",
+      "cached_read_cost_usd": "0.23408",
+      "uncached_input_cost_usd": "0.1020425",
+      "output_cost_usd": "0.02053",
+      "cache_read_fraction": 0.8210416474848847,
+      "cache_write_tokens": null,
+      "separate_cache_write_attributed_cost_usd": null,
+      "additional_cache_write_fee_under_configured_rates_usd": 0,
+      "actual_bookings": 2,
+      "bookings_matching_automatic_fields_and_confirmation": 2,
+      "entire_group_cost_per_automatically_correct_booking_usd": "0.17832625",
+      "automatic_consequence_flags": {
+        "incorrect_internal_selection": 3,
+        "unnecessary_clarification": 1
+      },
+      "driver_logged_unnecessary_questions": 1,
+      "completed_patient_turn_latency": {
+        "n": 33,
+        "p50_ms": 2470.429,
+        "p95_ms": 3460.121,
+        "max_ms": 4816.041
+      },
+      "incomplete_turns": [],
+      "startup_latency": {
+        "n": 16,
+        "p50_ms": 874.071,
+        "p95_ms": 1520.276,
+        "max_ms": 1582.317
+      },
+      "llm_call_processing_latency": {
+        "n": 76,
+        "p50_ms": 976.513,
+        "p95_ms": 1617.41,
+        "max_ms": 2452.075
+      },
+      "llm_ttfb": {
+        "n": 76,
+        "p50_ms": 775.095,
+        "p95_ms": 1447.689,
+        "max_ms": 1869.154
+      }
+    },
+    "heldout/baseline": {
+      "conversations": 16,
+      "raw_status_counts": {
+        "review_required": 8,
+        "failed": 8
+      },
+      "all_automatic_checks_true": 8,
+      "any_automatic_false": 8,
+      "any_automatic_unknown": 1,
+      "final_semantic_pass_rate": null,
+      "manual_reviews_complete": 0,
+      "requiring_manual_review": 16,
+      "agent_assessment_counts": {
+        "review_pending": 8,
+        "not_assessable": 8
+      },
+      "infrastructure_failures": 0,
+      "runner_errors": 0,
+      "evaluation_limited": 8,
+      "model_requests": 62,
+      "model_metric_rows": 62,
+      "complete_sdk_usage_requests": 62,
+      "unknown_sdk_usage_requests": 0,
+      "request_coverage_certified": true,
+      "prompt_tokens": 478056,
+      "cached_input_tokens": 435072,
+      "uncached_input_tokens": 42984,
+      "completion_tokens": 1998,
+      "total_tokens": 480054,
+      "known_cost_usd": "0.6712800",
+      "complete_cost_usd": "0.6712800",
+      "cached_read_cost_usd": "0.54384",
+      "uncached_input_cost_usd": "0.10746",
+      "output_cost_usd": "0.01998",
+      "cache_read_fraction": 0.9100858476831166,
+      "cache_write_tokens": null,
+      "separate_cache_write_attributed_cost_usd": null,
+      "additional_cache_write_fee_under_configured_rates_usd": 0,
+      "actual_bookings": 1,
+      "bookings_matching_automatic_fields_and_confirmation": 1,
+      "entire_group_cost_per_automatically_correct_booking_usd": "0.6712800",
+      "automatic_consequence_flags": {
+        "incorrect_internal_selection": 3,
+        "unnecessary_clarification": 1
+      },
+      "driver_logged_unnecessary_questions": 1,
+      "completed_patient_turn_latency": {
+        "n": 27,
+        "p50_ms": 2621.271,
+        "p95_ms": 4159.606,
+        "max_ms": 4436.98
+      },
+      "incomplete_turns": [],
+      "startup_latency": {
+        "n": 16,
+        "p50_ms": 1050.505,
+        "p95_ms": 1853.046,
+        "max_ms": 2175.563
+      },
+      "llm_call_processing_latency": {
+        "n": 62,
+        "p50_ms": 1063.207,
+        "p95_ms": 2000.874,
+        "max_ms": 2847.178
+      },
+      "llm_ttfb": {
+        "n": 62,
+        "p50_ms": 809.768,
+        "p95_ms": 1334.677,
+        "max_ms": 1847.457
+      }
+    },
+    "robustness/proposed": {
+      "conversations": 8,
+      "raw_status_counts": {
+        "review_required": 7,
+        "failed": 1
+      },
+      "all_automatic_checks_true": 7,
+      "any_automatic_false": 1,
+      "any_automatic_unknown": 0,
+      "final_semantic_pass_rate": null,
+      "manual_reviews_complete": 0,
+      "requiring_manual_review": 8,
+      "agent_assessment_counts": {
+        "review_pending": 7,
+        "automatic_failure": 1
+      },
+      "infrastructure_failures": 0,
+      "runner_errors": 0,
+      "evaluation_limited": 0,
+      "model_requests": 73,
+      "model_metric_rows": 73,
+      "complete_sdk_usage_requests": 73,
+      "unknown_sdk_usage_requests": 0,
+      "request_coverage_certified": true,
+      "prompt_tokens": 256473,
+      "cached_input_tokens": 226432,
+      "uncached_input_tokens": 30041,
+      "completion_tokens": 2114,
+      "total_tokens": 258587,
+      "known_cost_usd": "0.3792825",
+      "complete_cost_usd": "0.3792825",
+      "cached_read_cost_usd": "0.28304",
+      "uncached_input_cost_usd": "0.0751025",
+      "output_cost_usd": "0.02114",
+      "cache_read_fraction": 0.8828687620139352,
+      "cache_write_tokens": null,
+      "separate_cache_write_attributed_cost_usd": null,
+      "additional_cache_write_fee_under_configured_rates_usd": 0,
+      "actual_bookings": 5,
+      "bookings_matching_automatic_fields_and_confirmation": 4,
+      "entire_group_cost_per_automatically_correct_booking_usd": "0.094820625",
+      "automatic_consequence_flags": {
+        "wrong_booking": 1
+      },
+      "driver_logged_unnecessary_questions": 0,
+      "completed_patient_turn_latency": {
+        "n": 33,
+        "p50_ms": 2383.689,
+        "p95_ms": 3187.368,
+        "max_ms": 3846.711
+      },
+      "incomplete_turns": [],
+      "startup_latency": {
+        "n": 8,
+        "p50_ms": 772.898,
+        "p95_ms": 1189.559,
+        "max_ms": 1361.654
+      },
+      "llm_call_processing_latency": {
+        "n": 73,
+        "p50_ms": 933.34,
+        "p95_ms": 1366.956,
+        "max_ms": 2044.796
+      },
+      "llm_ttfb": {
+        "n": 73,
+        "p50_ms": 706.962,
+        "p95_ms": 1054.659,
+        "max_ms": 1724.778
+      }
+    }
+  },
+  "budget": {
+    "by_batch": {
+      "heldout": {
+        "limit_usd": "5",
+        "reported_cost_usd": "1.0279325",
+        "accounted_usd": "1.0279325",
+        "requests": 138,
+        "stopped": false,
+        "stop_reason": null,
+        "unreported_requests": 0,
+        "unreported_cost_usd": "0",
+        "unreported_exposure_bound_usd": "0.00000",
+        "unknown_usage": false,
+        "forecast": "Not used for admission; full per-request ceiling reserved before sending",
+        "per_request_reserved_usd": "0.32512",
+        "exposure_bound_valid": true,
+        "assumptions": "Provider enforces <=128000 input, <=512 output, dated GPT-4o rates, no extra model/tool fees, each request guarded, no retries"
+      },
+      "robustness": {
+        "limit_usd": "2",
+        "reported_cost_usd": "0.3792825",
+        "accounted_usd": "0.3792825",
+        "requests": 73,
+        "stopped": false,
+        "stop_reason": null,
+        "unreported_requests": 0,
+        "unreported_cost_usd": "0",
+        "unreported_exposure_bound_usd": "0.00000",
+        "unknown_usage": false,
+        "forecast": "Not used for admission; full per-request ceiling reserved before sending",
+        "per_request_reserved_usd": "0.32512",
+        "exposure_bound_valid": true,
+        "assumptions": "Provider enforces <=128000 input, <=512 output, dated GPT-4o rates, no extra model/tool fees, each request guarded, no retries"
+      }
+    },
+    "requests": 211,
+    "stopped": false
+  },
+  "raw_status_counts": {
+    "review_required": 24,
+    "failed": 16
+  },
+  "final_semantic_pass_rates": null,
+  "manual_reviews_complete": 0,
+  "required_review_conversations": 40,
+  "request_reconciliation": {
+    "reserved": 211,
+    "sdk_complete_usage": 211,
+    "closed": 211,
+    "metric_rows": 211,
+    "request_exceptions": 0,
+    "unresolved_request_ids": [],
+    "all_complete_usage": true,
+    "all_requests_accounted": true,
+    "no_new_outstanding_exposure_usd": "0",
+    "no_new_missing_usage_requests": true
+  },
+  "new_measured_model_cost_usd": "1.4072150",
+  "prior_attempts_known_usage_usd": "0.0923300",
+  "combined_known_usage_usd": "1.4995450",
+  "prior_unobserved_usage_exposure_bound_usd": "6.9076700",
+  "prior_actual_total_cost": null,
+  "voice_call_b": "pending manual verification",
+  "source_files_changed": false,
+  "raw_report_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.results.json",
+  "raw_metrics_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.jsonl",
+  "raw_event_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.events.jsonl",
+  "all_transcripts_path": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/all-transcripts-and-tools.md",
+  "exports_directory": "/Users/gabrielernoult/Desktop/Prosper AI/prosper-challenge-context-management/backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports",
+  "failure_inventory": "docs/results/final-restart-v1.2/failure-inventory.json",
+  "provenance": {
+    "backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.results.json": {
+      "sha256": "6e52cef1433c7a5ebe5d9898cdda69f962ff0e015b1648487721ee305c3923c9",
+      "bytes": 445246
+    },
+    "backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.jsonl": {
+      "sha256": "27a87e4687f325778c60c922b7b7a98453bf3fbfb411bba93b8e9e1efcfe6eda",
+      "bytes": 110995
+    },
+    "backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.events.jsonl": {
+      "sha256": "8cb72d351335bfc18495ce2059b8f19ce38b53dfc9e20ebe931ca737be007b16",
+      "bytes": 14303075
+    },
+    "backend/logs/evals/approved-restart-v1.2-20261110-1649UTC.console.log": {
+      "sha256": "44ec8f2c80ae78b8e2b5104f4ea547283fffeaf1304f7aa4cb32a2f0e4ae130f",
+      "bytes": 1884
+    }
+  },
+  "limitations": [
+    "No final semantic review or pass rate",
+    "15 held-out attempts are driver-limited/not_assessable under frozen evaluator",
+    "RW-005 automatic wrong-booking flag needs driver-fidelity review: explicit consent, no delivered human request",
+    "One repetition per case/arm; no statistical accuracy claim",
+    "Reduced capability-ingestion test scope from authorized source revision",
+    "No voice/STT/TTS cost or voice verification"
+  ],
+  "observed_provider_model_ids": [
+    "gpt-4o-2024-08-06"
+  ]
+}

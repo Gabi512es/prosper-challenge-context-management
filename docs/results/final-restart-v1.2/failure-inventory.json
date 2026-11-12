@@ -1,0 +1,187 @@
+{
+  "automatic_wrong_booking_flags": [
+    "robustness/proposed/RW-005"
+  ],
+  "incorrect_internal_selection_flags": [
+    "heldout/proposed/HO-003",
+    "heldout/proposed/HO-011",
+    "heldout/proposed/HO-013",
+    "heldout/baseline/HO-003",
+    "heldout/baseline/HO-007",
+    "heldout/baseline/HO-013"
+  ],
+  "false_refusal_count": null,
+  "false_statement_to_patient_count": null,
+  "semantic_failure_counts_status": "pending frozen-rubric review; internal/automatic flags are not promoted to spoken claims",
+  "RW-005_observation": {
+    "automatic_booking_count_failed": true,
+    "actual_bookings": 1,
+    "explicit_patient_consent_in_transcript": true,
+    "recorded_patient_human_request": false,
+    "interpretation": "Frozen automatic wrong_booking flag retained. Expected zero bookings and handoff review items conflict with observed consenting script: no human request was delivered. Do not label this a confirmed agent wrong booking or silently rescore. Patient-driver/rule-execution review required."
+  },
+  "automatic_failures": [
+    {
+      "case": "heldout/proposed/HO-002",
+      "failed": [
+        "booking_count",
+        "booking_fields",
+        "confirmation_recorded"
+      ],
+      "evaluation_limited": true,
+      "agent_assessment": "not_assessable"
+    },
+    {
+      "case": "heldout/proposed/HO-003",
+      "failed": [
+        "booking_count",
+        "booking_fields",
+        "confirmation_recorded"
+      ],
+      "evaluation_limited": true,
+      "agent_assessment": "not_assessable"
+    },
+    {
+      "case": "heldout/proposed/HO-007",
+      "failed": [
+        "booking_count",
+        "booking_fields",
+        "confirmation_recorded",
+        "globally_earliest_slot"
+      ],
+      "evaluation_limited": true,
+      "agent_assessment": "not_assessable"
+    },
+    {
+      "case": "heldout/proposed/HO-008",
+      "failed": [
+        "booking_count",
+        "booking_fields",
+        "confirmation_recorded"
+      ],
+      "evaluation_limited": true,
+      "agent_assessment": "not_assessable"
+    },
+    {
+      "case": "heldout/proposed/HO-010",
+      "failed": [
+        "booking_count",
+        "booking_fields",
+        "confirmation_recorded",
+        "globally_earliest_slot"
+      ],
+      "evaluation_limited": true,
+      "agent_assessment": "not_assessable"
+    },
+    {
+      "case": "heldout/proposed/HO-011",
+      "failed": [
+        "booking_count",
+        "booking_fields",
+        "confirmation_recorded"
+      ],
+      "evaluation_limited": true,
+      "agent_assessment": "not_assessable"
+    },
+    {
+      "case": "heldout/proposed/HO-013",
+      "failed": [
+        "booking_count",
+        "booking_fields",
+        "confirmation_recorded"
+      ],
+      "evaluation_limited": true,
+      "agent_assessment": "not_assessable"
+    },
+    {
+      "case": "heldout/baseline/HO-002",
+      "failed": [
+        "booking_count",
+        "booking_fields",
+        "confirmation_recorded"
+      ],
+      "evaluation_limited": true,
+      "agent_assessment": "not_assessable"
+    },
+    {
+      "case": "heldout/baseline/HO-003",
+      "failed": [
+        "booking_count",
+        "booking_fields",
+        "confirmation_recorded"
+      ],
+      "evaluation_limited": true,
+      "agent_assessment": "not_assessable"
+    },
+    {
+      "case": "heldout/baseline/HO-007",
+      "failed": [
+        "booking_count",
+        "booking_fields",
+        "confirmation_recorded",
+        "globally_earliest_slot"
+      ],
+      "evaluation_limited": true,
+      "agent_assessment": "not_assessable"
+    },
+    {
+      "case": "heldout/baseline/HO-008",
+      "failed": [
+        "booking_count",
+        "booking_fields",
+        "confirmation_recorded"
+      ],
+      "evaluation_limited": true,
+      "agent_assessment": "not_assessable"
+    },
+    {
+      "case": "heldout/baseline/HO-009",
+      "failed": [
+        "booking_count",
+        "booking_fields",
+        "confirmation_recorded"
+      ],
+      "evaluation_limited": true,
+      "agent_assessment": "not_assessable"
+    },
+    {
+      "case": "heldout/baseline/HO-010",
+      "failed": [
+        "booking_count",
+        "booking_fields",
+        "confirmation_recorded",
+        "globally_earliest_slot"
+      ],
+      "evaluation_limited": true,
+      "agent_assessment": "not_assessable"
+    },
+    {
+      "case": "heldout/baseline/HO-011",
+      "failed": [
+        "booking_count",
+        "booking_fields",
+        "confirmation_recorded"
+      ],
+      "evaluation_limited": true,
+      "agent_assessment": "not_assessable"
+    },
+    {
+      "case": "heldout/baseline/HO-013",
+      "failed": [
+        "booking_count",
+        "booking_fields",
+        "confirmation_recorded"
+      ],
+      "evaluation_limited": true,
+      "agent_assessment": "not_assessable"
+    },
+    {
+      "case": "robustness/proposed/RW-005",
+      "failed": [
+        "booking_count"
+      ],
+      "evaluation_limited": false,
+      "agent_assessment": "automatic_failure"
+    }
+  ]
+}

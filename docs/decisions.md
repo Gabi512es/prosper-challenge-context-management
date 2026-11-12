@@ -949,3 +949,1205 @@ guard accounting matches the JSONL usage. No retries or runtime changes.
 Raw report and usage: backend/logs/evals/smoke-20261109-131238-90cbfb.smoke.json
 and the corresponding .jsonl. Text smoke success does not establish acoustic
 behavior; numeric interruptions and segmented identity still need live checking.
+
+## 2026-11-09: proposed-v2 freeze, voice status and comparison authorization gate
+
+User froze the proposed arm at tag proposed-v2 (a5b124f). Do not change its
+behavior, prompts or shared guards without explicit user authorization. The
+next official proposed measurement must use this frozen revision and current
+scorer dev-v4-voice-gaps. Earlier full matrices predate the latest fixes.
+
+Verification status: call A was verified in real voice by the user. Call B fixes
+(ordered next_step controller, numbers/dates/times as real words, six-question
+loop history) are verified offline and by the four-case smoke, but have NOT yet
+been re-verified in voice. Passing text smoke does not close this voice gate.
+
+### Demo checklist
+
+- [x] Call A verified by the user in real voice.
+- [x] Call B fixes verified offline and by the approved four-case text smoke.
+- [ ] Re-test call B by voice: segmented identity, numeric year, Midtown retained,
+  identity confirmation followed by offer, no alternating question loop.
+
+### Step 6 estimates, provided before either paid matrix
+
+| Paid step | Scope | Estimated OpenAI cost | Suggested planning allowance |
+|---|---|---:|---:|
+| 1: official proposed measurement | 12 DEV scenarios × 3, frozen proposed-v2/current scorer | $1.20–$2.20 | $2.50 |
+| 3: baseline measurement | Same 36 conversations, full readable catalog/policies prefix | $3.00–$5.00 | $6.00 |
+| Combined | 72 conversations | $4.20–$7.20 | $8.50 |
+
+Estimates use existing dated gpt-4o rates ($2.50 uncached input, $1.25 cached
+input, $10 output per million) and the latest 40-call/$0.227365 four-case smoke,
+plus prior full-matrix call counts. Allow roughly 200–260 model calls per arm;
+the full DEV mix includes cheaper refusal/FAQ cases as well as bookings. These
+are estimates, not measured charges or automatic spending authorization.
+
+Baseline estimate assumes substantial reuse of the stable prefix. Its readable
+catalog has not been built/tokenized yet; budget provisionally assumes about
+6K–10K catalog/policy tokens. Existing measurements are raw JSON 12,924 and
+compact JSON 8,252; neither is the proposed readable baseline representation.
+Weak caching or longer recovery conversations could put baseline cost around
+$6–$8. Re-measure the rendered prefix offline in step 2 and refresh the estimate
+before step 3 if necessary. STT/TTS costs are excluded: these are text runs.
+
+User requested both estimates and a pause BEFORE step 1. No matrix, baseline
+implementation or paid call was started in this turn. Await explicit go and
+spending ceiling. Step 1 must classify failures as unnecessary question,
+internal-state-only, false patient statement or wrong booking, with trace
+evidence. Baseline must share model, scripted patients, fixtures, scorer,
+availability/booking tools and guards; only catalog access differs (readable
+complete stable context prefix; resolve_options ID-only). Report baseline wins
+plainly and leave the frozen proposed arm unchanged.
+
+## 2026-11-09: official frozen proposed measurement and offline full-catalog baseline
+
+User authorized step 1, all 12 DEV cases × 3, ceiling $2.50 and no retries;
+then baseline construction/tokenization/prefix checks offline. Baseline paid
+matrix remains unapproved. Frozen proposed-v2 commit a5b124f and source JSON
+40db1b587b5790ab2c92bc642edbc55e67f0d44ebd8d4f1267de29e1e86ebdc5,
+current scorer dev-v4-voice-gaps, sequential execution, same closed-world
+fixtures and patient driver. The launcher's in-memory settings disabled both
+SDK retries and Pipecat timeout retries; no frozen source was edited. Existing
+SpendGuard imposed the same 512 completion-token cap as the preceding smoke.
+
+Official run dev-matrix-20261109-150315-454f33: 25/36 PASS (69.44%),
+11 FAIL, 204 model calls, 659,476 prompt tokens including 556,800 cached,
+5,902 completion tokens, $1.0117100 at the recorded 2026-11-07 rates.
+All usage is known; no retries. Ten correct bookings, none wrong. Mixed
+outcomes on DEV-002/005/006; DEV-007/011 fail all three. Full table, trace-based
+manual severities and harness stopping limitations are recorded in
+docs/comparison-proposed-v2.md. Explanation omissions are distinguished from
+false statements; no scoring rules or scenario outcomes were relaxed.
+
+Baseline is additive code in backend/baseline_agent.py, with an explicit paid
+entrypoint backend/evals/baseline_matrix.py. It reuses AgentBuilder, runtime,
+controller, model, APPEND context, scripted patients, fixtures, scorer, shared
+find_slots/book_appointment/get_details and all identity/consent/handoff guards.
+resolve_options is an ID-only wrapper over the shared handler; queries and
+specialty search arguments are rejected before delegation. Validation, block
+reasons and alternatives stay identical. Shared transcript safeguards remain;
+no separate baseline orchestration or booking implementation was introduced.
+Only the baseline catalog-access messages differ: full reference instead of
+the compact type index and free-text resolver instructions.
+
+Complete readable Markdown catalog/policies: 5,894 o200k_base tokens for
+configured gpt-4o; 16,848 bytes. Catalog+role 6,085 tokens; system+initial task
+content 6,626 tokens (excludes API framing/tools). Round-trip tests check every
+source field, relationship, record and policy. The offline installed-adapter
+check constructs four requests with different histories/state, including a
+post-tool history, and verifies identical system/task prefixes and schemas.
+AsyncCompletions.create was mocked/asserted unused. This proves prefix stability
+with zero paid calls; it does not claim measured OpenAI cache hits.
+Evidence: backend/logs/evals/baseline-prefix-check-20261109.json and
+backend/logs/evals/baseline-catalog-20261109.md. Both are ignored local artifacts.
+
+Updated step 3 estimate: $2.30–$3.30 with substantial caching, suggested ceiling
+$5.50, no retries. Based on measured 204 proposed calls and approximately
+4,788 extra serialized input tokens/call; cold input at identical call counts
+would be about $4.15, and 260 similar calls about $5.30. Actual baseline behavior
+is unmeasured. Await explicit user go; no paid baseline run yet. Neither proposed
+arm nor scorer nor scenarios were changed.
+
+Final offline validation: make test ran 102 tests, 100 passed and 2 opt-in paid
+integrations skipped. Six new baseline tests cover full rendering fidelity,
+stable installed-adapter serialization without HTTP, ID-only rejection/runtime
+validation, shared guards/policy alternatives, unchanged source configuration,
+and identity -> offer -> consent -> one booking in both arms. Tracked backend
+diff against proposed-v2 is empty; new files are additive baseline/eval/test code.
+
+## 2026-11-09: offline triage before baseline authorization
+
+Reviewed all 11 failures in the official frozen proposed run with saved
+transcripts/tool results, original scenario requirements, current helpers and
+git history. No paid calls or runtime/harness/scorer/scenario edits. Findings
+and per-run evidence: docs/failure-triage-proposed-v2.md.
+
+Primary attribution: eight agent-behavior failures, three DEV-011 name-echo
+scorer misfires. Patient limitations additionally bound recovery: status can be
+answered once, service re-confirmation lacks a reply, blocked core state can
+stop before the spoken explanation, and unknown-provider acknowledgement stops
+before an explicitly requested spelling reply. Existing identity confirmation
+already gets an affirmative patient reply; none of the 11 failures reached it.
+
+DEV-007's nearest earlier full matrix was 2/3, not 3/3; it now lacks the required
+catalog-distinction explanation in all three runs. The 92487dd refactor shortened
+the handoff message, removing that instruction, and added a guard that rejects
+the exact staff-confirmation request in all three current traces. These are
+agent defects, not a reason to change the patient wording or relax its scorer.
+DEV-011 used to echo the requested name (and give an unrelated clinic phone);
+the later generic code-generated spelling request correctly acknowledges an
+unknown provider but fails a literal-echo assertion beyond the scenario outcome.
+Accepting that unambiguous reference would yield 28/36 on the saved text, an
+offline counterfactual, not a replaced official measurement.
+
+Proposed, not implemented: one common versioned scorer accepting unambiguous
+unknown-provider references; bounded same-fact patient repeats; completion that
+lets supported outstanding clarifications run before stopping. Scorer-only
+correction: rescore all 36 saved runs for $0, no proposed paid rerun needed;
+baseline estimate remains $2.30–$3.30 with caching. Patient/completion changes:
+fresh full 36 proposed and 36 baseline using the identical new harness/scorer,
+estimated $1.20–$1.80 plus $2.60–$3.80 with caching. Do not cherry-pick retries
+of the failed repetitions. No implementation or paid-run approval inferred;
+proposed remains frozen, and baseline run remains unapproved.
+
+## 2026-11-09: approved common evaluator corrections and two fresh matrices
+
+User selected harness plus scorer corrections, equally for both arms, then
+fresh proposed 12 × 3 capped at $2.00 and baseline 12 × 3 capped at $4.50.
+No retries. Stop if a cap is reached; do not start the second arm if the first
+stops for budget or unknown usage. This is explicit authorization for those
+two measurements, not additional smokes or failed-case retries.
+
+Evaluator label: dev-eval-v5-recovery. Both reports include the same evaluator
+SHA-256 over version/scorer/patient/measurement/budget code, scenario SHA-256,
+catalog pin, source git commit, model and agent revisions. Runtime agent,
+prompts, tools, guards, APPEND handling and source scenarios remain frozen.
+
+Corrections in backend/evals/text_integration.py: one bounded same-fact repeat
+for service, identity and eligibility/referral facts (an initial answer plus
+one repeat when the opening did not already supply that fact); no engine state
+is filled by the patient driver. The same spelling reply is allowed before an
+unknown-provider completion predicate. Hidden blocked state alone cannot end
+a refusal before its required spoken explanation. The DEV-007 patient wording
+is unchanged; no wording is tailored to bypass its handoff guard. Unsupported
+or exhausted replies remain explicit failures. Unnecessary factual questions
+are logged in driver_events even when the booking later succeeds.
+
+Common scorer dev-eval-v5-recovery accepts a clear unknown-provider explanation
+referring to the sole requested provider as "that provider" or "a provider with
+that name". It rejects wrong-entity statements and no-availability substitutes.
+No booking, state, clinical-distinction or other explanation assertion is
+relaxed. The previous 28/36 calculation is a counterfactual on saved transcripts
+only, not an official score, nor a run of this corrected patient harness. The
+old 25/36 report is preserved without rewriting it.
+
+Known agent limitations from the voice-driven refactor, documented rather than
+fixed: stated patient status/service facts are not always recorded (DEV-002,
+005,006); the handoff message's undocumented-service-distinction explanation
+was removed (DEV-007); and the handoff regex rejects the existing explicit
+staff-confirmation request. The added next_step gate can repeat a known service
+or suppress a policy explanation while that service is absent from core state.
+Neither these limitations nor the literal source JSON are repaired for this
+comparison. Both arms retain the shared dialogue/booking guard limitations.
+
+Measurement: backend/evals/comparison_matrix.py checkpoints each finished
+scenario, runs sequentially, disables both retry layers, uses the same 512-token
+completion cap and budget policy, and stops scheduling cases when budget/usage
+admission stops. The observed-cost reservation remains; a conservative cold-input
+admission check adds near-cap protection without assuming a future cache hit.
+Missing usage remains unknown. Per-patient-turn latency now measures monotonic
+session.send wall-clock duration through all tools and final generation;
+startup and incomplete turns are separately marked and excluded from completed
+patient-turn percentiles. This instrumentation is evaluation-only, with no
+speech or runtime-behavior changes. Text remains controlled, not deterministic.
+
+### Operational pause after the first two attempted cases
+
+DEV-001 repetition 1 passed. Repetition 2's first patient turn exceeded the
+45-second text deadline. Its model response arrived after about 61 seconds;
+a subsequent automatic tool-result completion was cancelled without returning
+usage. This was not an SDK retry. The initial guard paused the measurement:
+12 admitted requests, 11 usage records, $0.0564600 known cost. No failed case
+was retried and the original paused report is preserved separately.
+
+To continue only unattempted cases without guessing the missing charge, verified
+the official GPT-4o model page (https://developers.openai.com/api/docs/models/gpt-4o)
+on 2026-11-09: 128,000-token context, $2.50/M input and $10/M output. With the
+existing 512-output-token cap, an unreported request costs at most $0.32512
+(128,000 * 2.50/M + 512 * 10/M), deliberately double-allowing output within the
+context ceiling. This bound is held against the authorized cap; actual usage
+and actual cost remain null. It is a spending-exposure bound, not a measured
+charge or a cost estimate. New unknown requests receive the same treatment in
+both arms, and no call is admitted if its full bound cannot fit. Observed-cost
+reservations remain unchanged for ordinary reported calls.
+
+Added checkpoint resume support that skips every already attempted
+(scenario,repetition), including failures. Scorer.py and text_integration.py
+are byte-for-byte unchanged from the first two attempts. The evaluator behavior
+hash now explicitly covers those two files; operational checkpoint/budget code
+has its separate execution hash. The archived pause retains the initial broader
+full-code hash. Evaluator label stays dev-eval-v5-recovery; these are budget and
+provenance corrections, not a scoring/patient or agent revision. Both arms use
+the same final operational code. Per-run known usage subtotals are retained,
+with unknown requests included in model-call counts and total usage/cost null.
+
+## 2026-11-09: completed fresh v5 comparison, no retries or agent fixes
+
+Both 12 × 3 DEV matrices completed under dev-eval-v5-recovery. Evaluator
+behavior SHA-256: 97117348b6d00263d60c0561381841e3fc50e843873a53b60e827a8c7415a996.
+Final execution SHA-256: be63f5d4876dd066a96fdc2948d6a43c25df069c278b45e9ccb129d92e7a397e.
+Common scenario pin, model, scorer/patient source, fixtures, guards, APPEND,
+512-output-token cap and disabled SDK/timeout retries were checked. Frozen
+agent/core/prompt files and source scenarios have no diff against proposed-v2.
+
+Proposed run comparison-proposed-v2-20261109-180827-8752c3: 29/36 PASS,
+7 FAIL; 219 admitted model calls (218 with usage). Known subtotals: 711,025
+prompt, including 598,272 cached and 112,753 uncached, 6,572 completion;
+$1.0954425 known cost. One unreported request keeps actual totals null, with
+maximum total exposure $1.4205625 after its $0.32512 bound, under the $2 cap.
+The initial timeout was retained, not retried. Continuation skipped both
+already attempted repetitions; archived pause and resume provenance are kept.
+
+Baseline run comparison-baseline-20261109-182321-c4ee5f: 30/36 PASS,
+6 FAIL; 203 model calls, all usage reported. 1,625,524 prompt tokens including
+1,482,240 cached and 143,284 uncached; 6,703 completion; $2.2780400, under
+the $4.50 cap. No budget cap was reached. Combined known cost $3.3734825;
+combined maximum exposure including the unreported request $3.6986025.
+
+Ten correct bookings proposed, eleven baseline; zero wrong bookings and zero
+observed invalid booking attempts. Baseline's prov_unknown argument is an
+invalid resolution ID rejected before booking, not an invalid booking attempt.
+Entire-arm cost divided by successful bookings, including failures and valid
+non-booking conversations: proposed known component $0.10954425, maximum
+$0.14205625; baseline $0.20709455. Proposed actual cost per booking stays null.
+
+Manual redundant-clarification review totals nine proposed, five baseline:
+driver_events log six/one and a separately saved, turn-indexed audit adds
+three/four. Valid disambiguation, first spelling checks, consent and permission
+to change constraints are excluded. Baseline records the stated services in
+DEV-005/006 without the proposed arm's five extra repeat-service questions.
+It uses 16 fewer model calls overall. Proposed remains cheaper even at the
+unreported request's conservative upper bound; no architecture was changed
+in response to these findings.
+
+Completed text-patient-turn latency: proposed n=93, p50 2.619s, p95 3.208s;
+baseline n=91, p50 2.634s, p95 3.420s. One proposed turn timed out at 45s,
+excluded from completed-turn percentiles and reported separately; its response
+arrived around 61s. Largest completed proposed turn: 23.910s. Startup, scripted
+think time and operational pause time are excluded. This measures complete
+session.send spans, not voice perceived latency. Sequential small samples and
+provider jitter prevent a causal speed claim.
+
+Raw failure primaries, manually reviewed: proposed two unnecessary-question
+failures, one false patient statement, two missing-explanation/next-step failures,
+one provider timeout and one evaluator false failure. Baseline: one unnecessary
+question failure, one internal/tool resolution error, three missing-explanation
+failures and one evaluator false failure. Each has five genuine agent failures.
+DEV-007 remains 0/3 in both. No scorer/agent changes or paid repeats followed
+inspection of these results, and no manual review promotes a raw failure to pass.
+
+Remaining evaluator paraphrase limits, disclosed rather than silently fixed:
+proposed DEV-011/3 correctly says "I didn't find any provider with the name..."
+but completion misses didn't find; all assertions except runner_completed pass.
+Baseline DEV-011/1 says "does not match any provider in our catalog" and asks to
+verify the name; acknowledgement/completion miss that phrasing and verify is
+not the spelling trigger. These are one false failure per arm. Proposed
+DEV-011/1's service question after spelling and baseline DEV-011/3's invented
+prov_unknown resolution argument are genuine agent failures. Raw 29/36 versus
+30/36 therefore includes infrastructure/evaluator effects; baseline's one-pass
+margin is not proof of a behavior-quality advantage. The earlier 28/36 remains
+only the historical saved-text counterfactual, never an official measurement.
+
+Full tables, per-scenario tokens/costs/calls and severity evidence:
+docs/comparison-evaluator-v5.md. Machine summary and manual annotations:
+backend/logs/evals/comparison-v5-summary.json and comparison-v5-manual-review.json.
+Reports and raw JSONL use the two run IDs above. Logs are local ignored
+artifacts. No held-out source was inspected; no voice call was run in this step.
+
+## 2026-11-09: offline trace clarification and step 6b preparation, no paid go
+
+False patient statement in proposed DEV-007 repetition 1 (call
+9d271b7b-2881-44bc-9d6a-676548bfd27b): "I'm unable to transfer to a staff
+member without an explicit request. You could reach out directly to the clinic
+for confirmation." The patient had just explicitly asked staff to confirm the
+intended service. Proposed called request_human_transfer three times across
+DEV-007 and all three returned explicit_human_request_required. Baseline called
+that tool zero times, so its failures cannot be attributed to that guard
+rejecting a call. Both arms omit the required clinical-distinction explanation
+in all three repetitions. This refines the earlier shared-limitation wording;
+no agent or scorer is changed.
+
+The 23.909566-second turn was proposed DEV-001 repetition 1, patient turn 3:
+1.249545s for the find_slots model call, 22.142099s for its post-tool model
+completion, and 0.517922s outside those processing windows. Post-tool TTFB was
+20.901938s; the processing-window gap is about 3.8ms. The installed external
+turn-stop strategy's default is 0.5s, consistent with most of the residual;
+individual pure-tool time is not measured. Although offer text is code-generated,
+BookingSpeech still waits for the post-tool LLM completion before releasing it.
+The 45.000471s timeout was DEV-001 repetition 2's first patient turn; its API
+TTFB was 60.751802s and full processing 60.932204s, observed during cleanup.
+No retry occurred; the cancelled follow-up remains unreported. TTFB does not
+separate provider, network and client scheduling delays. No runtime fix here.
+
+New offline-only expander: backend/evals/catalog_expander.py,
+catalog-disjoint-v1, fixed seed 20261109, hash-ranked name pools and sequential
+IDs. Original records/policies are retained as exact prefixes; synthetic copies
+have their own provider/location/type relations with no bridges into originals.
+Names avoid original catalog entities and known DEV patient/unknown-provider
+names. They are fictional research-service distractors, not a clinical-realism
+or near-neighbor benchmark. No synthetic availability is added, no catalog is
+repaired, and no scenario/fixture/expected outcome or original blob pin is edited.
+Derived catalogs get separate source/output manifests. Original eight orphan
+types remain unbookable.
+
+Measured with gpt-4o/o200k_base using the existing full readable baseline
+renderer: x1 5,894; x5 29,333; x10 58,664; x20 121,030; x50 313,545 tokens.
+At x22 catalog alone first exceeds 128K: 133,867 tokens. At x21 catalog has
+127,455 tokens but the initial full request projects to 128,669 input tokens;
+the selected saved-history shape plus 512 output reserve projects to 132,984.
+At x20 that latter projection is 126,559, leaving only 1,441 tokens for longer
+history. Full request sizes are explicitly projections, not expanded API usage.
+
+Material input decision requested from the user, still pending: frozen proposed
+JSON contains a literal id+name index of 82 services (1,026 tokens). A complete
+expanded index has x5 5,792; x10 11,768; x20 24,320; x50 62,571 tokens. Keeping
+the original index tests original-answer distractor isolation, not complete
+growing-index coverage. Recommendation: regenerate only that data in experiment
+copies, preserving every instruction/tool/model/guard and the original source
+agent file. Candidate index data files are generated for review; no agent-config
+copy or frozen prompt was changed. Do not infer authorization from the pending
+choice or from elapsed time.
+
+backend/evals/catalog_scaling.py measures offline and projects cost from prior
+v5 logs for DEV-002/003/009/012, all three prior repetitions, with dated
+2026-11-07 prices and observed cache shares. It labels every expanded cost and
+full-request projection. Baseline x10+ projections are four conversations, one
+per selected case: x10 about $2.76 cached-profile/$4.95 cold; x20 $5.58/$9.99.
+x50 cannot fit GPT-4o; $14.26/$25.55 is an unlimited-context price extrapolation,
+not a runnable estimate. No truncation or replacement model is proposed.
+
+Whole proposed 6b plan is 24 conversations: x5 both arms, four cases × two;
+x10/x50 proposed only, four cases × one each. With complete-index experiment
+inputs, phase projections are $0.82 proposed x5, $2.85 baseline x5, $0.70
+proposed x10, $3.14 proposed x50, total $7.51 using prior cache/call profiles.
+Planning range $7.50–$9.50; same-call-count all-cold projection $13.08;
+suggested total cap $15, no retries. Keeping the frozen 82-type index instead
+projects to $3.59 with caching/$6.40 cold, with its narrower coverage caveat.
+Both are projections, not measured charges or spend authorization. Await
+explicit go/ceiling and index-input choice before any scaling API call.
+
+Offline verification: 121 tests, 119 passed, two paid integrations skipped;
+eight new expander tests passed. All original details/searches and all 12 DEV
+fact-card core outcomes, slots and positive booking fields are unchanged at
+x50; structural preservation does not guarantee LLM outcomes. An unscoped
+request may legitimately return more facets and an invalid ID may return more
+valid values; no constant-output claim is made for those paths. Measurement
+also ran with AsyncCompletions.create mocked/asserted unused. No paid calls.
+Evaluator v5 and frozen agent/core/scenario sources remain unchanged.
+Findings: docs/scaling-v1.md. Data, manifests and complete offline report:
+backend/logs/evals/scaling-catalog-disjoint-v1-seed20261109/.
+
+## 2026-11-09: scaling index choice and revised offline pricing, no paid go
+
+User selected regenerated index data in experiment copies, with ID + name +
+specialty, fixed seed and unchanged instructions/tools/source agent. The frozen
+source actually contains ID + name only (82 entries, 1,026 tokens), so the new
+three-field format is explicitly disclosed as an experiment data change. At x1
+it is 1,559 tokens. Primary variant is scaled-index-v2-id-name-specialty with
+catalog-disjoint-v1 seed 20261109. Only data after the existing index marker is
+replaced in derived agent JSONs; whole-config tests restore that data and prove
+everything else unchanged. Existing AgentStore/AgentBuilder validation passes.
+Manifests fingerprint source/copy/index/catalog/seed/scenario source. Source
+agent, core, prompts, tools, evaluator and source scenarios are untouched.
+
+Measured three-field index sizes with gpt-4o/o200k_base: x5 8,457; x10 17,098;
+x20 34,980; x50 89,221. Full readable baseline sizes are unchanged. Prior
+two-field index estimates ($7.51 cached-profile/$13.08 cold) are superseded.
+New primary 24-conversation projection: proposed x5 $1.072537, baseline x5
+$2.848151, proposed x10 $0.956298, proposed x50 $4.417788, total $9.294774.
+All-cold, same-call-shape projection $16.127453. Suggested cap $18, no retries,
+awaiting explicit approval. x50 proposed full request plus output reserve
+projects to 94,823 tokens, within 128K, conditional on the saved history shape.
+
+Secondary option priced separately: exact frozen 82-entry, two-field index,
+16 additional proposed conversations (x5 x2, x10/x50 x1 across four cases).
+Increment $0.737016 with prior cache behavior or $1.241069 all-cold. Combined
+40 conversations project to $10.031790/$17.368522; suggested combined cap $20,
+no retries. At about 8% extra it is offered explicitly, not silently added as
+negligible. It tests original-answer isolation, not expanded service coverage,
+and its narrower field format prevents calling it a pure index-length ablation.
+
+Pricing verified against official GPT-4o docs on 2026-11-09, unchanged from the
+2026-11-07 ledger: $2.50/M input, $1.25/M cached input, $10/M output. Installed
+GPT-4o Chat Completions reports cache reads, not a separate write count; the
+Pipecat adapter leaves generic cache-creation usage unpopulated. Official docs
+specify no extra write charge for this model family. Report actual cached reads
+from each paid call. Write tokens and separately attributed write-input cost
+are null, not zero or prompt-minus-cached. Additional write fee is $0; cache
+population is already included in ordinary uncached-input charges. No double
+charge. New-scale usage remains null until authorized runs. Historical selected
+v5 profiles have actual cached tokens 307,328 proposed and 738,048 baseline;
+these are projection inputs, never new scaling measurements.
+
+Focused x50 tests additionally replay the DEV-008 location correction through
+offer/snapshot invalidation and refused stale booking, and keep DEV-004 blocked
+without new service/provider answers. The all-12 fact-card test includes the
+same original valid DEV-012 booking; eight original orphan types remain without
+providers. Original scenario/fixture/expected bytes and catalog blob pin are
+unchanged. These preserve expected answers, not predicted LLM pass rates.
+make test: 125 tests, 123 passed, two paid integrations skipped. Offline
+measurement also passes with model-create mocked/asserted unused. No paid
+calls or changes to the frozen arm. Details/prices: docs/scaling-v2-pricing.md.
+
+## 2026-11-10: revised 6b scope, conditional paid authorization
+
+User replaced the three-field index experiment with exactly the frozen ID +
+name format, dropped the frozen-82 secondary arm, and made indexed x50
+projection-only. Paid plan is proposed indexed x5 and baseline x5, four DEV
+cases x2 each; proposed indexed x10 x1; exploratory search-only x10 and x50 x1
+each. Cases remain DEV-002/003/009/012. Total 28 conversations, no retries.
+Original frozen agent, runtime, tools/guards and evaluator v5 remain unchanged.
+
+Index variant scaled-index-v3-id-name-search-only; same catalog-disjoint-v1
+seed 20261109. Indexed copies replace data only. Search-only removes the index
+and replaces its single access instruction with free-text resolve_options
+queries. Its experiment-only registry omits/rejects service/provider/location
+IDs in resolve_options, forwarding queries and patient facts to the unchanged
+shared handler. get_details, find_slots, book_appointment and mandatory dialogue
+guards are unchanged. Search-only is explicitly exploratory, not proposed-v2.
+
+Expanded catalogs are injected only within the experiment harness using a
+scoped override of the v5 driver's catalog loader. The original scenario loader
+still validates the original source blob independently. Patient behavior,
+fixture universe, expected outcomes, scorer and evaluator hash do not change.
+No hidden or other scenario file is used. Registry and injection checks are
+offline, with the frozen config/source pin preserved.
+
+Revised projection: proposed x5 $0.819562, baseline x5 $2.848151, proposed x10
+$0.700488, exploratory search-only x10/x50 $0.168167 each; total $4.704535.
+Search-only has no observed profile: estimate allows two extra calls per
+conversation and does not credit the smaller tool schema. All-cold same-call
+projection $8.306690. Indexed x50 remains $3.138741 cached-profile/$5.336442
+cold, projection only, excluded from paid budget. Prices verified 2026-11-10:
+GPT-4o $2.50/M uncached, $1.25/M cached, $10/M output, unchanged from the ledger.
+
+User explicitly authorized proceeding if expected spend is below $6, with a
+hard global cap $8 and no retries. $4.704535 satisfies that condition; estimate
+was reported before execution. SpendGuard strict cold-request admission and
+unknown-usage bounds apply globally across all five phases; SDK and timeout
+retries are disabled. Unknown usage stays null. Paid results will be recorded
+separately from projections. No original proposed-arm fix is authorized.
+
+## 2026-11-10: revised 6b completed, no retries or agent changes
+
+Experiment scaling-v3-20261110-092924-e2cde6 completed all 28 unique attempts,
+201 admitted requests/JSONL usage rows. Actual GPT-4o cost $3.813240, below the
+$8 global cap; no missing usage, retry, timeout or indexed x50 API run. Original
+source/scenario/evaluator hashes match the pre-run values. Every usage row has
+the matching saved agent id/revision and eval_fixture mode. No alternative
+scenario source was inspected. Raw results are not rescored or edited.
+
+Results: indexed x5 6/8, 60 calls, $0.689215; baseline x5 5/8, 56 calls,
+$2.348205; indexed x10 3/4, 27 calls, $0.517805; exploratory search-only x10
+3/4, 28 calls, $0.128555; search-only x50 3/4, 30 calls, $0.129460.
+Baseline used fewer aggregate calls at x5 but had one fewer successful booking;
+earlier failed paths contribute to that apparent call-count advantage. All
+successful comparable paths used the same call counts. Search-only raw scores
+match indexed x10 with lower cost on this small original-request subset, not
+evidence of general accuracy equivalence or a change to the frozen arm.
+
+Actual usage totals: 2,809,720 prompt, 2,615,168 cached reads, 194,552 uncached
+prompt, 5,790 completion. Cached-read charges $3.268960; uncached-input charges
+$0.486380 (including any cache population); output $0.057900. Additional cache
+write fee $0. Separate write-token count and attributable write-input cost
+remain null, not inferred. Actual cost below projection reflects both changed
+call counts/early failures and cache behavior, not caching alone. All LLM
+follow-up calls are included; voice/ElevenLabs cost is not measured here.
+
+All eight failures manually reviewed without fixes: every phase fails DEV-002.
+Five repetitions fail on the known unanswered-state loop after new-patient
+status was supplied; indexed x10 instead asks for spelling without applying
+the provider clarification; search-only x10 embeds Family Medicine in the
+provider name query and shared resolution proposes original Dr. Maria Martinez
+(ENT), as a tentative candidate. Driver exhaustion follows the two unexpected
+provider questions; no counterfactual pass is claimed. These are seven
+unnecessary-question/resolution failures. Baseline DEV-012/1 submits appt_064
+(MRI - Spine) for the knee request, then tells the patient no matching slots
+are available: one patient-facing false refusal. Its second repetition passes.
+No wrong booking or invalid booking attempt was observed; 13 correct bookings.
+Manual redundant-question count 12, with its logged/manual components disclosed.
+
+Indexed x50 is projection only: complete ID + name index 62,571 tokens;
+saved-history shape plus output reserve 68,173; four-conversation estimate
+$3.138741 cached-profile/$5.336442 cold. Baseline x10+ remains projection-only,
+with x21 projected full-request overflow and x22 catalog-only overflow.
+Search-only's flat x10/x50 cost/context is limited to these four original
+requests, disjoint distractors and unchanged closed-world fixtures. No new
+synthetic-service queries or held-out accuracy/lookup-time claim is made.
+
+Offline verification: 128 tests, 126 passed, two paid integrations skipped;
+all five expanded request prefixes/tool schemas stable across two histories
+each, with model-create mocked/asserted unused. Indexed copies match frozen
+ID + name; search-only copies/registry changes are separately labeled. No
+original proposed-agent/core, scenario, fixture, expected outcome, scorer or
+patient-driver change. Details: docs/scaling-v3-results.md; exact raw/analysis
+artifacts and per-phase JSONL paths are recorded there. docs/costs.md includes
+this step as a separate dated addendum; its future-spend wording now matches
+the already established AGENTS.md rule (estimate and explicit authorization
+for any paid run). No further paid run is authorized by this completed go.
+
+## 2026-11-10: submission draft and final-evaluation preparation only
+
+User closed scaling: no more variants or scaling repeats. Search-only remains
+exploratory, never a replacement for frozen proposed-v2. Call B cannot yet be
+repeated and remains pending manual voice verification; independent text
+preparation/approved execution need not wait for it. Call A remains
+user-reported verified. No new paid run or unchanged test-suite rerun occurred.
+
+Existing-evidence investigation is in docs/offline-investigation.md, with
+saved transcript/tool/metric extracts in docs/results/. Proposed DEV-007/1,
+call 9d271b7b-2881-44bc-9d6a-676548bfd27b, falsely said transfer was unavailable
+without an explicit request after the explicit staff-confirmation request.
+All three proposed handoff edge calls were rejected by handoff_requested's
+regex; baseline made zero such calls. Both omitted the undocumented clinical
+distinction, so a shared guard rejection is not the observed cause for both.
+Unlogged pre-filter text is not reconstructed. Proposed consequences include
+false patient statement and false refusal; baseline also has unnecessary
+clarification/missing explanation, without an observed guard rejection.
+
+The 23.909566s completed DEV-001/1 turn has 1.249545s plus 22.142099s in
+LLM-service processing windows and 0.517922s residual. Post-tool TTFB is
+20.901938s. The approximately 3.788ms inter-call gap is inferred from metric
+log writes, not measured pure-tool latency. The installed 0.5s stop strategy
+is a plausible contributor to the residual, not a measured allocation.
+DEV-001/2 runner wait expired at 45.000471s; API TTFB/processing were
+60.751802/60.932204s, overlapping that wait and observed during cleanup.
+No exact tool/cleanup split, provider/network split, or missing follow-up
+response is invented. Timeout is infrastructure failure; the slow completed
+turn is a performance limitation with a correct booking. Proposed corrections
+are separate and unimplemented, awaiting the user's decision.
+
+External paths were absent from repository records (only filenames and full
+hashes existed), so no directory was searched. User supplied Documents.
+Exact byte-only SHA-256 verification passed for:
+/Users/gabrielernoult/Documents/prosper_heldout_scenarios.json:
+d41abdad3defe405a48becc55a97d4d153c3c3b27a4eff5f5518db8a2dedd1b6;
+/Users/gabrielernoult/Documents/prosper_robustness_scenarios.json:
+c5de085b51996c51afaa9dbc3b40c392452d0eec28760b422ced2a6f74aa6c19.
+Neither was parsed, displayed, searched or copied. Recorded counts 16/8 were
+not independently read/validated. No hidden-set or robustness result is used
+for tuning. The new evals/final_preflight.py is stdlib metadata/hash/budget
+preparation only, with no API/paid execution mode. It exits 2 intentionally
+while execution compatibility remains blocked, even when file hashes match.
+
+Material evaluator issue: current loader/driver/completion/scorer dispatch
+are DEV-specific and comparison_matrix always runs DEV 12 x3. It cannot
+honestly be presented as an external final-set command. Do not relabel hidden
+IDs or silently skip explanation/correction/FAQ/ambiguity assertions. Proposed
+smallest correction is an isolated external-contract adapter, reusing the
+existing predicates and preserving original cases/expectations, with an
+explicit outer version and identical dispatch for both arms. Validate contract
+coverage and fixture clock before the first paid request within an approved
+execution, fail on unsupported fields, and do not manually inspect cases to
+tune. This evaluator/behavior decision is NOT implemented or authorized.
+An existing compatible evaluator is another option. The metadata command is
+ready; a valid final paid command is not, and no nonexistent CLI is claimed.
+
+Final batch planned: held-out 16 x2 per frozen arm (64 conversations), plus
+robustness 8 x1 proposed (8), total 72. Estimate from the 35 fully measured
+proposed x1 conversations (whole incomplete-usage conversation excluded), and
+all 36 baseline conversations: $0.995319 proposed held-out, $2.024924 baseline
+held-out, $0.248830 robustness; total expected $3.269073. All-cold same-mean
+usage plus 50% longer call shape gives planning allowance $8.646696, rounded
+to $9; proposed global hard cap $10. These are projections with unknown case
+mix/contract complexity, not measurements or a guarantee all cases complete.
+One shared strict sequential guard must account for in-flight exposure and
+reserve $0.32512 per unreported request; actual unknown costs stay null.
+No automatic or selective retries. Prior scaling go does not authorize this.
+
+Current and evaluated agent/core identities match: HEAD/tag a5b124f7...;
+proposed JSON 40db1b58...; baseline compiled 68d02acb...; evaluator
+dev-eval-v5-recovery behavior SHA 97117348...; original catalog blob
+8e509108.... Full hashes, source fingerprints, versions/model/APPEND/fixture
+mode, package versions and exact preparation commands are recorded in
+docs/final-evaluation-plan.md and docs/results/final-evaluation-plan.json.
+Builder identities were calculated without API sessions. Uncommitted evaluator
+and baseline files mean a git tag alone does not reproduce all measurement
+code; do not hide that provenance limitation. No frozen source was changed.
+
+Draft solution.md now covers architecture/editor workflow, official x1
+accuracy as inconclusive on a small DEV set, baseline wins, failure categories,
+unnecessary questions, known/unknown cost, scaling versus projections,
+exploratory search-only, cache dependence, total voice-cost limits, mocks,
+voice-driven regressions and pending final/Call B verification. Existing key
+reports/raw DEV logs are copied verbatim to docs/results/ with SHA provenance;
+no external scenario content is copied. Small hours-guard limitation remains
+explicit: slot-local clocks are compared without timezone normalization.
+Final results and any behavior correction wait for separate explicit approval.
+
+## 2026-11-10: isolated adapter v1, public validation, pinned schema stop
+
+User authorized evaluation infrastructure only. Implemented external-eval-v1
+in evals/external_contract.py, external_score.py, external_eval.py and
+external_budget.py, with external_config.json and external_pin.json. No frozen
+agent/baseline/runtime, booking/handoff guard, prompt, tool, original scenario,
+legacy patient driver or legacy v5 scorer was changed. Known DEV-007 remains.
+No paid calls/retries/matrix execution or additional scaling variant/run.
+
+IDs are labels only. Public tests rename them and shuffle order without changing
+driver replies/scoring. Explicit fact/expected/script fields select behavior;
+no category/name/ordering/ID mapping. The agent gets only the opening and
+appropriately requested scripted patient responses, catalog/fixtures and
+unchanged tools. Gold expected outcomes and whole private fact cards are never
+passed to its builder/context. Tests verify canaries and an instrumented fake
+text session. A separate patient-side oracle checks earliest-slot consent;
+it does not seed live agent state.
+
+This changes semantics, not just input mapping: generic field-driven
+disambiguation/correction, accurate identity/slot consent and explicit
+assertions replace DEV-specific dispatch. Existing applicable recovery regexes
+and bounds/general v5 predicates remain, but old v5 results are not relabeled.
+Natural-language reply_rules, explanation, forbidden actions, notes and prose
+contract grading/behavior requirements are required review, not interpreted or
+silently dropped. Unknown structured fields/assertions or malformed inputs
+fail visibly. Incomplete review/missing evidence cannot pass. Wrong booking,
+internal selection, infrastructure failure and evaluation-limited exhaustion
+are distinct; no-booking is not automatically a false refusal and an internal
+ID mismatch is not automatically a patient-facing false statement.
+
+Before private contents access: 27 targeted public/synthetic offline tests
+passed; all 12 DEV scenarios compiled; 72 saved x1 attempts replayed with zero
+model calls. Source fingerprints before/after checks match. All directly
+comparable automatic assertions agree. Old 59 passes become review-required;
+12 failures remain failed, one remains infrastructure failure. This is a
+counterfactual evidence replay, not a new final score or matrix execution.
+Missing evidence is not filled from gold; old ID-attached assertions not
+automatically reproducible from explicit fields are listed for review.
+Report: docs/results/external-offline-validation.json, including named tests,
+source hashes and per-run disagreements/required reviews. No unchanged suite
+was rerun merely to create a validation timestamp.
+
+Pinned only after those checks: adapter pin SHA-256
+dbd24883c42ad0c0188bb8b9cc5dab0aa30b133a62195465c94787cdebc7efaa;
+configuration 31fa3c9d33b729d26a55bedee938c303fe0c0dc283f543cae51facb8660e591f;
+offline evidence b44b41c039a6478ab3dc6ca691bb8e04379d9f6d58e98b75e0059b52c460d6e6.
+The pin covers 29 files, dependency versions and compiled agent identities.
+Proposed 40db1b58..., baseline 68d02acb..., legacy v5 behavior 97117348...
+remain unchanged. No private contents informed implementation or validation.
+
+Only then, ran the user-authorized automated schema preflight on the exact
+external paths, verifying pin/hash before internal JSON parsing. It stopped
+on heldout, field availability_fixture, code malformed_availability from the
+existing scheduling-engine fixture validator. No case contents or failing
+values were printed, inspected manually, copied, searched or used for tuning;
+no case identity or precise underlying validity condition is guessed. Robustness
+schema preflight was not reached. Both files' earlier byte-only SHA verification
+remains separate. This is a structural input compatibility failure, not an
+agent failure or score. Stopped: no fixture/expectation/adapter/arm patch after
+the result. Metadata-only result: docs/results/external-preflight.json. Source
+owner must resolve contract mismatch; final paid batch stays blocked.
+
+Budget proposals unchanged, pending approval: expected $3.27, allowance $9,
+global cap $10. New guard reserves full exposure before every API call, including
+tool-result calls: 128000 input x $2.50/M + 512 output x $10/M = $0.32512.
+This deliberately allows output beyond the 128K input allowance; combined
+128K context with 512 output would give tighter $0.32384. It is a conditional
+upper bound under recorded provider limits/prices, enforced max output, no
+extra fees/retries and fully guarded admissions, not a measured charge or an
+unconditional account-wide billing guarantee. Input limit relies on the provider
+window; alias/price/fee changes can invalidate that premise. Known usage releases
+the excess reserve; missing/cancelled requests retain it and actual cost null.
+In-flight work and cleanup follow-ups stay guarded/billable. Limit-violating
+usage stops admissions and marks the bound uncertified; undisclosed fees or
+changed prices cannot be detected from token counts. Docs explain remaining
+exposure and no guarantee all cases finish under cap.
+
+Exact executable validation/pin/preflight/run-paid commands and unsupported
+criteria: docs/external-adapter.md. The paid command requires an explicit
+approval reference and all-set preflight, but flags do not grant authorization;
+it is not run and currently cannot pass compatibility. Final-evaluation plan,
+machine manifest and solution.md updated. Final results still pending. Voice
+Call B remains pending manual verification independently of text preparation.
+
+## 2026-11-10: fixture contract audit, substantive mismatch, no conversion
+
+User authorized structural inspection and a boundary mapping only if unambiguous
+and lossless. Read only the two exact recorded external files; source hashes
+remain d41abdad3defe405a48becc55a97d4d153c3c3b27a4eff5f5518db8a2dedd1b6
+and c5de085b51996c51afaa9dbc3b40c392452d0eec28760b422ced2a6f74aa6c19.
+Printed no dialogue, expected outcome values or complete case. No paid call,
+new matrix/scaling run, original scenario edit or evaluated behavior change.
+
+Exact blocker is substantive capability consistency, not representation:
+scenarios[1].availability_fixture[0].location_id,
+scenarios[2].availability_fixture[0].location_id,
+scenarios[7].availability_fixture[0].location_id and
+scenarios[7].availability_fixture[1].location_id fail
+appointment_type.required_capability in location.capabilities in the existing
+SchedulingEngine._validate_slots. Referenced entities and provider relations
+exist, but those locations lack the required service capability. Supplied slot
+objects have exactly the expected six string fields; all 42 intervals across
+the sets are timezone-aware and ordered. No private IDs or values are exposed.
+Earlier generic documentation about duration validation was overbroad; duration
+is not the failing gate, and this initializer's checks are references,
+provider/type/site relations and capability.
+
+No lossless boundary conversion can satisfy that predicate while preserving
+the same provider, site, service and interval. Moving, replacing, dropping or
+bypassing records would change data or frozen behavior. None was done. Source
+owner must decide whether these are intended available slots or deliberately
+invalid candidate records; correcting/refreezing data or changing that contract
+requires separate authorization. No normalized evaluation input was produced;
+conversion version and normalized-input hashes are null/not applicable.
+
+Read-only audit fixture-compatibility-audit-v1 visits both complete datasets,
+each complete fixture array and each scenario body independently. Diagnostic
+code is docs/results/fixture_contract_audit.py, not an evaluator redesign or
+converter. It verifies the unchanged v1 pin, source hashes, record counts and
+label uniqueness, and records its own source SHA separately. Full metadata:
+docs/results/fixture-compatibility-audit.json. No source contents are copied.
+
+Held-out: 16 scenarios/31 records, 27 engine-valid records and four invalid
+records across three cases; 13/16 complete fixture arrays initialize. V1
+accepts 6/16 scenario bodies. First-error body counts: unsupported patient
+facts four, unsupported assertions three, unsupported factual assertions one,
+fixture errors two. Buckets overlap independent root causes: one capability
+failure is behind an earlier unsupported field. Robustness: eight scenarios/
+11 records, all fixture arrays initialize, but additional contract/scenario
+metadata and grading fields are not admitted by v1; 0/8 complete bodies
+accepted. Additional field names/types only are inventoried. This is structural
+compatibility, not assertion grading or an agent pass rate. No criterion was
+weakened or ignored and no partial final batch is proposed.
+
+All 24 cases carry required prose review. Planned repetitions imply 72
+transcript reviews, none completed; an illustrative 2–4 minutes each is
+2.4–4.8 hours, not measured work or part of LLM cost. The consolidated report
+separates automatic checks from script/explanation/factual/conduct/claim
+review. Missing review cannot pass; unsupported structured criteria block
+execution. New field handling/scenario-specific tuning is not implemented.
+
+Historical external-eval-v1 pin remains
+dbd24883c42ad0c0188bb8b9cc5dab0aa30b133a62195465c94787cdebc7efaa;
+no evaluator/config/engine/agent source change was necessary or authorized to
+repair substantive data. Current final plan, solution and evidence index are
+updated, preserving the old first-error preflight artifact. Full consolidated
+report and exact audit/preflight commands: docs/fixture-compatibility-report.md.
+Proposals unchanged: $3.27 expected, $9 allowance, $10 cap, all unapproved and
+uncertain under the changed patient driver. No new measured final cost exists.
+Voice Call B remains pending and does not block independent offline work.
+
+
+## 2026-11-10: source-authorized revised evaluation copies, external-eval-v1.1
+
+User/source review: four capability-invalid held-out fixtures were deliberate
+adversarial inputs; frozen engine rejects them at initialization. Chosen approach:
+separate proposed conversational copies outside Git remove exactly the four
+named records, retain all 16 held-out and eight robustness cases and all original
+expected fields/booking identities/outcome labels. Original hashes unchanged.
+Scope is explicitly reduced: no runtime ingestion test of invalid-capability
+availability; **not lossless normalization**. Four records plus 4/4 initializer
+rejections retained as separate offline evidence. RW-004 Saturday fixture unchanged.
+
+Exact 29-edit manifest and original/revised/boundary hashes are in
+`docs/results/revised-assets-manifest.json` and the private manifest it references.
+Authorized clarifications: decline all substitutes where declared; accept honest
+staff-directed next steps without callback/transfer invention; accurate location/
+referral answer without mandatory spoken provider name; requested human help,
+genuine technical errors and declared urgent escalation excepted from general
+false-refusal rule; explicit earliest request for first-slot failure setup.
+Source-edit script addresses authorized source labels; runtime never branches on IDs.
+
+Adapter `external-eval-v1.1` is intentionally separate from historical DEV v5 and
+external-v1. Changes include private requested/initial-site alias, brief option
+selection before full consent, earliest consent after observed slot loss, bounded
+patient replies before zero-booking early-stop, mandatory review for unimplemented
+semantic/preference/correction requirements, and automatic actual-fault/stage
+checks. No expectation is silently omitted or counted as a pass. Historical v1
+executable/pin/evidence archived unchanged in `docs/results/archive/`.
+
+Fault aliases mapped only at evaluation boundary (`times`→`attempts`, normalized
+mode, explicit write stage). Session-local write interception runs after all
+frozen engine guards, returns structured failure to the model and records triggers.
+Offline protocol proofs: RW-002 two error writes after consent, RW-003/RW-008 one
+slot-loss write each after consent, zero bookings, zero preparation/no-consent
+triggers. These are not conversational recovery results. Every actual run must
+exercise its declared fault or fail recovery assertions.
+
+Evidence: 38 targeted DEV/synthetic tests pass, 12 DEV compile, 72 saved traces
+replay (59 review-required, 12 failures, one infrastructure failure; no common
+automatic disagreements). Both complete revised datasets initialize and compile:
+16/16 with 27 slots; 8/8 with 11 slots. Every planned transcript needs semantic
+review (40 total, estimated 2–3.3h). Frozen rubric external-review-v1.1 SHA-256
+`054cbbd261440e29d0c7bdf6749bbff56ac38023f11cdf130d1efef31d08e686`; adapter pin
+`529c0714f452d158d91fcde98237d0728fa17775e89ab3e7a84e5f34721259e5`. Source, configuration,
+packages and rubric pinned before any paid execution. Arms/shared engine/tools/
+guards/prompts and legacy evaluator unchanged; DEV-007 defect remains documented.
+
+Paid proposal replaces the older 72-conversation plan: held-out 32 conversations
+(one/case/arm), expected proxy $1.51, allowance $4.50, cap $5; separate robustness
+eight proposed-only, expected $0.25, allowance $1.50, cap $2. Total expected $1.76,
+allowance $6, caps $7. Based only on complete existing x1 usage, excluding the
+entire incomplete-usage attempt; revised-driver/recovery/cache uncertainty remains.
+$0.32512 is conditional full-request exposure (128000 uncached input at $2.50/M
+plus 512 output at $10/M), not measured missing spend. Unknown/in-flight usage
+retains reserve. No paid authorization, calls, retries or matrix execution.
+Call B remains pending manual verification; neither final text score nor voice
+verification is claimed. Details: `docs/revised-evaluation-preflight.md`.
+
+
+## 2026-11-10: approved final batches interrupted by report serialization
+
+User explicitly approved revised held-out 16 cases x two arms once, $5 cap,
+and separate proposed-only robustness eight cases once, $2 cap, no retries.
+Before spend verified exact v1.1 pin `529c0714f452d158d91fcde98237d0728fa17775e89ab3e7a84e5f34721259e5`,
+rubric/source/config/package hashes, revised/original assets, catalog/git and
+both rebuilt arm revisions. Identity receipt: docs/results/final-execution-identity-check.json.
+
+Ran each batch command once, without changing any pinned file or repinning.
+Held-out run `external-v1.1-heldout-20261110-153532-72eb74` stopped after proposed HO-001;
+robustness `external-v1.1-robustness-20261110-153646-ed8563` stopped after RW-001. Both command exits 1.
+Cause: checkpoint `json.dumps(report, default=list)` cannot serialize the
+`datetime` in asdict(SessionState), such as last_horizon_end after find_slots.
+Exception precedes write_text, losing the in-memory result/transcript/tool traces
+and leaving the pre-attempt journal. This report-writing path was missed by the
+offline tests. It is infrastructure failure, not agent failure. No patch or
+reproduction was made. Remaining 38 planned conversations, including all baseline,
+never ran. No live fault-recovery cases were reached.
+
+Surviving usage: nine model rows per batch, all with prompt/cached/output counts;
+held-out 29,747/24,064/241 tokens, $0.0466975; robustness
+30,281/26,368/289, $0.0456325. Combined $0.0923300 known at pinned dated prices.
+This is not certified complete billing: terminal guarded request counts/reserve
+balances were lost. Observed missing-usage rows zero; unlogged request count,
+final charge and final reserve unknown. Raw journal zero-cost snapshots are stale
+and must not be reported as actual spend. No cap-stop error appears in either
+console. Documented $0.32512 reserve and $5/$2 cap assumptions remain unchanged.
+Per-model-call p50/p95: held-out 1.061/1.519s, robustness 1.141/1.909s.
+Patient-turn/tool/wait timings and automatic outcomes unavailable. Wrong booking,
+false refusal, incorrect internal selection and spoken falsehood counts are
+unassessable, not assumed zero. Zero final semantic passes assigned, no score.
+
+Surviving journals, metrics and console tracebacks copied verbatim with hashes to
+docs/results/final-evaluation/. Full report docs/final-evaluation-execution.md,
+40-row expected-outcome/review-check inventory, explicit missing transcript/tool
+manifest and private automatically exported review packet outside Git. No expected
+outcomes or rubric weakened, no missing trace reconstructed. Original/revised
+scenario contents, agents/runtime/tools/guards/scorer and Call B status unchanged.
+Potential evaluator-only datetime serialization/durable-trace repair documented
+but **not implemented**; any future execution needs a new decision/authorization.
+Voice Call B remains pending manual verification.
+
+
+## 2026-11-10: serialization/durable-evidence repair, no paid restart
+
+User authorized an infrastructure-only fix/offline check, timebox 45min; no changes
+to agents, scenarios, patient behavior or scoring. Exact failure: old external_eval
+checkpoint line 298 used json.dumps(default=list), which tried list() on aware
+SessionState.last_horizon_end from asdict after slot search. Chosen fix: explicit
+ISO datetime/date serialization preserving offset, sorted sets, reject naive
+clocks/unknown objects (no catch-all string conversion); serialize-before-write,
+fsynced temp file and atomic report replacement.
+
+Reuse existing metrics observer unchanged and the voice tool-wrapper pattern.
+Add independent append/fsync events for patient/actual assistant messages, context,
+tool start/args/result/errors, turn status, snapshots and conversation results.
+SDK write-ahead admission/reserve before HTTP, partial raw model/tool chunks,
+usage/status/provider ID, exception/cancellation/close and terminal budgets are
+durable independently of report export. Raw model drafts are separate from actual
+code-generated output. Each conversation also has its own atomic result file
+before aggregate export. Evidence failure is sticky/fail-closed; no further paid
+request when its evidence cannot be written. Existing $0.32512 arithmetic/unknown
+reserves and no-retry settings unchanged. Checkpoint usage requires SDK-admission/
+usage reconciliation, not merely populated metric rows.
+
+Version: external-infra-v1.2; evaluator semantics external-eval-v1.1 unchanged.
+Pin `032f9418860c650afbe3771ca947f7afc15b82cc5cda5ebdae1b5fbaf04375c8`, rubric unchanged
+`054cbbd261440e29d0c7bdf6749bbff56ac38023f11cdf130d1efef31d08e686`. Old v1.1 source/pin archived with provenance.
+All 33 historical pinned files except external_eval entrypoint unchanged, including
+patient/scorer/model/runtime/faults/agents/catalog. Original/revised/normalized
+scenario hashes unchanged. New plan addresses labels only, not behavioral dispatch.
+
+Evidence: 49 offline tests pass (11 new), zero model/API calls. Real shared-handler
+booking generates actual nested dated state; reproduces old failure, exercises
+successful checkpoints/final export and deliberate final-export OSError while
+messages/tools/metrics/SDK ledger/budget/per-conversation files survive. Cancellation
+retains partial delta/full reserve; missing cache stays null despite legacy row;
+unknown object/naive timezone fail visibly; insufficient cap or evidence failure
+prevents HTTP. Saved 72-trace replay unchanged; no new accuracy result. Details:
+docs/results/external-infra-v1.2-validation.json and docs/external-infrastructure-v1.2.md.
+
+Restart plan hash `bf9674be6c7c71db9b6465332da22e123592578128381f081e98854ad6f1a8f7`: first two replacements for the
+recorded infrastructure failures, with original run/call links and outcomes unknown,
+then every 38 not-run conversation, once. No result-dependent reruns. Same original
+coverage 32 held-out + eight robustness. A single future command routes independent
+$5/$2 proposed fresh caps so ledgers persist while dataset order alternates.
+Prepared/validated, **not authorized or executed**. No new spend during this fix.
+
+Historical known subtotal $0.0923300 retained. Complete request count/billing cannot
+be inferred from the 18 populated rows. Under old guard/pricing/provider assumptions,
+old total lies within known subtotal–$7, unobserved-charge bound $6.9076700; these
+are bounds, not pending-charge estimates. No certified unspent balance. Proposed
+restart expected incremental $1.76 (known old subtotal + estimate ≈$1.85), allowances
+$4.50/$1.50 and fresh incremental caps $5/$2 await explicit approval. Fresh caps
+would add exposure rather than silently reuse unverifiable old balances; lifetime
+caps require historical billing reconciliation. Voice Call B remains pending.
+
+
+## 2026-11-10: approved v1.2 restart completed, no behavior/scoring changes
+
+User explicitly authorized fresh, additional $5 held-out/$2 robustness caps;
+old attempts/billing uncertainty remain separate. Verified exact pin
+`032f9418860c650afbe3771ca947f7afc15b82cc5cda5ebdae1b5fbaf04375c8`, plan/rubric/dataset/package/agent/catalog/git identities,
+and no existing evaluator before starting. Ran `external-infra-v1.2-restart-20261110-175004-ec9627` once, exit 0,
+40 unique jobs: linked proposed HO-001 and RW-001 replacements first, then all 38
+previously unrun. Continued ordinary automatic failures; no retry, new experiment,
+source edit, scenario/expectation/patient/scorer change or cap stop.
+
+Fresh model cost $1.4072150: held-out proposed $0.3566525, baseline $0.6712800
+(total $1.0279325); robustness proposed $0.3792825. Ledger reconciliation:
+211 reservations=211 complete SDK usage=211 closed requests=211 metrics, no
+unresolved IDs, exceptions, missing usage or retained exposure. Old known
+$0.0923300 remains with lost request coverage; combined known $1.4995450 and old
+conditional extra-unobserved bound $6.9076700, never guessed as zero. Cache counts:
+962,610 prompt, 848,768 cached, 113,842 uncached, 6,165 output; dated rates unchanged.
+
+Raw status 24 review-required/16 failed. Held-out automatic sets all true 9/16
+proposed vs 8/16 baseline; failures 7/8 respectively, all 15 marked driver-limited/
+not_assessable. Robustness seven all true/one booking-count failure. These are
+not semantic pass rates. Baseline used fewer held-out model calls 62 vs76;
+proposed lower cost. Completed patient turn p50/p95: P2.470/3.460s,
+B2.621/4.160s, robustness2.384/3.187s; zero incomplete turns or infra/runner errors.
+All mandatory semantic review remains pending, same rubric both arms.
+
+Live write faults RW-002/003/008 all triggered once after consent and exposed
+structured results. No recovery semantic pass assigned yet. RW-005 automatically
+flags wrong_booking (one vs expected zero), but actual patient messages request
+booking and explicitly consent; no human request was delivered. Record this
+as a driver-fidelity discrepancy needing review, not a confirmed agent wrong
+booking or counterfactual pass. Preserve raw failure. Six internal-selection
+flags (three/arm) are not automatically spoken falsehoods; false-refusal/false-
+statement counts pending review. No tuning/fix/rerun followed these observations.
+
+Full measured report docs/final-evaluation-restart-v1.2.md; 40-row review table,
+automatic inventory, usage/latency summary/provenance and failure inventory in
+docs/results/final-restart-v1.2/. Complete actual patient/assistant and tool
+args/results exports under backend/logs/evals/external-infra-v1.2-restart-20261110-175004-ec9627.exports/;
+raw event journal, per-conversation files and metrics preserved. Logging/export
+worked; no missing traces reconstructed. Handoff/status/solution updated.
+Voice Call B remains pending manual verification. All approved jobs consumed;
+no unused allowance authorizes more calls. Next is semantic review/submission.
+
+## 2026-11-12: semantic review sheet prepared, criteria read post-freeze, no changes
+
+With explicit user authorization, the private criteria packet
+`../Evals/final-evaluation-review-v1.1/review-packet.md` was read on 2026-11-12,
+AFTER the frozen final restart completed, solely to prepare the manual semantic
+review. Nothing else outside the repository was opened. Because both arms, the
+scenarios, the patient driver and the scorer were already frozen and all 40
+approved conversations had run, this read cannot have influenced any evaluated
+behavior; the freeze rules continue to forbid any agent, scenario, driver or
+scoring change arising from this review. No paid call was made and no
+evaluation was started or resumed.
+
+Output: one proposed-label row per conversation (40 rows), each with the
+expected outcome, the automatic result, the forbidden actions checked, the
+decisive transcript/tool evidence and a one-line reason. All automatic scores
+are untouched; the review is a separate column and every label awaits the
+user's validation. Labels: pass / confirmed agent failure / evaluator-or-driver
+limitation / not assessable. Full sheet with criteria text, outside Git:
+`../Evals/final-evaluation-review-v1.1/semantic-review-full.md`. Index-only
+repo copy without criteria text: docs/semantic-review.md.
+
+Proposed counts, pending validation: 7 pass (P 2 / B 4 / R 1), 19 confirmed
+agent failures (P 6 / B 7 / R 6), 14 evaluator-or-driver limitations
+(P 8 / B 5 / R 1), 0 not assessable. The 15 auto driver-limited held-out runs
+split 10 driver / 5 agent: a stall counts as an agent failure when the blocking
+question was itself wrong or unanswerable. Recurring defects: silent deviation
+(a changed time/day, a lost slot or a failed write is never told to the
+patient: RW-001/002/003/004/008); the dialogue guard asking a question instead
+of explaining a block already present in the same tool result (HO-005 P,
+HO-004/005 B, HO-012 both, HO-010 both via the hard-constraint widening
+question); a guard question swallowing the patient's own question (RW-006
+AI-disclosure dodge); stated facts re-asked or recorded wrongly (HO-009 B loop;
+HO-016 P recorded a promised referral as on file, bypassing the gate in state).
+RW-005 is proposed as a driver-fidelity limitation: the scripted human-handoff
+demand was never delivered and the recorded patient explicitly consented; the
+raw wrong-booking flag remains recorded and unpromoted. All injected faults
+verifiably fired; the weakness is disclosure, not recovery mechanics. These are
+proposed judgments only; final semantic pass rates remain pending user
+validation.
+
+## 2026-11-12: voice call B stuck-choice fix after final evaluation (no paid calls)
+
+Observed in logs/voice-tools.jsonl and logs/turns.jsonl, call 35e9b8b2 (today
+10:08-10:10): find_slots returned two slots at 10:09:40 with next_action
+ask_patient_to_choose; the spoken offer was the stored options line without
+service or provider context. After the patient's barge-in ("Sorry. W-"),
+turns 19-23 made five model calls with zero tool calls, and each reply was the
+guard's canned line "Your details are confirmed. I'll check the available
+appointments." Root causes, all in code, none in the model: (1) the options
+text in scheduling_agent.find_slots listed only dates and sites; (2) the
+pending slot choice lived only in the one-shot dialogue `pending` field, which
+is cleared on every patient turn, and next_step() had no slot-choice stage, so
+any tool-free turn after the offer fell to stage "offer", where BookingSpeech
+replaced the model's text with that canned line — falsely implying an identity
+step had just finished and claiming a check that never ran; (3)
+avoid_repeated_question returned early for text without "?", so the repeated
+statement was never caught. The same canned line explains the misleading
+replies observed in RW-002/RW-003 of the final run.
+
+Fixes, explicitly requested by the user and applied to the shared dialogue
+code used by both arms: slot offers are rendered by a new
+SchedulingDialogue.offer_options with one context sentence (service, provider,
+site; per-slot only when they differ) ending "Which works for you?"; the
+offered choice is durable dialogue state surfaced by a new next_step stage
+"slot_choice", gated on engine offered_slot_ids so constraint changes retire
+it; during a pending choice a tool-free model reply is spoken first and the
+contextual choice is repeated after it; the canned line is removed — a
+tool-free "offer"-stage turn now asks "Would you like me to search for
+available appointments now?" instead of claiming a check; and the repeat
+limiter records statements as well as questions, with a slot_choice
+escalation that keeps the times. booking_gate admits the new stage so a
+choice remains directly bookable.
+
+Regression test tests/test_choice_interruption_recovery.py replays the exact
+sequence offline: contextual offer, barge-in "Sorry. W-", "What are you
+referring to?", "Are these appointments?", then booking the kept choice; it
+asserts no "Your details are confirmed", no check-claims without a tool call,
+stable offered slots and identity, and loop-breaking on repeated statements
+and blank turns. One wording assertion in test_scheduling_dialogue was
+updated for the contextual offer. Full offline suite: 181 tests, 179 passed,
+2 paid skipped. No scenario, scorer, patient-driver or evaluated-result
+change; the completed final-run results remain tied to their pinned
+revisions. These edits make the current working tree diverge from the
+external-infra-v1.2 pin, as any post-freeze fix must: a future evaluation
+would need a new version and pin, never a repin. Voice call B still needs the
+user's live retest; no paid or voice call was made here.
+
+## 2026-11-12: single slot presentation per turn (voice retest follow-up)
+
+Observed in the user's voice retest after the stuck-choice fix: on "Sorry,
+what did you say?" the agent spoke the model's own single-slot re-offer
+("I have Monday, November 16th at 8:00 AM available... Would you like to book
+this?") and then the code-appended two-slot choice - two contradicting offers
+in one turn. Cause: the slot_choice append branch added the canonical choice
+to any non-empty model reply, including one that was itself a slot offer.
+
+Fixes in scheduling_dialogue.py, shared by both arms: an explicit repeat
+request ("what did you say", "say that again", "can/could you repeat",
+"repeat that", "come again", "pardon", bare "sorry") is detected per patient
+turn and gets the pending choice once, verbatim, nothing else; it also
+bypasses the repeated-question limiter, since a requested repeat is never a
+loop. During a pending choice, a model reply that already names an offered
+slot (month+day plus its time, matched against engine offered_slot_ids) is
+spoken alone - never two slot presentations in one turn; a reply without
+slots is spoken first with the choice appended once, as before. One persona
+sentence was added to agents/catalog_scheduler.json telling the model to
+answer side questions briefly during a pending choice and never list or
+re-offer slots itself, because the system repeats the choice; this changes
+the saved agent revision, which the session logs record per call.
+
+Regression cases added to tests/test_choice_interruption_recovery.py: a
+repeat request with a model self-offer yields exactly the canonical choice;
+a second repeat request still yields it rather than a bail-out; a side answer
+mentioning an offered slot is not doubled; a side answer without slots gets
+exactly one appended choice. Full offline suite: 183 tests, 181 passed, 2
+paid skipped. No paid calls, no scenario/scorer/driver change, nothing
+committed; the working tree continues to diverge from the external-infra-v1.2
+pin as documented in the previous entry.
+
+## 2026-11-12: repeat-request detection narrowed to the whole utterance
+
+User flagged a false-positive risk before retesting: repeat_requested matched
+"sorry"/"pardon" etc. anywhere via re.search over most phrases (only the bare
+"sorry" case was already a fullmatch), the same class of bug as matching
+"ENT" inside "patient". "Sorry, the first one" or "Sorry, can we do Richmond
+instead?" would not have been misdetected under the exact prior patterns
+tested, but the rule itself search-matched a phrase anywhere in the utterance
+rather than requiring the utterance to BE a repeat request, so it was not a
+safe general rule.
+
+Fix: REPEAT_REQUEST_RE in scheduling_dialogue.py now requires a fullmatch -
+an optional leading "sorry" plus exactly one recognized repeat phrase (what
+did you say / can or could you repeat or say that again / repeat, optionally
+with "please" / come again / pardon, optionally "me" / bare sorry), with only
+trailing punctuation after. patient() now sets repeat_requested from this
+fullmatch instead of the previous search-based check.
+
+Verified directly against the regex and end to end with the real engine:
+"Sorry, what did you say?", "Can you repeat that?", "Sorry?", "Pardon?",
+"Pardon me?", "Come again?", "Repeat please", "Can you repeat?", "Could you
+say that again?", "Say that again please." all match (true positives).
+"Sorry, the first one" selects the first offered slot and proceeds to
+needs_confirmation; "Sorry, I meant the second one" selects the second;
+"Sorry, can we do Richmond instead?" changes state.location_id to loc_007
+and clears the stale Midtown offered_slot_ids (a real change, not a silent
+repeat) - none of these three set repeat_requested. "I beg your pardon, I
+will take the first one" and "No, sorry, book the second slot" also do not
+match.
+
+Four regression cases added to tests/test_choice_interruption_recovery.py:
+first-one and second-one selection proceed to a correct readback and are
+not treated as repeats; the Richmond case is confirmed as a real location
+change; and a direct true/false table exercises REPEAT_REQUEST_RE against
+both the known repeat phrasings and the three reported false-positive risks
+plus two extra interjection cases. Full offline suite: 187 tests, 185
+passed, 2 paid skipped. No paid calls, no scenario/scorer/driver change,
+nothing committed.
+
+## 2026-11-12: semantic review finalized with adjudicated labels
+
+User adjudicated the proposed semantic-review labels. Method, as stated by
+the author: labels were proposed by two LLM reviewers, with disagreements
+adjudicated by the author; the two reviewers agreed on 37 of the 40 cases
+before adjudication. The author personally re-checked the 7 passing cases
+and the proposed HO-016 (proposed) case against the full transcripts. Each
+conversation ran once; these remain single-trial observations.
+
+Three adjudication decisions, applied to docs/semantic-review.md (index-only)
+and left unapplied to the private full sheet, which the user did not ask to
+update:
+
+- HO-003, both arms: reclassified driver limitation -> confirmed agent
+  failure. The patient had pre-accepted the Mission District alternative in
+  the opening message, so no further scripted reply was needed; the agent
+  explained the capability gate correctly but then closed with a phone
+  referral instead of proceeding with the already-accepted site.
+- HO-004 (proposed): kept as driver limitation, recorded as a judgment call
+  against the considered alternative "not assessable."
+- HO-009 (proposed): kept as pass, with the repeated "confirm new patient"
+  question kept as a caveat note, not a disqualifying defect.
+
+Recomputed and verified programmatically against the updated table rows
+(not by hand): held-out proposed pass/agent/driver 2/7/7, baseline 4/8/4,
+robustness 1/6/1 (not assessable: 0 throughout). Total 7 pass, 21 confirmed
+agent failures, 12 evaluator-or-driver limitations, 0 not assessable, across
+40. The "Notes" section's breakdown of the 15 harness-auto-flagged
+driver-limited runs was also corrected: it previously cited the wrong case
+IDs for the agent-labeled subset (naming HO-005/HO-004, which were never in
+that auto-flagged pool); it now correctly lists HO-002/003/007/008/010/011/013
+across both arms plus HO-009 (baseline only), split 8 driver / 7 agent after
+the HO-003 reclassification.
+
+No automatic score, scenario, driver or scorer changed. No paid calls were
+made; nothing was committed.
+
+## 2026-11-12: v2.1 working-tree smoke and agent revision
+
+User approved one usual four-case smoke on the current working tree (called
+v2.1: the post-freeze dialogue fixes logged on 2026-11-12 above), maximum
+$0.50, no retries. Run smoke-20261112-164821-2fe6d5 passed 4/4 with 42 model
+calls and fully reported usage, total $0.2417925 (spend-guard accounting equals
+the JSONL usage; no request was refused, no retry). Per case: DEV-012 PASS,
+9 calls, $0.0477275; DEV-002 PASS, 13 calls, $0.0752075; DEV-008 PASS, 9 calls,
+$0.0483475; DEV-009 PASS, 11 calls, $0.0705100. Previous run of the same four
+cases on v2 (smoke-20261109-131238-90cbfb): 4/4, 40 calls, $0.22736500. Of the
+four, only DEV-009 (three matching fixture slots) exercises the rewritten
+multi-slot offer; the scripted text driver never interrupts, so the
+interruption/repeat-request fixes are not exercised by this smoke.
+
+Agent revisions (SHA-256 of backend/agents/catalog_scheduler.json bytes, the
+same value the session logs record as agent_revision):
+- v2, pinned for all final measurements (tag proposed-v2, commit a5b124f):
+  40db1b587b5790ab2c92bc642edbc55e67f0d44ebd8d4f1267de29e1e86ebdc5
+- v2.1, current working tree: 478567bcb1ad1f80851489bb7b45d8d45eab90ff96cd10340d6880eff9e159ae
+The v2.1 JSON differs only by the persona sentence added on 2026-11-12; the
+shared dialogue code (scheduling_dialogue.py, scheduling_agent.py) also
+changed and is not covered by this JSON hash.
+
+Scope statement: the final held-out, robustness, x1 DEV comparison and scaling
+results were all measured on v2 under their pinned revisions. The v2.1 dialogue
+fixes (durable slot choice, contextual multi-slot offer, removal of the
+"I'll check" canned line, repeat-request handling, statement-aware loop
+breaker, single slot presentation per turn) were verified only by offline
+tests, this four-case smoke and the user's manual voice calls. They were not
+verified by a full matrix, and no final result may be attributed to v2.1.
+No paid call beyond this smoke; nothing committed.
+
+## 2026-11-12: active time update
+
+Total active time: 9h51 as of 2026-11-12 (author's timer), to be updated before
+submission; agent compute time not counted. The challenge brief suggests 8 to
+12 hours (author's reading of the brief). This supersedes the "4h44 so far"
+figure in the Time spent section above, which covered work through November 8.

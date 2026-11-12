@@ -1,0 +1,385 @@
+{
+  "audit_version": "fixture-compatibility-audit-v1",
+  "diagnostic_script_sha256": "440fd7c406fda86ab52e5deb213ac8d3b2abafe25c373bcdacfd6b1a17c93b32",
+  "adapter_version": "external-eval-v1",
+  "adapter_pin_sha256": "dbd24883c42ad0c0188bb8b9cc5dab0aa30b133a62195465c94787cdebc7efaa",
+  "api_calls": 0,
+  "source_files_changed": false,
+  "source_contents_printed": false,
+  "conversion": {
+    "implemented": false,
+    "conversion_version": null,
+    "normalized_input_sha256": null,
+    "reason": "substantive capability inconsistency; no lossless representational mapping"
+  },
+  "datasets": {
+    "heldout": {
+      "source_path": "/Users/gabrielernoult/Documents/prosper_heldout_scenarios.json",
+      "recorded_sha256": "d41abdad3defe405a48becc55a97d4d153c3c3b27a4eff5f5518db8a2dedd1b6",
+      "actual_sha256": "d41abdad3defe405a48becc55a97d4d153c3c3b27a4eff5f5518db8a2dedd1b6",
+      "hash_matches": true,
+      "scenario_count": 16,
+      "fixture_record_count": 31,
+      "fixture_structures": [
+        {
+          "fields_and_types": {
+            "appointment_type_id": "str",
+            "end": "str",
+            "location_id": "str",
+            "provider_id": "str",
+            "slot_id": "str",
+            "start": "str"
+          },
+          "record_count": 31
+        }
+      ],
+      "engine_valid_fixture_records": 27,
+      "engine_invalid_fixture_records": 4,
+      "complete_engine_fixture_cases_accepted": 13,
+      "complete_engine_fixture_cases_rejected": 3,
+      "scenario_schema_compatible": 6,
+      "scenario_schema_incompatible": 10,
+      "schema_error_counts": [
+        {
+          "code": "malformed_availability",
+          "field_path": "availability_fixture",
+          "case_count": 2
+        },
+        {
+          "code": "unsupported_assertion",
+          "field_path": "expected",
+          "case_count": 3
+        },
+        {
+          "code": "unsupported_factual_assertion",
+          "field_path": "expected.required_facts",
+          "case_count": 1
+        },
+        {
+          "code": "unsupported_patient_fact",
+          "field_path": "patient_facts",
+          "case_count": 4
+        }
+      ],
+      "scenario_body_compatible": 6,
+      "scenario_body_incompatible": 10,
+      "scenario_body_first_error_counts": [
+        {
+          "code": "malformed_availability",
+          "field_path": "availability_fixture",
+          "case_count": 2
+        },
+        {
+          "code": "unsupported_assertion",
+          "field_path": "expected",
+          "case_count": 3
+        },
+        {
+          "code": "unsupported_factual_assertion",
+          "field_path": "expected.required_facts",
+          "case_count": 1
+        },
+        {
+          "code": "unsupported_patient_fact",
+          "field_path": "patient_facts",
+          "case_count": 4
+        }
+      ],
+      "timezone_aware_ordered_intervals": 31,
+      "interval_count": 31,
+      "diagnostics": [
+        {
+          "field_path": "scenarios[1].availability_fixture[0].location_id",
+          "validator": "SchedulingEngine._validate_slots",
+          "condition": "appointment_type.required_capability in location.capabilities",
+          "condition_result": false,
+          "classification": "substantive data validity",
+          "expected_structure": "six string fields; referenced location must have the appointment type's required capability",
+          "supplied_structure": "six string fields; existing location lacks the required capability"
+        },
+        {
+          "field_path": "scenarios[2].availability_fixture[0].location_id",
+          "validator": "SchedulingEngine._validate_slots",
+          "condition": "appointment_type.required_capability in location.capabilities",
+          "condition_result": false,
+          "classification": "substantive data validity",
+          "expected_structure": "six string fields; referenced location must have the appointment type's required capability",
+          "supplied_structure": "six string fields; existing location lacks the required capability"
+        },
+        {
+          "field_path": "scenarios[7].availability_fixture[0].location_id",
+          "validator": "SchedulingEngine._validate_slots",
+          "condition": "appointment_type.required_capability in location.capabilities",
+          "condition_result": false,
+          "classification": "substantive data validity",
+          "expected_structure": "six string fields; referenced location must have the appointment type's required capability",
+          "supplied_structure": "six string fields; existing location lacks the required capability"
+        },
+        {
+          "field_path": "scenarios[7].availability_fixture[1].location_id",
+          "validator": "SchedulingEngine._validate_slots",
+          "condition": "appointment_type.required_capability in location.capabilities",
+          "condition_result": false,
+          "classification": "substantive data validity",
+          "expected_structure": "six string fields; referenced location must have the appointment type's required capability",
+          "supplied_structure": "six string fields; existing location lacks the required capability"
+        }
+      ],
+      "unsupported_field_structures": [
+        {
+          "field_path": "scenarios[].expected.explained_gate_before_alternative",
+          "supplied_type": "bool",
+          "occurrences": 1
+        },
+        {
+          "field_path": "scenarios[].expected.provider_identity_resolved_before_decision",
+          "supplied_type": "bool",
+          "occurrences": 2
+        },
+        {
+          "field_path": "scenarios[].expected.required_facts.bookable_location_id",
+          "supplied_type": "str",
+          "occurrences": 1
+        },
+        {
+          "field_path": "scenarios[].expected.required_facts.bookable_provider_id",
+          "supplied_type": "str",
+          "occurrences": 1
+        },
+        {
+          "field_path": "scenarios[].expected.required_facts.referral_required",
+          "supplied_type": "bool",
+          "occurrences": 1
+        },
+        {
+          "field_path": "scenarios[].expected.unknown_service_acknowledged",
+          "supplied_type": "bool",
+          "occurrences": 1
+        },
+        {
+          "field_path": "scenarios[].patient_facts.candidate_type_ids",
+          "supplied_type": "list",
+          "occurrences": 1
+        },
+        {
+          "field_path": "scenarios[].patient_facts.final_appointment_type_id",
+          "supplied_type": "str",
+          "occurrences": 2
+        },
+        {
+          "field_path": "scenarios[].patient_facts.initial_appointment_type_id",
+          "supplied_type": "str",
+          "occurrences": 1
+        },
+        {
+          "field_path": "scenarios[].patient_facts.preference_strength",
+          "supplied_type": "str",
+          "occurrences": 1
+        },
+        {
+          "field_path": "scenarios[].patient_facts.requested_location_id",
+          "supplied_type": "str",
+          "occurrences": 1
+        }
+      ],
+      "manual_review": {
+        "cases_with_required_prose_review": 16,
+        "criterion_counts": {
+          "prose forbidden criterion": 47,
+          "prose patient rules": 16,
+          "notes": 16,
+          "dataset contract prose": 96,
+          "prose explanation": 5
+        },
+        "assertions_executed": false,
+        "review_completed": false
+      },
+      "validation_scope": "Every complete scenario body and fixture array checked independently; error buckets are first failure per scope, not assertion outcomes."
+    },
+    "robustness": {
+      "source_path": "/Users/gabrielernoult/Documents/prosper_robustness_scenarios.json",
+      "recorded_sha256": "c5de085b51996c51afaa9dbc3b40c392452d0eec28760b422ced2a6f74aa6c19",
+      "actual_sha256": "c5de085b51996c51afaa9dbc3b40c392452d0eec28760b422ced2a6f74aa6c19",
+      "hash_matches": true,
+      "scenario_count": 8,
+      "fixture_record_count": 11,
+      "fixture_structures": [
+        {
+          "fields_and_types": {
+            "appointment_type_id": "str",
+            "end": "str",
+            "location_id": "str",
+            "provider_id": "str",
+            "slot_id": "str",
+            "start": "str"
+          },
+          "record_count": 11
+        }
+      ],
+      "engine_valid_fixture_records": 11,
+      "engine_invalid_fixture_records": 0,
+      "complete_engine_fixture_cases_accepted": 8,
+      "complete_engine_fixture_cases_rejected": 0,
+      "scenario_schema_compatible": 0,
+      "scenario_schema_incompatible": 8,
+      "schema_error_counts": [
+        {
+          "code": "unsupported_contract_field",
+          "field_path": "contract",
+          "case_count": 8
+        }
+      ],
+      "scenario_body_compatible": 0,
+      "scenario_body_incompatible": 8,
+      "scenario_body_first_error_counts": [
+        {
+          "code": "unsupported_scenario_field",
+          "field_path": "scenario",
+          "case_count": 8
+        }
+      ],
+      "timezone_aware_ordered_intervals": 11,
+      "interval_count": 11,
+      "diagnostics": [],
+      "unsupported_field_structures": [
+        {
+          "field_path": "contract.dataset_role_note",
+          "supplied_type": "str",
+          "occurrences": 1
+        },
+        {
+          "field_path": "contract.evidence_note",
+          "supplied_type": "str",
+          "occurrences": 1
+        },
+        {
+          "field_path": "contract.fault_injection",
+          "supplied_type": "str",
+          "occurrences": 1
+        },
+        {
+          "field_path": "contract.grading_note",
+          "supplied_type": "str",
+          "occurrences": 1
+        },
+        {
+          "field_path": "contract.handoff_honesty",
+          "supplied_type": "str",
+          "occurrences": 1
+        },
+        {
+          "field_path": "scenarios[].expected.closed_day_stated",
+          "supplied_type": "bool",
+          "occurrences": 1
+        },
+        {
+          "field_path": "scenarios[].expected.disclosed_ai_on_first_ask",
+          "supplied_type": "bool",
+          "occurrences": 1
+        },
+        {
+          "field_path": "scenarios[].expected.emergency_services_advised",
+          "supplied_type": "bool",
+          "occurrences": 1
+        },
+        {
+          "field_path": "scenarios[].expected.failure_disclosed",
+          "supplied_type": "bool",
+          "occurrences": 1
+        },
+        {
+          "field_path": "scenarios[].expected.fallback_offered",
+          "supplied_type": "str",
+          "occurrences": 1
+        },
+        {
+          "field_path": "scenarios[].expected.first_confirmation_invalidated",
+          "supplied_type": "bool",
+          "occurrences": 1
+        },
+        {
+          "field_path": "scenarios[].expected.handoff_requested_by_patient",
+          "supplied_type": "bool",
+          "occurrences": 1
+        },
+        {
+          "field_path": "scenarios[].expected.must_not_claim_booked",
+          "supplied_type": "bool",
+          "occurrences": 2
+        },
+        {
+          "field_path": "scenarios[].expected.new_search_performed",
+          "supplied_type": "bool",
+          "occurrences": 1
+        },
+        {
+          "field_path": "scenarios[].expected.next_step_given",
+          "supplied_type": "str",
+          "occurrences": 2
+        },
+        {
+          "field_path": "scenarios[].expected.no_attempt_to_retain",
+          "supplied_type": "bool",
+          "occurrences": 1
+        },
+        {
+          "field_path": "scenarios[].expected.no_availability_stated",
+          "supplied_type": "bool",
+          "occurrences": 1
+        },
+        {
+          "field_path": "scenarios[].expected.no_unrecorded_callback_promise",
+          "supplied_type": "bool",
+          "occurrences": 3
+        },
+        {
+          "field_path": "scenarios[].expected.requested_time_unavailable_stated",
+          "supplied_type": "bool",
+          "occurrences": 1
+        },
+        {
+          "field_path": "scenarios[].expected.stale_slot_disclosed",
+          "supplied_type": "bool",
+          "occurrences": 2
+        },
+        {
+          "field_path": "scenarios[].expected.transfer_not_falsely_claimed",
+          "supplied_type": "bool",
+          "occurrences": 1
+        },
+        {
+          "field_path": "scenarios[].expected.urgent_escalation_message",
+          "supplied_type": "bool",
+          "occurrences": 1
+        },
+        {
+          "field_path": "scenarios[].patient_facts.requested_day",
+          "supplied_type": "str",
+          "occurrences": 1
+        },
+        {
+          "field_path": "scenarios[].patient_facts.requested_time",
+          "supplied_type": "str",
+          "occurrences": 1
+        },
+        {
+          "field_path": "scenarios[].source_basis",
+          "supplied_type": "str",
+          "occurrences": 8
+        }
+      ],
+      "manual_review": {
+        "cases_with_required_prose_review": 8,
+        "criterion_counts": {
+          "prose forbidden criterion": 29,
+          "prose patient rules": 8,
+          "notes": 8,
+          "dataset contract prose": 48
+        },
+        "assertions_executed": false,
+        "review_completed": false
+      },
+      "validation_scope": "Every complete scenario body and fixture array checked independently; error buckets are first failure per scope, not assertion outcomes."
+    }
+  }
+}

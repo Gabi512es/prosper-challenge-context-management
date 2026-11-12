@@ -1,0 +1,59 @@
+{
+  "version": "external-eval-v1",
+  "files": {
+    "agent_builder/__init__.py": "87056dac5b30139625452e4512a4f4105cfce92086b70d1ed1dd0239f07cfb9e",
+    "agent_builder/builder.py": "75cd2d4e09850b5d501d2faba94dcfd355b4e497978f3dec5d2a83ddbfce97b0",
+    "agent_builder/schema.py": "5dee6ea59eb39ff3ce66be56bc8776659db18fa2c8128d240c406c32d1405534",
+    "agent_runtime.py": "35d5faffb9c5a92d535e59f4ba8457927bde8633a8834d2d2db17455b75d0dc1",
+    "agents/catalog_scheduler.json": "40db1b587b5790ab2c92bc642edbc55e67f0d44ebd8d4f1267de29e1e86ebdc5",
+    "baseline_agent.py": "92c1ac39774b3588ebc05d010a29f035af070b237ce125c8e122657f686d7c7b",
+    "data/catalog.json": "5837bc09e8337f469dccd649f408b9f69f8f11a5741856deb3b02e604867902a",
+    "evals/dev_matrix.py": "88c87696202d4d0b9d9784e68f87a29804339ae0a89fc8cc4b3bd8075145e857",
+    "evals/external_budget.py": "8506fb34b47cfbc1d156b37607923af556f6383747daf297fed8d198e6e68968",
+    "evals/external_config.json": "31fa3c9d33b729d26a55bedee938c303fe0c0dc283f543cae51facb8660e591f",
+    "evals/external_contract.py": "a1f40fdb5228a8fd5b727e881d63c4dc255117a30ceda3ae8115bcd0198ca418",
+    "evals/external_eval.py": "c9b8f978759e72ec42d2079cca2ec002798ec85f13c45b9aacf5baf537ab246e",
+    "evals/external_score.py": "9100d7e4ff02861cdd5d3f27d5d69a61b32356fc846e433a1dc0e57c14f7e4cd",
+    "evals/final_preflight.py": "bc9c44c505ee82d18a8fe05d8dab20c5d08adaa3fc919a3a9756200c6598ee1d",
+    "evals/loader.py": "7cc86ceb2c92a0e0cb826db890156672147f1a433fbcffbd535827253abec8c2",
+    "evals/scorer.py": "b4a66e4d491b486168eb09c52b84fa9ad3287a9e19d9600305eae11331d5c638",
+    "evals/spend_guard.py": "4cde22fc306b16ab937a587d61ddfe661cadc63ea72052867bc582d40a84eb25",
+    "evals/text_integration.py": "ed17dbcb5d0b208fd73c4ffddc3632f0559c8f997f8de2c7822a4f82560904ca",
+    "metrics_logging.py": "06bb8906312c5f05aa31c3178f2b693385fbfde690c09d623a98338642d55021",
+    "scheduling/__init__.py": "ed8bb4cc15cbfd8fe4c0560c8b8c52906f8e3b94363bb7939ea0b2230847b32c",
+    "scheduling/catalog.py": "97d59d41e14d2af58b1e1273b1264b343411c5e40feb50e579c703bf75268696",
+    "scheduling/demo.py": "ef47492d8b865ceba85c2d477f77ea16bea751f80e5653367fbdd03c0929f6b7",
+    "scheduling/engine.py": "3b049a8833246b207cc08bb4844ef6602b9ab7932d81205716102a24dba8f9b7",
+    "scheduling/models.py": "81ce51343910c3924b7bf334a4a488bbf5033d476382267a6e026f18f5f5900e",
+    "scheduling/opening_hours.py": "11031054f2318e7143363c8b239b1f355409a425603e2a34ea77ebafa544228e",
+    "scheduling_agent.py": "f18decb90afc244ee4d7aedd53f2e974ea0e86d4c949c45f029364ab5efbdf2e",
+    "scheduling_dialogue.py": "1c0cfb031d65e82b9a94556d1fbe1f1c38f7b190705f217d2b56908c9093ce85",
+    "tests/test_external_adapter.py": "14b65a05643ed1d80468a18827670c4951d9157e32f442a67372bba884df2b9c",
+    "text_runner.py": "23953002a35fe0495c0411af2fa612242a4791f1e34c599801ec65ae979efc9d"
+  },
+  "offline_evidence_sha256": "b44b41c039a6478ab3dc6ca691bb8e04379d9f6d58e98b75e0059b52c460d6e6",
+  "configuration_sha256": "31fa3c9d33b729d26a55bedee938c303fe0c0dc283f543cae51facb8660e591f",
+  "paid_authorized": false,
+  "git_commit": "a5b124f7aa3ffa9d7ebcd32a7f76c837c95486c8",
+  "catalog_blob_sha": "8e5091080383d598ae18acce084c7dcd6522ab14",
+  "agent_identities": {
+    "proposed": {
+      "agent_id": "catalog_scheduler",
+      "agent_revision": "40db1b587b5790ab2c92bc642edbc55e67f0d44ebd8d4f1267de29e1e86ebdc5",
+      "availability_mode": "eval_fixture"
+    },
+    "baseline": {
+      "agent_id": "full_catalog_baseline",
+      "agent_revision": "68d02acb9a89a72c279c3410001e2b184438abce7f7c714ce39a0e87ddf4f623",
+      "availability_mode": "eval_fixture",
+      "catalog_prefix_sha256": "baea1382762b1177e7f21a5070a6dd38724fc910c965905b9eb9f96458436e4f"
+    }
+  },
+  "legacy_evaluator_behavior_sha256": "97117348b6d00263d60c0561381841e3fc50e843873a53b60e827a8c7415a996",
+  "packages": {
+    "pipecat-ai": "1.4.0",
+    "pipecat-ai-flows": "1.4.0",
+    "openai": "2.54.0",
+    "tiktoken": "0.14.0"
+  }
+}

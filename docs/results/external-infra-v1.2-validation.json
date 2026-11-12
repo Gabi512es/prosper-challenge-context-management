@@ -1,0 +1,123 @@
+{
+  "infrastructure_version": "external-infra-v1.2",
+  "evaluator_semantics": "external-eval-v1.1",
+  "started_at": "2026-11-10T14:56:59+00:00",
+  "offline_checked_at": "2026-11-10T15:24:12.826616+00:00",
+  "elapsed_minutes_at_offline_check": 27.23,
+  "timebox_minutes": 45,
+  "paid_calls": 0,
+  "pin_path": "backend/evals/external_pin_v1_2.json",
+  "pin_sha256": "032f9418860c650afbe3771ca947f7afc15b82cc5cda5ebdae1b5fbaf04375c8",
+  "semantic_config_sha256": "97e54fe59f65c3e931c1c4865d8bd74a99a79cd59f883c6186ca426376aa24e1",
+  "rubric_sha256": "054cbbd261440e29d0c7bdf6749bbff56ac38023f11cdf130d1efef31d08e686",
+  "unchanged_historical_pinned_files": {
+    "agent_builder/__init__.py": true,
+    "agent_builder/builder.py": true,
+    "agent_builder/schema.py": true,
+    "agent_runtime.py": true,
+    "agents/catalog_scheduler.json": true,
+    "baseline_agent.py": true,
+    "data/catalog.json": true,
+    "evals/dev_matrix.py": true,
+    "evals/external_budget.py": true,
+    "evals/external_config.json": true,
+    "evals/external_contract.py": true,
+    "evals/external_score.py": true,
+    "evals/final_preflight.py": true,
+    "evals/loader.py": true,
+    "evals/preflight_reviewed.py": true,
+    "evals/review_rubric_v1_1.json": true,
+    "evals/revise_assets.py": true,
+    "evals/scorer.py": true,
+    "evals/spend_guard.py": true,
+    "evals/text_integration.py": true,
+    "evals/write_faults.py": true,
+    "metrics_logging.py": true,
+    "scheduling/__init__.py": true,
+    "scheduling/catalog.py": true,
+    "scheduling/demo.py": true,
+    "scheduling/engine.py": true,
+    "scheduling/models.py": true,
+    "scheduling/opening_hours.py": true,
+    "scheduling_agent.py": true,
+    "scheduling_dialogue.py": true,
+    "tests/test_external_adapter.py": true,
+    "tests/test_external_write_faults.py": true,
+    "text_runner.py": true
+  },
+  "old_failed_attempt_evidence_unchanged": true,
+  "original_revised_normalized_datasets_unchanged": true,
+  "tests_run": 49,
+  "new_persistence_tests": [
+    "tests.test_external_persistence.IncompleteUsageTest.test_missing_cached_usage_is_unknown_not_zero",
+    "tests.test_external_persistence.JSONTest.test_dates_offsets_sets_and_unknown_types",
+    "tests.test_external_persistence.JSONTest.test_failed_serialization_and_replace_keep_previous_checkpoint",
+    "tests.test_external_persistence.PersistenceTest.test_actual_batch_export_failure_preserves_all_conversation_evidence",
+    "tests.test_external_persistence.PersistenceTest.test_actual_batch_final_export_with_real_state_types",
+    "tests.test_external_persistence.PersistenceTest.test_real_result_checkpoints_final_export_and_independent_evidence",
+    "tests.test_external_persistence.RequestLedgerTest.test_cancelled_stream_keeps_partial_delta_and_full_reserve",
+    "tests.test_external_persistence.RequestLedgerTest.test_evidence_failure_before_http_is_fail_closed",
+    "tests.test_external_persistence.RequestLedgerTest.test_request_exception_is_journaled_once_without_retry",
+    "tests.test_external_persistence.RequestLedgerTest.test_stream_usage_status_caps_and_unknowns_survive_report_error",
+    "tests.test_external_persistence.RestartPlanTest.test_exactly_two_infrastructure_replacements_then_all_unrun_labels"
+  ],
+  "failures": 0,
+  "errors": 0,
+  "realistic_fixture": "actual shared scheduling handlers: identity confirmation, slot search, generated read-back, patient yes, booking, asdict(SessionState) including last_horizon_end; nested aware datetimes/date/set; public DEV only",
+  "failure_injection_evidence": [
+    "old json.dumps(default=list) raises on actual nested datetime",
+    "unknown JSON object rejected visibly; naive datetime rejected without timezone inference",
+    "failed JSON serialization and os.replace keep old checkpoint intact",
+    "actual run_batch successful checkpoints and final export",
+    "actual run_batch final-export OSError leaves both per-conversation files, messages, tools, SDK reservations/usage/status, original metrics and budget in append-only journal",
+    "SDK cancellation retains partial delta and full exposure reserve",
+    "missing cached usage remains null/unknown despite populated legacy metric row",
+    "evidence failure before request prevents SDK invocation"
+  ],
+  "replay_summary_unchanged": {
+    "runs": 72,
+    "old_passes": 59,
+    "new_passes": 0,
+    "review_required": 59,
+    "failed": 12,
+    "infrastructure_failure": 1
+  },
+  "restart_plan_sha256": "bf9674be6c7c71db9b6465332da22e123592578128381f081e98854ad6f1a8f7",
+  "restart_counts": {
+    "replacements_first": 2,
+    "then_previously_unrun": 38,
+    "total": 40,
+    "heldout": 32,
+    "robustness": 8
+  },
+  "historical_billing_bounds": {
+    "heldout": {
+      "old_cap_usd": "5",
+      "known_usage_cost_usd": "0.0466975",
+      "actual_total_billing_usd": null,
+      "conditional_total_billing_interval_usd": [
+        "0.0466975",
+        "5"
+      ],
+      "additional_unobserved_charge_upper_bound_usd": "4.9533025",
+      "unreported_usage_request_count_upper_bound_if_full_reserves_retained": 15,
+      "unlogged_request_count": null,
+      "certified_unspent_balance_usd": null
+    },
+    "robustness": {
+      "old_cap_usd": "2",
+      "known_usage_cost_usd": "0.0456325",
+      "actual_total_billing_usd": null,
+      "conditional_total_billing_interval_usd": [
+        "0.0456325",
+        "2"
+      ],
+      "additional_unobserved_charge_upper_bound_usd": "1.9543675",
+      "unreported_usage_request_count_upper_bound_if_full_reserves_retained": 6,
+      "unlogged_request_count": null,
+      "certified_unspent_balance_usd": null
+    }
+  },
+  "restart_paid_authorized": false,
+  "voice_call_b": "pending manual verification"
+}

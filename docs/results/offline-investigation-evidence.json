@@ -1,0 +1,1181 @@
+{
+  "method": "Extracted existing transcripts, tool results and metric rows only. No reconstructed missing output.",
+  "sources": {
+    "proposed": {
+      "report": "backend/logs/evals/comparison-proposed-v2-20261109-180827-8752c3.results.json",
+      "report_sha256": "b09c39a93d8056a330d7d35f0c3b56669a0f7bf580f4b7e53b691a3618b882b3",
+      "metrics": "backend/logs/evals/comparison-proposed-v2-20261109-180827-8752c3.jsonl",
+      "metrics_sha256": "f7bb2c9e28cd0a49d4b9dd6444eff87a17040d7963b0a1e83e8b9637fbd25e6a",
+      "git_commit": "a5b124f7aa3ffa9d7ebcd32a7f76c837c95486c8"
+    },
+    "baseline": {
+      "report": "backend/logs/evals/comparison-baseline-20261109-182321-c4ee5f.results.json",
+      "report_sha256": "94d47cdde186e528a1c239b42d29f97054f9a93ade8acbfbe9ec02ac47802d44",
+      "metrics": "backend/logs/evals/comparison-baseline-20261109-182321-c4ee5f.jsonl",
+      "metrics_sha256": "febcc54ac845eba515e9a0dfe6da1cb450fe96abb60389e07e1e57ae05053394",
+      "git_commit": "a5b124f7aa3ffa9d7ebcd32a7f76c837c95486c8"
+    }
+  },
+  "dev007": [
+    {
+      "arm": "proposed",
+      "repetition": 1,
+      "call_id": "9d271b7b-2881-44bc-9d6a-676548bfd27b",
+      "report_run_index": 18,
+      "passed": false,
+      "assertions": [
+        {
+          "name": "runner_completed",
+          "passed": false,
+          "observed": "RuntimeError: No scripted patient reply after: \"I'm unable to transfer to a staff member without an explicit request. You could reach out directly to the clinic for confirmation.\"; state=SessionState(patient_facts=PatientFacts(name=None, date_of_birth=None, is_new_patient=None, referral_on_file=None), appointment_type_id=None, provider_id=None, location_id=None, any_provider=False, any_location=False, hard_constraints=set(), preferences={}, last_candidates=[], more_available=0, offered_slot_ids=set(), last_horizon_end=None, selected_slot_id=None, confirmation=None); bookings=[]; recent_context=[{'role': 'assistant', 'content': 'I couldn\\'t find a match for \"full skin check.\" You might be looking for \"Full Body Skin Exam\" or \"Skin Cancer Screening.\" Would you like to explore one of these options?'}, {'role': 'user', 'content': 'I cannot choose between Skin Cancer Screening and Full Body Skin Exam. Please have a staff member confirm the intended service.'}, {'role': 'assistant', 'tool_calls': [{'id': 'call_VtXunVMP8NOHGKWD2mkko4vv', 'function': {'name': 'request_human_transfer', 'arguments': '{\"human_transfer_requested\": true, \"reason\": \"User requested confirmation for intended service between Skin Cancer Screening and Full Body Skin Exam.\"}'}, 'type': 'function'}]}, {'role': 'tool', 'content': '{\"type\": \"async_tool\", \"status\": \"running\", \"tool_call_id\": \"call_VtXunVMP8NOHGKWD2mkko4vv\", \"description\": \"An asynchronous task associated with this tool_call_id has started running. Expect results to arrive later as developer messages that look roughly like this one (with \\'type=async_tool\\' and a matching tool_call_id) but with a \\'result\\' field. Note that there *may* be more than one result (i.e., a stream of results), but there doesn\\'t have to be (there may be only one). The last result will come in a message with \\'status=finished\\'.\"}', 'tool_call_id': 'call_VtXunVMP8NOHGKWD2mkko4vv'}, {'role': 'developer', 'content': '{\"type\": \"async_tool\", \"status\": \"finished\", \"tool_call_id\": \"call_VtXunVMP8NOHGKWD2mkko4vv\", \"description\": \"This is the final result for the asynchronous task associated with this tool_call_id. The task has completed. No further results will arrive for this tool_call_id.\", \"result\": \"{\\\\\"status\\\\\": \\\\\"error\\\\\", \\\\\"code\\\\\": \\\\\"explicit_human_request_required\\\\\"}\"}'}, {'role': 'assistant', 'content': \"I'm unable to transfer to a staff member without an explicit request. You could reach out directly to the clinic for confirmation.\"}]"
+        },
+        {
+          "name": "slot_offers_include_location",
+          "passed": true,
+          "observed": null
+        },
+        {
+          "name": "no_unrecorded_callback_promise",
+          "passed": true,
+          "observed": null
+        },
+        {
+          "name": "no_match_has_next_step",
+          "passed": true,
+          "observed": null
+        },
+        {
+          "name": "booking_count",
+          "passed": true,
+          "observed": 0
+        },
+        {
+          "name": "ambiguity_preserved",
+          "passed": true,
+          "observed": null
+        },
+        {
+          "name": "staff_confirmation_requested",
+          "passed": true,
+          "observed": "how can i assist you today with scheduling or healthcare inquiries? i couldn't find a match for \"full skin check.\" you might be looking for \"full body skin exam\" or \"skin cancer screening.\" would you like to explore one of these options? i'm unable to transfer to a staff member without an explicit request. you could reach out directly to the clinic for confirmation."
+        },
+        {
+          "name": "undocumented_distinction_explained",
+          "passed": false,
+          "observed": "how can i assist you today with scheduling or healthcare inquiries? i couldn't find a match for \"full skin check.\" you might be looking for \"full body skin exam\" or \"skin cancer screening.\" would you like to explore one of these options? i'm unable to transfer to a staff member without an explicit request. you could reach out directly to the clinic for confirmation."
+        }
+      ],
+      "transcript": [
+        {
+          "role": "assistant",
+          "text": "How can I assist you today with scheduling or healthcare inquiries?"
+        },
+        {
+          "role": "patient",
+          "text": "I need a full skin check, but I don't know the exact appointment name."
+        },
+        {
+          "role": "assistant",
+          "text": "I couldn't find a match for \"full skin check.\" You might be looking for \"Full Body Skin Exam\" or \"Skin Cancer Screening.\" Would you like to explore one of these options?",
+          "tools": [
+            "resolve_options"
+          ],
+          "node": "scheduling"
+        },
+        {
+          "role": "patient",
+          "text": "I cannot choose between Skin Cancer Screening and Full Body Skin Exam. Please have a staff member confirm the intended service."
+        },
+        {
+          "role": "assistant",
+          "text": "I'm unable to transfer to a staff member without an explicit request. You could reach out directly to the clinic for confirmation.",
+          "tools": [
+            "request_human_transfer"
+          ],
+          "node": "scheduling"
+        }
+      ],
+      "saved_tool_events": [
+        {
+          "function": {
+            "name": "resolve_options",
+            "arguments": "{\"appointment_type_query\": \"full skin check\"}"
+          },
+          "result": {
+            "status": "no_match",
+            "next_action": "explain_no_match_before_collecting_patient_details",
+            "resolved": {
+              "appointment_type_id": null,
+              "provider_id": null,
+              "location_id": null
+            },
+            "search_scope": {
+              "any_provider": false,
+              "any_location": false
+            },
+            "candidates": [],
+            "more_available": 0,
+            "missing_facts": [
+              "appointment_type_id",
+              "provider_id",
+              "location_id",
+              "is_new_patient"
+            ],
+            "deferred_patient_facts": [
+              "name",
+              "date_of_birth"
+            ],
+            "blocked_options": [],
+            "errors": [
+              {
+                "code": "unknown_appointment_type",
+                "entity": "appointment_type",
+                "query": "full skin check"
+              }
+            ],
+            "filter_issues": [],
+            "clinic_contacts": [],
+            "eligible_locations": [],
+            "dialogue_step": {
+              "stage": "service",
+              "question": "What appointment service do you need?"
+            }
+          }
+        },
+        {
+          "function": {
+            "name": "request_human_transfer",
+            "arguments": "{\"human_transfer_requested\": true, \"reason\": \"User requested confirmation for intended service between Skin Cancer Screening and Full Body Skin Exam.\"}"
+          },
+          "result": {
+            "status": "error",
+            "code": "explicit_human_request_required"
+          }
+        }
+      ]
+    },
+    {
+      "arm": "proposed",
+      "repetition": 2,
+      "call_id": "c1a8eceb-eade-4398-ba88-5de8cdabca5c",
+      "report_run_index": 19,
+      "passed": false,
+      "assertions": [
+        {
+          "name": "runner_completed",
+          "passed": false,
+          "observed": "RuntimeError: No scripted patient reply after: 'No transfer or callback is recorded.'; state=SessionState(patient_facts=PatientFacts(name=None, date_of_birth=None, is_new_patient=None, referral_on_file=None), appointment_type_id=None, provider_id=None, location_id=None, any_provider=False, any_location=False, hard_constraints=set(), preferences={}, last_candidates=[], more_available=0, offered_slot_ids=set(), last_horizon_end=None, selected_slot_id=None, confirmation=None); bookings=[]; recent_context=[{'role': 'assistant', 'content': 'That sounds like it might be a \"Full Body Skin Exam.\" Let\\'s find a provider for that service. Do you have a specific provider or location in mind?'}, {'role': 'user', 'content': 'I cannot choose between Skin Cancer Screening and Full Body Skin Exam. Please have a staff member confirm the intended service.'}, {'role': 'assistant', 'tool_calls': [{'id': 'call_MSNMn8UmpgdDbH7q5umJkRRl', 'function': {'name': 'request_human_transfer', 'arguments': '{\"human_transfer_requested\": true, \"reason\": \"The patient needs confirmation on the intended service between Skin Cancer Screening and Full Body Skin Exam from a staff member.\"}'}, 'type': 'function'}]}, {'role': 'tool', 'content': '{\"type\": \"async_tool\", \"status\": \"running\", \"tool_call_id\": \"call_MSNMn8UmpgdDbH7q5umJkRRl\", \"description\": \"An asynchronous task associated with this tool_call_id has started running. Expect results to arrive later as developer messages that look roughly like this one (with \\'type=async_tool\\' and a matching tool_call_id) but with a \\'result\\' field. Note that there *may* be more than one result (i.e., a stream of results), but there doesn\\'t have to be (there may be only one). The last result will come in a message with \\'status=finished\\'.\"}', 'tool_call_id': 'call_MSNMn8UmpgdDbH7q5umJkRRl'}, {'role': 'developer', 'content': '{\"type\": \"async_tool\", \"status\": \"finished\", \"tool_call_id\": \"call_MSNMn8UmpgdDbH7q5umJkRRl\", \"description\": \"This is the final result for the asynchronous task associated with this tool_call_id. The task has completed. No further results will arrive for this tool_call_id.\", \"result\": \"{\\\\\"status\\\\\": \\\\\"error\\\\\", \\\\\"code\\\\\": \\\\\"explicit_human_request_required\\\\\"}\"}'}, {'role': 'assistant', 'content': 'No transfer or callback is recorded.'}]"
+        },
+        {
+          "name": "slot_offers_include_location",
+          "passed": true,
+          "observed": null
+        },
+        {
+          "name": "no_unrecorded_callback_promise",
+          "passed": true,
+          "observed": null
+        },
+        {
+          "name": "no_match_has_next_step",
+          "passed": true,
+          "observed": null
+        },
+        {
+          "name": "booking_count",
+          "passed": true,
+          "observed": 0
+        },
+        {
+          "name": "ambiguity_preserved",
+          "passed": true,
+          "observed": null
+        },
+        {
+          "name": "staff_confirmation_requested",
+          "passed": false,
+          "observed": "hi! how can i help you with your healthcare scheduling or questions today? that sounds like it might be a \"full body skin exam.\" let's find a provider for that service. do you have a specific provider or location in mind? no transfer or callback is recorded."
+        },
+        {
+          "name": "undocumented_distinction_explained",
+          "passed": false,
+          "observed": "hi! how can i help you with your healthcare scheduling or questions today? that sounds like it might be a \"full body skin exam.\" let's find a provider for that service. do you have a specific provider or location in mind? no transfer or callback is recorded."
+        }
+      ],
+      "transcript": [
+        {
+          "role": "assistant",
+          "text": "Hi! How can I help you with your healthcare scheduling or questions today?"
+        },
+        {
+          "role": "patient",
+          "text": "I need a full skin check, but I don't know the exact appointment name."
+        },
+        {
+          "role": "assistant",
+          "text": "That sounds like it might be a \"Full Body Skin Exam.\" Let's find a provider for that service. Do you have a specific provider or location in mind?",
+          "tools": [],
+          "node": "scheduling"
+        },
+        {
+          "role": "patient",
+          "text": "I cannot choose between Skin Cancer Screening and Full Body Skin Exam. Please have a staff member confirm the intended service."
+        },
+        {
+          "role": "assistant",
+          "text": "No transfer or callback is recorded.",
+          "tools": [
+            "request_human_transfer"
+          ],
+          "node": "scheduling"
+        }
+      ],
+      "saved_tool_events": [
+        {
+          "function": {
+            "name": "request_human_transfer",
+            "arguments": "{\"human_transfer_requested\": true, \"reason\": \"The patient needs confirmation on the intended service between Skin Cancer Screening and Full Body Skin Exam from a staff member.\"}"
+          },
+          "result": {
+            "status": "error",
+            "code": "explicit_human_request_required"
+          }
+        }
+      ]
+    },
+    {
+      "arm": "proposed",
+      "repetition": 3,
+      "call_id": "6f203b02-f2ef-4bdc-884a-865fb5e39d3c",
+      "report_run_index": 20,
+      "passed": false,
+      "assertions": [
+        {
+          "name": "runner_completed",
+          "passed": false,
+          "observed": "RuntimeError: No scripted patient reply after: 'To proceed, you need to choose either \"Skin Cancer Screening\" or \"Full Body Skin Exam.\" Please let me know if you require more information about each service.'; state=SessionState(patient_facts=PatientFacts(name=None, date_of_birth=None, is_new_patient=None, referral_on_file=None), appointment_type_id=None, provider_id=None, location_id=None, any_provider=False, any_location=False, hard_constraints=set(), preferences={}, last_candidates=[], more_available=0, offered_slot_ids=set(), last_horizon_end=None, selected_slot_id=None, confirmation=None); bookings=[]; recent_context=[{'role': 'assistant', 'content': 'I couldn\\'t find a matching appointment for \"full skin exam.\" Could you specify if you\\'re looking for something like a \"Full Body Skin Exam\" or a \"Skin Cancer Screening\"?'}, {'role': 'user', 'content': 'I cannot choose between Skin Cancer Screening and Full Body Skin Exam. Please have a staff member confirm the intended service.'}, {'role': 'assistant', 'tool_calls': [{'id': 'call_LjKFYV0rQKA02SCTqE2VmcxR', 'function': {'name': 'request_human_transfer', 'arguments': '{\"human_transfer_requested\": true, \"reason\": \"The patient cannot choose between Skin Cancer Screening and Full Body Skin Exam.\"}'}, 'type': 'function'}]}, {'role': 'tool', 'content': '{\"type\": \"async_tool\", \"status\": \"running\", \"tool_call_id\": \"call_LjKFYV0rQKA02SCTqE2VmcxR\", \"description\": \"An asynchronous task associated with this tool_call_id has started running. Expect results to arrive later as developer messages that look roughly like this one (with \\'type=async_tool\\' and a matching tool_call_id) but with a \\'result\\' field. Note that there *may* be more than one result (i.e., a stream of results), but there doesn\\'t have to be (there may be only one). The last result will come in a message with \\'status=finished\\'.\"}', 'tool_call_id': 'call_LjKFYV0rQKA02SCTqE2VmcxR'}, {'role': 'developer', 'content': '{\"type\": \"async_tool\", \"status\": \"finished\", \"tool_call_id\": \"call_LjKFYV0rQKA02SCTqE2VmcxR\", \"description\": \"This is the final result for the asynchronous task associated with this tool_call_id. The task has completed. No further results will arrive for this tool_call_id.\", \"result\": \"{\\\\\"status\\\\\": \\\\\"error\\\\\", \\\\\"code\\\\\": \\\\\"explicit_human_request_required\\\\\"}\"}'}, {'role': 'assistant', 'content': 'To proceed, you need to choose either \"Skin Cancer Screening\" or \"Full Body Skin Exam.\" Please let me know if you require more information about each service.'}]"
+        },
+        {
+          "name": "slot_offers_include_location",
+          "passed": true,
+          "observed": null
+        },
+        {
+          "name": "no_unrecorded_callback_promise",
+          "passed": true,
+          "observed": null
+        },
+        {
+          "name": "no_match_has_next_step",
+          "passed": true,
+          "observed": null
+        },
+        {
+          "name": "booking_count",
+          "passed": true,
+          "observed": 0
+        },
+        {
+          "name": "ambiguity_preserved",
+          "passed": true,
+          "observed": null
+        },
+        {
+          "name": "staff_confirmation_requested",
+          "passed": false,
+          "observed": "hello! how can i assist you with your healthcare scheduling or catalog questions today? i couldn't find a matching appointment for \"full skin exam.\" could you specify if you're looking for something like a \"full body skin exam\" or a \"skin cancer screening\"? to proceed, you need to choose either \"skin cancer screening\" or \"full body skin exam.\" please let me know if you require more information about each service."
+        },
+        {
+          "name": "undocumented_distinction_explained",
+          "passed": false,
+          "observed": "hello! how can i assist you with your healthcare scheduling or catalog questions today? i couldn't find a matching appointment for \"full skin exam.\" could you specify if you're looking for something like a \"full body skin exam\" or a \"skin cancer screening\"? to proceed, you need to choose either \"skin cancer screening\" or \"full body skin exam.\" please let me know if you require more information about each service."
+        }
+      ],
+      "transcript": [
+        {
+          "role": "assistant",
+          "text": "Hello! How can I assist you with your healthcare scheduling or catalog questions today?"
+        },
+        {
+          "role": "patient",
+          "text": "I need a full skin check, but I don't know the exact appointment name."
+        },
+        {
+          "role": "assistant",
+          "text": "I couldn't find a matching appointment for \"full skin exam.\" Could you specify if you're looking for something like a \"Full Body Skin Exam\" or a \"Skin Cancer Screening\"?",
+          "tools": [
+            "resolve_options"
+          ],
+          "node": "scheduling"
+        },
+        {
+          "role": "patient",
+          "text": "I cannot choose between Skin Cancer Screening and Full Body Skin Exam. Please have a staff member confirm the intended service."
+        },
+        {
+          "role": "assistant",
+          "text": "To proceed, you need to choose either \"Skin Cancer Screening\" or \"Full Body Skin Exam.\" Please let me know if you require more information about each service.",
+          "tools": [
+            "request_human_transfer"
+          ],
+          "node": "scheduling"
+        }
+      ],
+      "saved_tool_events": [
+        {
+          "function": {
+            "name": "resolve_options",
+            "arguments": "{\"appointment_type_query\": \"full skin exam\"}"
+          },
+          "result": {
+            "status": "no_match",
+            "next_action": "explain_no_match_before_collecting_patient_details",
+            "resolved": {
+              "appointment_type_id": null,
+              "provider_id": null,
+              "location_id": null
+            },
+            "search_scope": {
+              "any_provider": false,
+              "any_location": false
+            },
+            "candidates": [],
+            "more_available": 0,
+            "missing_facts": [
+              "appointment_type_id",
+              "provider_id",
+              "location_id",
+              "is_new_patient"
+            ],
+            "deferred_patient_facts": [
+              "name",
+              "date_of_birth"
+            ],
+            "blocked_options": [],
+            "errors": [
+              {
+                "code": "unknown_appointment_type",
+                "entity": "appointment_type",
+                "query": "full skin exam"
+              }
+            ],
+            "filter_issues": [],
+            "clinic_contacts": [],
+            "eligible_locations": [],
+            "dialogue_step": {
+              "stage": "service",
+              "question": "What appointment service do you need?"
+            }
+          }
+        },
+        {
+          "function": {
+            "name": "request_human_transfer",
+            "arguments": "{\"human_transfer_requested\": true, \"reason\": \"The patient cannot choose between Skin Cancer Screening and Full Body Skin Exam.\"}"
+          },
+          "result": {
+            "status": "error",
+            "code": "explicit_human_request_required"
+          }
+        }
+      ]
+    },
+    {
+      "arm": "baseline",
+      "repetition": 1,
+      "call_id": "86071377-2606-4139-903f-886625152421",
+      "report_run_index": 18,
+      "passed": false,
+      "assertions": [
+        {
+          "name": "runner_completed",
+          "passed": false,
+          "observed": "RuntimeError: No scripted patient reply after: \"I can't arrange a staff transfer, but I can help you with scheduling. For a Skin Cancer Screening or a Full Body Skin Exam, would you like me to look for the earliest available appointments for either type? If you need to discuss service specifics, contacting the clinic at the appropriate phone number might be the best option.\"; state=SessionState(patient_facts=PatientFacts(name=None, date_of_birth=None, is_new_patient=None, referral_on_file=None), appointment_type_id=None, provider_id=None, location_id=None, any_provider=False, any_location=False, hard_constraints=set(), preferences={}, last_candidates=[], more_available=0, offered_slot_ids=set(), last_horizon_end=None, selected_slot_id=None, confirmation=None); bookings=[]; recent_context=[{'role': 'developer', 'content': \"Help with booking and catalog questions. On a booking request, call resolve_options with every fact the patient supplied. Use the full reference catalog to resolve names to IDs; preserve ambiguity. Resolve a requested provider and service before asking for the patient's name or date of birth. Resolve service, provider and location from the reference catalog; pass catalog IDs, never free-text queries or specialty filters. Put all currently known facts in one resolve_options call rather than splitting them across parallel calls. For a catalog-information question that is not a booking request, resolve the named entity and call get_details; do not collect booking facts. If the patient accepts any clinician or any site, pass any_provider or any_location respectively instead of asking them to choose. Follow next_action: explain a no-match or blocked reason before collecting identity. When explaining a capability block, say the returned required_capability and returned alternative location names exactly; offer no unreturned alternative. For an eligible request, collect the patient's name and date of birth, then call resolve_options again with patient_name, date_of_birth, and every other supplied fact so session state is updated. Call find_slots only when resolve_options says find_slots, and offer returned slots only.  Corrections must go through resolve_options before any booking. Never offer a slot excluded for opening hours or current unavailability. If booking returns slot_taken, tell the patient it was taken and call find_slots for fresh choices. For any other tool error or shutdown, expose the failure, never claim success, do not loop the same failing call, and ask whether the patient wants human help. Do not call the handoff tool merely because another tool failed.  APPEND context is intentional.\"}, {'role': 'assistant', 'content': 'Hello! How can I help you today? Are you looking to schedule an appointment or need information about our healthcare services?'}, {'role': 'user', 'content': \"I need a full skin check, but I don't know the exact appointment name.\"}, {'role': 'assistant', 'content': 'For a full skin check, the appointment type is likely a \"Full Body Skin Exam.\" Would you like me to check availability for this appointment?'}, {'role': 'user', 'content': 'I cannot choose between Skin Cancer Screening and Full Body Skin Exam. Please have a staff member confirm the intended service.'}, {'role': 'assistant', 'content': \"I can't arrange a staff transfer, but I can help you with scheduling. For a Skin Cancer Screening or a Full Body Skin Exam, would you like me to look for the earliest available appointments for either type? If you need to discuss service specifics, contacting the clinic at the appropriate phone number might be the best option.\"}]"
+        },
+        {
+          "name": "slot_offers_include_location",
+          "passed": true,
+          "observed": null
+        },
+        {
+          "name": "no_unrecorded_callback_promise",
+          "passed": true,
+          "observed": null
+        },
+        {
+          "name": "no_match_has_next_step",
+          "passed": true,
+          "observed": null
+        },
+        {
+          "name": "booking_count",
+          "passed": true,
+          "observed": 0
+        },
+        {
+          "name": "ambiguity_preserved",
+          "passed": true,
+          "observed": null
+        },
+        {
+          "name": "staff_confirmation_requested",
+          "passed": true,
+          "observed": "hello! how can i help you today? are you looking to schedule an appointment or need information about our healthcare services? for a full skin check, the appointment type is likely a \"full body skin exam.\" would you like me to check availability for this appointment? i can't arrange a staff transfer, but i can help you with scheduling. for a skin cancer screening or a full body skin exam, would you like me to look for the earliest available appointments for either type? if you need to discuss service specifics, contacting the clinic at the appropriate phone number might be the best option."
+        },
+        {
+          "name": "undocumented_distinction_explained",
+          "passed": false,
+          "observed": "hello! how can i help you today? are you looking to schedule an appointment or need information about our healthcare services? for a full skin check, the appointment type is likely a \"full body skin exam.\" would you like me to check availability for this appointment? i can't arrange a staff transfer, but i can help you with scheduling. for a skin cancer screening or a full body skin exam, would you like me to look for the earliest available appointments for either type? if you need to discuss service specifics, contacting the clinic at the appropriate phone number might be the best option."
+        }
+      ],
+      "transcript": [
+        {
+          "role": "assistant",
+          "text": "Hello! How can I help you today? Are you looking to schedule an appointment or need information about our healthcare services?"
+        },
+        {
+          "role": "patient",
+          "text": "I need a full skin check, but I don't know the exact appointment name."
+        },
+        {
+          "role": "assistant",
+          "text": "For a full skin check, the appointment type is likely a \"Full Body Skin Exam.\" Would you like me to check availability for this appointment?",
+          "tools": [],
+          "node": "scheduling"
+        },
+        {
+          "role": "patient",
+          "text": "I cannot choose between Skin Cancer Screening and Full Body Skin Exam. Please have a staff member confirm the intended service."
+        },
+        {
+          "role": "assistant",
+          "text": "I can't arrange a staff transfer, but I can help you with scheduling. For a Skin Cancer Screening or a Full Body Skin Exam, would you like me to look for the earliest available appointments for either type? If you need to discuss service specifics, contacting the clinic at the appropriate phone number might be the best option.",
+          "tools": [],
+          "node": "scheduling"
+        }
+      ],
+      "saved_tool_events": []
+    },
+    {
+      "arm": "baseline",
+      "repetition": 2,
+      "call_id": "5b8a7bbc-174f-4284-b036-cee122e95c78",
+      "report_run_index": 19,
+      "passed": false,
+      "assertions": [
+        {
+          "name": "runner_completed",
+          "passed": false,
+          "observed": "RuntimeError: No scripted patient reply after: \"I can't arrange a direct transfer or confirmation with staff. However, if you have any questions about these appointments, I can help with information from the catalog. If you need further assistance, please contact the clinic directly at their phone number. Would you like to proceed with one of these appointments, or do you need the clinic's contact info?\"; state=SessionState(patient_facts=PatientFacts(name=None, date_of_birth=None, is_new_patient=None, referral_on_file=None), appointment_type_id=None, provider_id=None, location_id=None, any_provider=False, any_location=False, hard_constraints=set(), preferences={}, last_candidates=[], more_available=0, offered_slot_ids=set(), last_horizon_end=None, selected_slot_id=None, confirmation=None); bookings=[]; recent_context=[{'role': 'developer', 'content': \"Help with booking and catalog questions. On a booking request, call resolve_options with every fact the patient supplied. Use the full reference catalog to resolve names to IDs; preserve ambiguity. Resolve a requested provider and service before asking for the patient's name or date of birth. Resolve service, provider and location from the reference catalog; pass catalog IDs, never free-text queries or specialty filters. Put all currently known facts in one resolve_options call rather than splitting them across parallel calls. For a catalog-information question that is not a booking request, resolve the named entity and call get_details; do not collect booking facts. If the patient accepts any clinician or any site, pass any_provider or any_location respectively instead of asking them to choose. Follow next_action: explain a no-match or blocked reason before collecting identity. When explaining a capability block, say the returned required_capability and returned alternative location names exactly; offer no unreturned alternative. For an eligible request, collect the patient's name and date of birth, then call resolve_options again with patient_name, date_of_birth, and every other supplied fact so session state is updated. Call find_slots only when resolve_options says find_slots, and offer returned slots only.  Corrections must go through resolve_options before any booking. Never offer a slot excluded for opening hours or current unavailability. If booking returns slot_taken, tell the patient it was taken and call find_slots for fresh choices. For any other tool error or shutdown, expose the failure, never claim success, do not loop the same failing call, and ask whether the patient wants human help. Do not call the handoff tool merely because another tool failed.  APPEND context is intentional.\"}, {'role': 'assistant', 'content': 'Hello! How can I assist you today with your healthcare scheduling or catalog questions?'}, {'role': 'user', 'content': \"I need a full skin check, but I don't know the exact appointment name.\"}, {'role': 'assistant', 'content': \"A Full Body Skin Exam might be what you're looking for. Would you like to book this appointment? If so, please let me know if you have a provider or location preference.\"}, {'role': 'user', 'content': 'I cannot choose between Skin Cancer Screening and Full Body Skin Exam. Please have a staff member confirm the intended service.'}, {'role': 'assistant', 'content': \"I can't arrange a direct transfer or confirmation with staff. However, if you have any questions about these appointments, I can help with information from the catalog. If you need further assistance, please contact the clinic directly at their phone number. Would you like to proceed with one of these appointments, or do you need the clinic's contact info?\"}]"
+        },
+        {
+          "name": "slot_offers_include_location",
+          "passed": true,
+          "observed": null
+        },
+        {
+          "name": "no_unrecorded_callback_promise",
+          "passed": true,
+          "observed": null
+        },
+        {
+          "name": "no_match_has_next_step",
+          "passed": true,
+          "observed": null
+        },
+        {
+          "name": "booking_count",
+          "passed": true,
+          "observed": 0
+        },
+        {
+          "name": "ambiguity_preserved",
+          "passed": true,
+          "observed": null
+        },
+        {
+          "name": "staff_confirmation_requested",
+          "passed": true,
+          "observed": "hello! how can i assist you today with your healthcare scheduling or catalog questions? a full body skin exam might be what you're looking for. would you like to book this appointment? if so, please let me know if you have a provider or location preference. i can't arrange a direct transfer or confirmation with staff. however, if you have any questions about these appointments, i can help with information from the catalog. if you need further assistance, please contact the clinic directly at their phone number. would you like to proceed with one of these appointments, or do you need the clinic's contact info?"
+        },
+        {
+          "name": "undocumented_distinction_explained",
+          "passed": false,
+          "observed": "hello! how can i assist you today with your healthcare scheduling or catalog questions? a full body skin exam might be what you're looking for. would you like to book this appointment? if so, please let me know if you have a provider or location preference. i can't arrange a direct transfer or confirmation with staff. however, if you have any questions about these appointments, i can help with information from the catalog. if you need further assistance, please contact the clinic directly at their phone number. would you like to proceed with one of these appointments, or do you need the clinic's contact info?"
+        }
+      ],
+      "transcript": [
+        {
+          "role": "assistant",
+          "text": "Hello! How can I assist you today with your healthcare scheduling or catalog questions?"
+        },
+        {
+          "role": "patient",
+          "text": "I need a full skin check, but I don't know the exact appointment name."
+        },
+        {
+          "role": "assistant",
+          "text": "A Full Body Skin Exam might be what you're looking for. Would you like to book this appointment? If so, please let me know if you have a provider or location preference.",
+          "tools": [],
+          "node": "scheduling"
+        },
+        {
+          "role": "patient",
+          "text": "I cannot choose between Skin Cancer Screening and Full Body Skin Exam. Please have a staff member confirm the intended service."
+        },
+        {
+          "role": "assistant",
+          "text": "I can't arrange a direct transfer or confirmation with staff. However, if you have any questions about these appointments, I can help with information from the catalog. If you need further assistance, please contact the clinic directly at their phone number. Would you like to proceed with one of these appointments, or do you need the clinic's contact info?",
+          "tools": [],
+          "node": "scheduling"
+        }
+      ],
+      "saved_tool_events": []
+    },
+    {
+      "arm": "baseline",
+      "repetition": 3,
+      "call_id": "d1907c75-9b9c-4ab7-ac4b-d343758d6b22",
+      "report_run_index": 20,
+      "passed": false,
+      "assertions": [
+        {
+          "name": "runner_completed",
+          "passed": false,
+          "observed": "RuntimeError: No scripted patient reply after: 'No transfer or callback is recorded.'; state=SessionState(patient_facts=PatientFacts(name=None, date_of_birth=None, is_new_patient=None, referral_on_file=None), appointment_type_id=None, provider_id=None, location_id=None, any_provider=False, any_location=False, hard_constraints=set(), preferences={}, last_candidates=[], more_available=0, offered_slot_ids=set(), last_horizon_end=None, selected_slot_id=None, confirmation=None); bookings=[]; recent_context=[{'role': 'developer', 'content': \"Help with booking and catalog questions. On a booking request, call resolve_options with every fact the patient supplied. Use the full reference catalog to resolve names to IDs; preserve ambiguity. Resolve a requested provider and service before asking for the patient's name or date of birth. Resolve service, provider and location from the reference catalog; pass catalog IDs, never free-text queries or specialty filters. Put all currently known facts in one resolve_options call rather than splitting them across parallel calls. For a catalog-information question that is not a booking request, resolve the named entity and call get_details; do not collect booking facts. If the patient accepts any clinician or any site, pass any_provider or any_location respectively instead of asking them to choose. Follow next_action: explain a no-match or blocked reason before collecting identity. When explaining a capability block, say the returned required_capability and returned alternative location names exactly; offer no unreturned alternative. For an eligible request, collect the patient's name and date of birth, then call resolve_options again with patient_name, date_of_birth, and every other supplied fact so session state is updated. Call find_slots only when resolve_options says find_slots, and offer returned slots only.  Corrections must go through resolve_options before any booking. Never offer a slot excluded for opening hours or current unavailability. If booking returns slot_taken, tell the patient it was taken and call find_slots for fresh choices. For any other tool error or shutdown, expose the failure, never claim success, do not loop the same failing call, and ask whether the patient wants human help. Do not call the handoff tool merely because another tool failed.  APPEND context is intentional.\"}, {'role': 'assistant', 'content': 'How can I assist you with scheduling today? Do you need help booking an appointment or have questions about our catalog?'}, {'role': 'user', 'content': \"I need a full skin check, but I don't know the exact appointment name.\"}, {'role': 'assistant', 'content': 'I can help with that. A full skin check typically refers to a \"Full Body Skin Exam\" in Dermatology. May I proceed with finding options for this type of appointment?'}, {'role': 'user', 'content': 'I cannot choose between Skin Cancer Screening and Full Body Skin Exam. Please have a staff member confirm the intended service.'}, {'role': 'assistant', 'content': 'No transfer or callback is recorded.'}]"
+        },
+        {
+          "name": "slot_offers_include_location",
+          "passed": true,
+          "observed": null
+        },
+        {
+          "name": "no_unrecorded_callback_promise",
+          "passed": true,
+          "observed": null
+        },
+        {
+          "name": "no_match_has_next_step",
+          "passed": true,
+          "observed": null
+        },
+        {
+          "name": "booking_count",
+          "passed": true,
+          "observed": 0
+        },
+        {
+          "name": "ambiguity_preserved",
+          "passed": true,
+          "observed": null
+        },
+        {
+          "name": "staff_confirmation_requested",
+          "passed": false,
+          "observed": "how can i assist you with scheduling today? do you need help booking an appointment or have questions about our catalog? i can help with that. a full skin check typically refers to a \"full body skin exam\" in dermatology. may i proceed with finding options for this type of appointment? no transfer or callback is recorded."
+        },
+        {
+          "name": "undocumented_distinction_explained",
+          "passed": false,
+          "observed": "how can i assist you with scheduling today? do you need help booking an appointment or have questions about our catalog? i can help with that. a full skin check typically refers to a \"full body skin exam\" in dermatology. may i proceed with finding options for this type of appointment? no transfer or callback is recorded."
+        }
+      ],
+      "transcript": [
+        {
+          "role": "assistant",
+          "text": "How can I assist you with scheduling today? Do you need help booking an appointment or have questions about our catalog?"
+        },
+        {
+          "role": "patient",
+          "text": "I need a full skin check, but I don't know the exact appointment name."
+        },
+        {
+          "role": "assistant",
+          "text": "I can help with that. A full skin check typically refers to a \"Full Body Skin Exam\" in Dermatology. May I proceed with finding options for this type of appointment?",
+          "tools": [],
+          "node": "scheduling"
+        },
+        {
+          "role": "patient",
+          "text": "I cannot choose between Skin Cancer Screening and Full Body Skin Exam. Please have a staff member confirm the intended service."
+        },
+        {
+          "role": "assistant",
+          "text": "No transfer or callback is recorded.",
+          "tools": [],
+          "node": "scheduling"
+        }
+      ],
+      "saved_tool_events": []
+    }
+  ],
+  "timing_runs": [
+    {
+      "arm": "proposed",
+      "repetition": 1,
+      "call_id": "cd6241f4-b70a-4a76-85f1-c5f80088e5bd",
+      "report_run_index": 0,
+      "patient_turn_metrics": [
+        {
+          "patient_turn": 0,
+          "completed": true,
+          "elapsed_ms": 1915.433
+        },
+        {
+          "patient_turn": 1,
+          "completed": true,
+          "elapsed_ms": 2743.531
+        },
+        {
+          "patient_turn": 2,
+          "completed": true,
+          "elapsed_ms": 2621.042
+        },
+        {
+          "patient_turn": 3,
+          "completed": true,
+          "elapsed_ms": 23909.566
+        },
+        {
+          "patient_turn": 4,
+          "completed": true,
+          "elapsed_ms": 2262.455
+        }
+      ],
+      "transcript": [
+        {
+          "role": "assistant",
+          "text": "How can I assist you today with healthcare scheduling or information?"
+        },
+        {
+          "role": "patient",
+          "text": "I'd like a flu shot with Dr. Maria Garcia, the pediatrician at Mission Bay. I'm a new patient."
+        },
+        {
+          "role": "assistant",
+          "text": "What is your full name and date of birth?",
+          "tools": [
+            "resolve_options"
+          ],
+          "node": "scheduling"
+        },
+        {
+          "role": "patient",
+          "text": "My name is Alex Morgan and my date of birth is 1990-04-12."
+        },
+        {
+          "role": "assistant",
+          "text": "Alex Morgan, born April 12, 1990, is that right?",
+          "tools": [
+            "resolve_options"
+          ],
+          "node": "scheduling"
+        },
+        {
+          "role": "patient",
+          "text": "Yes, my name and date of birth are correct."
+        },
+        {
+          "role": "assistant",
+          "text": "I'll book a Flu Shot with Dr. Maria Garcia at Mission Bay Health Center, Tuesday November 10 at 9:00 AM. Shall I book it?",
+          "tools": [
+            "find_slots"
+          ],
+          "node": "scheduling"
+        },
+        {
+          "role": "patient",
+          "text": "Yes. I confirm that exact provider, location, service, date, and time. Please book it."
+        },
+        {
+          "role": "assistant",
+          "text": "You're all set for Tuesday, November 10 at 9:00 AM at Mission Bay Health Center. Is there anything else I can help with?",
+          "tools": [
+            "book_appointment"
+          ],
+          "node": "scheduling"
+        }
+      ],
+      "usage": {
+        "model_calls": 9,
+        "prompt_tokens": 29795,
+        "cached_tokens": 21888,
+        "uncached_prompt_tokens": 7907,
+        "completion_tokens": 252,
+        "total_tokens": 30047,
+        "cost_usd": 0.0496475
+      },
+      "known_usage_subtotal": null,
+      "saved_tool_events": [
+        {
+          "function": {
+            "name": "resolve_options",
+            "arguments": "{\"provider_query\": \"Maria Garcia\", \"provider_specialty\": \"Pediatrics\", \"location_query\": \"Mission Bay\", \"appointment_type_id\": \"appt_011\", \"is_new_patient\": true}"
+          },
+          "result": {
+            "status": "missing_facts",
+            "next_action": "collect_missing_facts",
+            "resolved": {
+              "appointment_type_id": "appt_011",
+              "provider_id": "prov_002",
+              "location_id": "loc_000"
+            },
+            "search_scope": {
+              "any_provider": false,
+              "any_location": false
+            },
+            "candidates": [],
+            "more_available": 0,
+            "missing_facts": [
+              "name",
+              "date_of_birth"
+            ],
+            "deferred_patient_facts": [],
+            "blocked_options": [],
+            "errors": [],
+            "filter_issues": [],
+            "clinic_contacts": [
+              {
+                "location": "Mission Bay Health Center",
+                "phone": "(415) 555-9313",
+                "hours": "Mon-Fri 8:00-17:00"
+              }
+            ],
+            "eligible_locations": [
+              {
+                "id": "loc_000",
+                "name": "Mission Bay Health Center"
+              }
+            ],
+            "dialogue_step": {
+              "stage": "identity",
+              "question": "What is your full name and date of birth?"
+            }
+          }
+        },
+        {
+          "function": {
+            "name": "resolve_options",
+            "arguments": "{\"patient_name\": \"Alex Morgan\", \"date_of_birth\": \"1990-04-12\", \"provider_id\": \"prov_002\", \"location_id\": \"loc_000\", \"appointment_type_id\": \"appt_011\", \"is_new_patient\": true}"
+          },
+          "result": {
+            "status": "ready",
+            "next_action": "find_slots",
+            "resolved": {
+              "appointment_type_id": "appt_011",
+              "provider_id": "prov_002",
+              "location_id": "loc_000"
+            },
+            "search_scope": {
+              "any_provider": false,
+              "any_location": false
+            },
+            "candidates": [],
+            "more_available": 0,
+            "missing_facts": [],
+            "deferred_patient_facts": [],
+            "blocked_options": [],
+            "errors": [],
+            "filter_issues": [],
+            "clinic_contacts": [
+              {
+                "location": "Mission Bay Health Center",
+                "phone": "(415) 555-9313",
+                "hours": "Mon-Fri 8:00-17:00"
+              }
+            ],
+            "eligible_locations": [
+              {
+                "id": "loc_000",
+                "name": "Mission Bay Health Center"
+              }
+            ],
+            "dialogue_step": {
+              "stage": "identity_confirmation",
+              "question": "Alex Morgan, born April 12, 1990, is that right?"
+            },
+            "identity_confirmation": {
+              "status": "needs_identity_confirmation",
+              "technical_failure": false,
+              "readback": "Alex Morgan, born April 12, 1990, is that right?",
+              "next_action": "say_identity_and_wait"
+            }
+          }
+        },
+        {
+          "function": {
+            "name": "find_slots",
+            "arguments": "{\"horizon_days\": 30}"
+          },
+          "result": {
+            "status": "ok",
+            "horizon_days": 30,
+            "horizon_end": "2026-12-07T00:00:00-08:00",
+            "relaxed": [],
+            "slots": [
+              {
+                "slot_id": "dev001-s1",
+                "provider_id": "prov_002",
+                "location_id": "loc_000",
+                "appointment_type_id": "appt_011",
+                "start": "2026-11-10T09:00:00-08:00",
+                "end": "2026-11-10T09:10:00-08:00",
+                "service": "Flu Shot",
+                "provider": "Dr. Maria Garcia",
+                "location": "Mission Bay Health Center"
+              }
+            ],
+            "alternatives": [],
+            "clinic_contacts": [
+              {
+                "location": "Mission Bay Health Center",
+                "phone": "(415) 555-9313",
+                "hours": "Mon-Fri 8:00-17:00"
+              }
+            ],
+            "more_available": 0,
+            "excluded": {
+              "outside_opening_hours": 0,
+              "unavailable": 0
+            },
+            "booking_phase": {
+              "status": "needs_confirmation",
+              "technical_failure": false,
+              "next_action": "say_readback_and_wait_for_patient",
+              "slot_id": "dev001-s1",
+              "readback": "I'll book a Flu Shot with Dr. Maria Garcia at Mission Bay Health Center, Tuesday November 10 at 9:00 AM. Shall I book it?"
+            }
+          }
+        },
+        {
+          "function": {
+            "name": "book_appointment",
+            "arguments": "{\"slot_id\": \"dev001-s1\"}"
+          },
+          "result": {
+            "status": "booked",
+            "booking": {
+              "booking_id": "booking-dev001-s1",
+              "slot_id": "dev001-s1",
+              "provider_id": "prov_002",
+              "location_id": "loc_000",
+              "appointment_type_id": "appt_011",
+              "start": "2026-11-10T09:00:00-08:00",
+              "end": "2026-11-10T09:10:00-08:00",
+              "service": "Flu Shot",
+              "provider": "Dr. Maria Garcia",
+              "location": "Mission Bay Health Center"
+            }
+          }
+        }
+      ],
+      "metric_rows": [
+        {
+          "source_line": 1,
+          "row": {
+            "timestamp": "2026-11-09T17:08:29.642999+00:00",
+            "run_id": "comparison-proposed-v2-20261109-180827-8752c3",
+            "call_id": "cd6241f4-b70a-4a76-85f1-c5f80088e5bd",
+            "agent_id": "catalog_scheduler",
+            "agent_revision": "40db1b587b5790ab2c92bc642edbc55e67f0d44ebd8d4f1267de29e1e86ebdc5",
+            "availability_mode": "eval_fixture",
+            "turn": 1,
+            "patient_turn": 0,
+            "trigger": "startup",
+            "node": "scheduling",
+            "model": "gpt-4o",
+            "prompt_tokens": 2306,
+            "cached_tokens": 0,
+            "completion_tokens": 13,
+            "usage_status": "reported",
+            "latency_ms": 1907.829,
+            "ttfb_ms": 1875.102
+          }
+        },
+        {
+          "source_line": 2,
+          "row": {
+            "timestamp": "2026-11-09T17:08:31.365589+00:00",
+            "run_id": "comparison-proposed-v2-20261109-180827-8752c3",
+            "call_id": "cd6241f4-b70a-4a76-85f1-c5f80088e5bd",
+            "agent_id": "catalog_scheduler",
+            "agent_revision": "40db1b587b5790ab2c92bc642edbc55e67f0d44ebd8d4f1267de29e1e86ebdc5",
+            "availability_mode": "eval_fixture",
+            "turn": 2,
+            "patient_turn": 1,
+            "trigger": "patient",
+            "node": "scheduling",
+            "model": "gpt-4o",
+            "prompt_tokens": 2349,
+            "cached_tokens": 0,
+            "completion_tokens": 44,
+            "usage_status": "reported",
+            "latency_ms": 1211.154,
+            "ttfb_ms": 893.965
+          }
+        },
+        {
+          "source_line": 3,
+          "row": {
+            "timestamp": "2026-11-09T17:08:32.388325+00:00",
+            "run_id": "comparison-proposed-v2-20261109-180827-8752c3",
+            "call_id": "cd6241f4-b70a-4a76-85f1-c5f80088e5bd",
+            "agent_id": "catalog_scheduler",
+            "agent_revision": "40db1b587b5790ab2c92bc642edbc55e67f0d44ebd8d4f1267de29e1e86ebdc5",
+            "availability_mode": "eval_fixture",
+            "turn": 3,
+            "patient_turn": 1,
+            "trigger": "tool_result",
+            "node": "scheduling",
+            "model": "gpt-4o",
+            "prompt_tokens": 2837,
+            "cached_tokens": 2176,
+            "completion_tokens": 26,
+            "usage_status": "reported",
+            "latency_ms": 1016.778,
+            "ttfb_ms": 950.798
+          }
+        },
+        {
+          "source_line": 4,
+          "row": {
+            "timestamp": "2026-11-09T17:08:34.041148+00:00",
+            "run_id": "comparison-proposed-v2-20261109-180827-8752c3",
+            "call_id": "cd6241f4-b70a-4a76-85f1-c5f80088e5bd",
+            "agent_id": "catalog_scheduler",
+            "agent_revision": "40db1b587b5790ab2c92bc642edbc55e67f0d44ebd8d4f1267de29e1e86ebdc5",
+            "availability_mode": "eval_fixture",
+            "turn": 4,
+            "patient_turn": 2,
+            "trigger": "patient",
+            "node": "scheduling",
+            "model": "gpt-4o",
+            "prompt_tokens": 2874,
+            "cached_tokens": 2688,
+            "completion_tokens": 55,
+            "usage_status": "reported",
+            "latency_ms": 1142.329,
+            "ttfb_ms": 884.045
+          }
+        },
+        {
+          "source_line": 5,
+          "row": {
+            "timestamp": "2026-11-09T17:08:35.007725+00:00",
+            "run_id": "comparison-proposed-v2-20261109-180827-8752c3",
+            "call_id": "cd6241f4-b70a-4a76-85f1-c5f80088e5bd",
+            "agent_id": "catalog_scheduler",
+            "agent_revision": "40db1b587b5790ab2c92bc642edbc55e67f0d44ebd8d4f1267de29e1e86ebdc5",
+            "availability_mode": "eval_fixture",
+            "turn": 5,
+            "patient_turn": 2,
+            "trigger": "tool_result",
+            "node": "scheduling",
+            "model": "gpt-4o",
+            "prompt_tokens": 3421,
+            "cached_tokens": 2688,
+            "completion_tokens": 17,
+            "usage_status": "reported",
+            "latency_ms": 960.361,
+            "ttfb_ms": 900.76
+          }
+        },
+        {
+          "source_line": 6,
+          "row": {
+            "timestamp": "2026-11-09T17:08:36.767337+00:00",
+            "run_id": "comparison-proposed-v2-20261109-180827-8752c3",
+            "call_id": "cd6241f4-b70a-4a76-85f1-c5f80088e5bd",
+            "agent_id": "catalog_scheduler",
+            "agent_revision": "40db1b587b5790ab2c92bc642edbc55e67f0d44ebd8d4f1267de29e1e86ebdc5",
+            "availability_mode": "eval_fixture",
+            "turn": 6,
+            "patient_turn": 3,
+            "trigger": "patient",
+            "node": "scheduling",
+            "model": "gpt-4o",
+            "prompt_tokens": 3456,
+            "cached_tokens": 3200,
+            "completion_tokens": 16,
+            "usage_status": "reported",
+            "latency_ms": 1249.545,
+            "ttfb_ms": 1123.229
+          }
+        },
+        {
+          "source_line": 7,
+          "row": {
+            "timestamp": "2026-11-09T17:08:58.913224+00:00",
+            "run_id": "comparison-proposed-v2-20261109-180827-8752c3",
+            "call_id": "cd6241f4-b70a-4a76-85f1-c5f80088e5bd",
+            "agent_id": "catalog_scheduler",
+            "agent_revision": "40db1b587b5790ab2c92bc642edbc55e67f0d44ebd8d4f1267de29e1e86ebdc5",
+            "availability_mode": "eval_fixture",
+            "turn": 7,
+            "patient_turn": 3,
+            "trigger": "tool_result",
+            "node": "scheduling",
+            "model": "gpt-4o",
+            "prompt_tokens": 4016,
+            "cached_tokens": 3328,
+            "completion_tokens": 33,
+            "usage_status": "reported",
+            "latency_ms": 22142.099,
+            "ttfb_ms": 20901.938
+          }
+        },
+        {
+          "source_line": 8,
+          "row": {
+            "timestamp": "2026-11-09T17:09:00.343295+00:00",
+            "run_id": "comparison-proposed-v2-20261109-180827-8752c3",
+            "call_id": "cd6241f4-b70a-4a76-85f1-c5f80088e5bd",
+            "agent_id": "catalog_scheduler",
+            "agent_revision": "40db1b587b5790ab2c92bc642edbc55e67f0d44ebd8d4f1267de29e1e86ebdc5",
+            "availability_mode": "eval_fixture",
+            "turn": 8,
+            "patient_turn": 4,
+            "trigger": "patient",
+            "node": "scheduling",
+            "model": "gpt-4o",
+            "prompt_tokens": 4077,
+            "cached_tokens": 3840,
+            "completion_tokens": 19,
+            "usage_status": "reported",
+            "latency_ms": 913.852,
+            "ttfb_ms": 821.812
+          }
+        },
+        {
+          "source_line": 9,
+          "row": {
+            "timestamp": "2026-11-09T17:09:01.181740+00:00",
+            "run_id": "comparison-proposed-v2-20261109-180827-8752c3",
+            "call_id": "cd6241f4-b70a-4a76-85f1-c5f80088e5bd",
+            "agent_id": "catalog_scheduler",
+            "agent_revision": "40db1b587b5790ab2c92bc642edbc55e67f0d44ebd8d4f1267de29e1e86ebdc5",
+            "availability_mode": "eval_fixture",
+            "turn": 9,
+            "patient_turn": 4,
+            "trigger": "tool_result",
+            "node": "scheduling",
+            "model": "gpt-4o",
+            "prompt_tokens": 4459,
+            "cached_tokens": 3968,
+            "completion_tokens": 29,
+            "usage_status": "reported",
+            "latency_ms": 832.904,
+            "ttfb_ms": 681.535
+          }
+        }
+      ]
+    },
+    {
+      "arm": "proposed",
+      "repetition": 2,
+      "call_id": "99b0c79e-aa65-489e-a752-cded6d4d671c",
+      "report_run_index": 1,
+      "patient_turn_metrics": [
+        {
+          "patient_turn": 0,
+          "completed": true,
+          "elapsed_ms": 3714.17
+        },
+        {
+          "patient_turn": 1,
+          "completed": false,
+          "elapsed_ms": 45000.471
+        }
+      ],
+      "transcript": [
+        {
+          "role": "assistant",
+          "text": "Hello, how may I assist you with healthcare scheduling or information today?"
+        }
+      ],
+      "usage": {
+        "model_calls": 3,
+        "prompt_tokens": null,
+        "cached_tokens": null,
+        "uncached_prompt_tokens": null,
+        "completion_tokens": null,
+        "total_tokens": null,
+        "cost_usd": null
+      },
+      "known_usage_subtotal": {
+        "model_calls": 2,
+        "prompt_tokens": 4657,
+        "cached_tokens": 4352,
+        "uncached_prompt_tokens": 305,
+        "completion_tokens": 61,
+        "total_tokens": 4718,
+        "cost_usd": 0.0068125
+      },
+      "saved_tool_events": [],
+      "metric_rows": [
+        {
+          "source_line": 10,
+          "row": {
+            "timestamp": "2026-11-09T17:09:04.913086+00:00",
+            "run_id": "comparison-proposed-v2-20261109-180827-8752c3",
+            "call_id": "99b0c79e-aa65-489e-a752-cded6d4d671c",
+            "agent_id": "catalog_scheduler",
+            "agent_revision": "40db1b587b5790ab2c92bc642edbc55e67f0d44ebd8d4f1267de29e1e86ebdc5",
+            "availability_mode": "eval_fixture",
+            "turn": 1,
+            "patient_turn": 0,
+            "trigger": "startup",
+            "node": "scheduling",
+            "model": "gpt-4o",
+            "prompt_tokens": 2306,
+            "cached_tokens": 2176,
+            "completion_tokens": 15,
+            "usage_status": "reported",
+            "latency_ms": 3706.439,
+            "ttfb_ms": 3621.555
+          }
+        },
+        {
+          "source_line": 11,
+          "row": {
+            "timestamp": "2026-11-09T17:10:06.356336+00:00",
+            "run_id": "comparison-proposed-v2-20261109-180827-8752c3",
+            "call_id": "99b0c79e-aa65-489e-a752-cded6d4d671c",
+            "agent_id": "catalog_scheduler",
+            "agent_revision": "40db1b587b5790ab2c92bc642edbc55e67f0d44ebd8d4f1267de29e1e86ebdc5",
+            "availability_mode": "eval_fixture",
+            "turn": 2,
+            "patient_turn": 1,
+            "trigger": "patient",
+            "node": "scheduling",
+            "model": "gpt-4o",
+            "prompt_tokens": 2351,
+            "cached_tokens": 2176,
+            "completion_tokens": 46,
+            "usage_status": "reported",
+            "latency_ms": 60932.204,
+            "ttfb_ms": 60751.802
+          }
+        }
+      ]
+    }
+  ],
+  "relevant_original_catalog_records": [
+    {
+      "id": "appt_027",
+      "name": "Skin Cancer Screening",
+      "specialty": "Dermatology",
+      "duration_min": 30,
+      "requires_referral": false,
+      "new_patients_allowed": true
+    },
+    {
+      "id": "appt_028",
+      "name": "Full Body Skin Exam",
+      "specialty": "Dermatology",
+      "duration_min": 30,
+      "requires_referral": false,
+      "new_patients_allowed": true
+    }
+  ]
+}

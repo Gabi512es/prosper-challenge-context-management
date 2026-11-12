@@ -1,13 +1,17 @@
 """Scripted-patient text integrations for the development scenarios."""
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime
+from time import perf_counter
+import re
+from types import SimpleNamespace
 
 from scheduling import SchedulingEngine, load_catalog
 from scheduling_agent import build_scheduling_agent
 from text_runner import TextAgentSession, TextTurnResult
 
 from .loader import DEFAULT_CATALOG_PATH, load_dev_scenarios
+from .version import EVALUATOR_VERSION
 
 
 FIRST_TEXT_CASES = {"DEV-012", "DEV-004", "DEV-008"}
@@ -23,6 +27,8 @@ class ScenarioTextRun:
     engine: SchedulingEngine
     error: str | None = None
     agent: dict | None = None
+    patient_turn_metrics: list[dict] = field(default_factory=list)
+    driver_events: list[dict] = field(default_factory=list)
 
 
 @dataclass
@@ -36,6 +42,44 @@ class _PatientDriver:
     corrected: bool = False
     spelling_repeated: bool = False
     human_accepted: bool = False
+    repeats: dict = field(default_factory=dict)
+    events: list[dict] = field(default_factory=list)
+
+    def clarification_field(self, text):
+        facts = self.scenario["patient_facts"]
+        if "spell" in text and facts.get("provider_name") and not self.spelling_repeated:
+            return "provider_spelling"
+        if (any(p in text for p in ("appointment service", "what service", "which service", "confirm the service", "confirm the appointment type"))
+                and facts.get("appointment_type_id") and self.repeats.get("service", 0) < 1):
+            return "service"
+        opening = self.scenario["opening"].casefold()
+        status_limit = 1 if re.search(r"\b(?:new|existing) patient\b|new to the clinic", opening) else 2
+        referral_limit = 1 if "referral" in opening else 2
+        if (re.search(r"(?:confirm|are you|whether|tell me|let me know).{0,45}(?:new patient|new or existing)", text)
+                and "is_new_patient" in facts and self.repeats.get("status", 0) < status_limit):
+            return "status"
+        if (re.search(r"(?:confirm|do you|whether|have you|is there|tell me|let me know).{0,45}referral", text)
+                and "referral_on_file" in facts and self.repeats.get("referral", 0) < referral_limit):
+            return "referral"
+        return None
+
+    def _fact_reply(self, field_name, text, engine):
+        facts = self.scenario["patient_facts"]
+        if field_name == "service":
+            reply = "I'm asking for " + engine.catalog.appointment_types_by_id[facts["appointment_type_id"]].name + "."
+            unnecessary = True  # Same service is already on the fact card/opening.
+        elif field_name == "status":
+            reply = self._patient_status(facts["is_new_patient"]).strip()
+            unnecessary = self.patient_status_given or bool(re.search(r"\b(?:new|existing) patient\b|new to the clinic", self.scenario["opening"], re.I))
+            self.patient_status_given = True
+        else:
+            reply = self._referral_status(facts["referral_on_file"]).strip()
+            unnecessary = self.referral_status_given or "referral" in self.scenario["opening"].casefold()
+            self.referral_status_given = True
+        self.repeats[field_name] = self.repeats.get(field_name, 0) + 1
+        self.events.append({"type": "unnecessary_question" if unnecessary else "fact_question",
+                            "field": field_name, "question": text, "reply": reply})
+        return reply
 
     def reply(self, result: TextTurnResult, engine: SchedulingEngine) -> str | None:
         scenario_id = self.scenario["id"]
@@ -89,9 +133,11 @@ class _PatientDriver:
             )
             if "new patient" in text and "is_new_patient" in facts:
                 self.patient_status_given = True
+                self.repeats["status"] = 1
                 reply += self._patient_status(facts["is_new_patient"])
             if "referral" in text and "referral_on_file" in facts:
                 self.referral_status_given = True
+                self.repeats["referral"] = 1
                 reply += self._referral_status(facts["referral_on_file"])
             return reply
 
@@ -99,21 +145,14 @@ class _PatientDriver:
         if self.identity_given and any(phrase in text for phrase in ("confirm", "correct", "right")) and any(
             phrase in text for phrase in ("birth", "born", "dob")):
             return "Yes, my name and date of birth are correct."
-        if (
-            "new patient" in text
-            and "is_new_patient" in facts
-            and not self.patient_status_given
-        ):
-            self.patient_status_given = True
-            return self._patient_status(facts["is_new_patient"]).strip()
-        if (
-            "referral" in text
-            and "referral_on_file" in facts
-            and not self.referral_status_given
-        ):
-            self.referral_status_given = True
-            return self._referral_status(facts["referral_on_file"]).strip()
-
+        if self.identity_given and self._asks_for_identity(text) and self.repeats.get("identity", 0) < 1:
+            self.repeats["identity"] = 1
+            reply = f"My name is {facts['name']} and my date of birth is {facts['date_of_birth']}."
+            self.events.append({"type": "unnecessary_question", "field": "identity", "question": text, "reply": reply})
+            return reply
+        clarification = self.clarification_field(text)
+        if clarification in {"service", "status", "referral"}:
+            return self._fact_reply(clarification, text, engine)
         if engine.state.offered_slot_ids:
             if scenario_id == "DEV-009":
                 return (
@@ -154,7 +193,7 @@ class _PatientDriver:
         return " I do not have a referral on file."
 
 
-async def run_dev_case(scenario_id: str, *, run_id: str, demo_availability: bool = False) -> ScenarioTextRun:
+async def run_dev_case(scenario_id: str, *, run_id: str, demo_availability: bool = False, agent_factory=None) -> ScenarioTextRun:
     """Run one development case without exposing its expected outcome to the agent."""
     dataset = load_dev_scenarios()
     scenarios = {item["id"]: item for item in dataset["scenarios"]}
@@ -169,7 +208,7 @@ async def run_dev_case(scenario_id: str, *, run_id: str, demo_availability: bool
         generate_demo_availability(catalog, now) if demo_availability else scenario["availability_fixture"],
         now=now,
     )
-    builder = build_scheduling_agent(engine, catalog, availability_mode="demo_generated" if demo_availability else "eval_fixture")
+    builder = (agent_factory or build_scheduling_agent)(engine, catalog, availability_mode="demo_generated" if demo_availability else "eval_fixture")
     session = TextAgentSession(
         builder=builder,
         run_id=run_id,
@@ -181,21 +220,34 @@ async def run_dev_case(scenario_id: str, *, run_id: str, demo_availability: bool
     driver = _PatientDriver(scenario)
     error: str | None = None
     context_messages: list[dict] = []
+    turn_metrics = []
+
+    async def measured(operation, patient_turn):
+        start = perf_counter()
+        completed = False
+        try:
+            reply = await operation
+            completed = True
+            return reply
+        finally:
+            turn_metrics.append({"patient_turn": patient_turn, "completed": completed,
+                                 "elapsed_ms": round((perf_counter() - start) * 1000, 3)})
     try:
-        initial = await session.start()
+        initial = await measured(session.start(), 0)
         transcript.append({"role": "assistant", "text": initial.assistant_text})
-        result = await session.send(scenario["opening"])
+        result = await measured(session.send(scenario["opening"]), 1)
         _append_turn(transcript, scenario["opening"], result)
 
-        for _ in range(8):
+        for patient_turn in range(2, 10):
             if _conversation_complete(scenario, result, engine, driver):
                 break
             patient_text = driver.reply(result, engine)
             if patient_text is None:
+                driver.events.append({"type": "harness_exhausted", "question": result.assistant_text})
                 raise RuntimeError(
                     f"No scripted patient reply after: {result.assistant_text!r}"
                 )
-            result = await session.send(patient_text)
+            result = await measured(session.send(patient_text), patient_turn)
             _append_turn(transcript, patient_text, result)
         else:
             raise RuntimeError("Conversation exceeded eight scripted patient turns.")
@@ -216,6 +268,8 @@ async def run_dev_case(scenario_id: str, *, run_id: str, demo_availability: bool
         engine=engine,
         error=error,
         agent=dict(builder.session_metadata),
+        patient_turn_metrics=turn_metrics,
+        driver_events=driver.events,
     )
 
 
@@ -252,13 +306,22 @@ def _conversation_complete(
     if result.ended or engine.bookings:
         return True
     scenario_id = scenario["id"]
+    text = result.assistant_text.casefold()
+    # A supported question gets its factual reply before terminal keywords or
+    # hidden policy state can cut the conversation short.
+    if driver.clarification_field(text):
+        return False
     current = engine.resolve_options()
     blocked = {item["code"] for item in current["blocked_options"]}
     if scenario["expected_outcome"] == "no_booking" and blocked:
-        return True
-    text = result.assistant_text.casefold()
+        from .scorer import evaluate_run
+        scored = evaluate_run(scenario, SimpleNamespace(error=None, engine=engine,
+            transcript=[{"role": "assistant", "text": result.assistant_text}], call_id="completion-check", context_messages=[]))
+        explanations = [a for a in scored["assertions"] if a["name"].endswith("_explained")]
+        return bool(explanations) and all(a["passed"] for a in explanations)
     if scenario_id == "DEV-007" and driver.service_escalated:
-        return any(word in text for word in ("staff", "human", "cannot", "can't"))
+        from .scorer import _catalog_limit_explained
+        return _catalog_limit_explained(text) and any(word in text for word in ("staff", "human", "clinic"))
     if scenario_id == "DEV-010":
         digits = "".join(character for character in text if character.isdigit())
         opening = "8:00" in text or "8 am" in text or "8 a.m." in text

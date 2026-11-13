@@ -18,3 +18,4 @@ export const SettingsIcon = (p) => <Svg {...p}><path d="M4 7h10M18 7h2M4 17h4M12
 export const ArrowRightIcon = (p) => <Svg {...p}><path d="M5 12h14M13 6l6 6-6 6" /></Svg>
 export const TrashIcon = (p) => <Svg {...p}><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3" /></Svg>
 export const CloseIcon = (p) => <Svg {...p}><path d="M6 6l12 12M18 6 6 18" /></Svg>
+export const ChevronIcon = (p) => <Svg {...p}><path d="m9 6 6 6-6 6" /></Svg>

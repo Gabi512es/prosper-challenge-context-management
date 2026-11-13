@@ -96,6 +96,8 @@ export default function App() {
   const [message, setMessage] = useState({ kind: 'info', text: 'Loading agents…' })
   const [serverErrors, setServerErrors] = useState([])
   const [dialog, setDialog] = useState(null)
+  // Asks the inspector to open and scroll to one section, e.g. from the tools badge.
+  const [reveal, setReveal] = useState(null)
   const positionsRef = useRef(positions)
   positionsRef.current = positions
   // Sizes React Flow measured. Passed back on every render: node objects are
@@ -253,6 +255,10 @@ export default function App() {
         active: selectedNodeName === node.name,
         hasError: Boolean(validation.nodes[index]),
         onRename: (name) => renameNode(node.name, name),
+        onOpenTools: () => {
+          setSelection({ kind: 'node', name: node.name })
+          setReveal({ section: 'node.tools', nonce: Date.now() })
+        },
       },
     }))
     if (virtual[START_ID]) items.push({ id: START_ID, type: 'start', position: virtual[START_ID], measured: measuredRef.current[START_ID], draggable: false, selectable: false, connectable: false, data: {} })
@@ -548,6 +554,34 @@ export default function App() {
     addEdge(source, target)
   }
 
+  const openAgent = (section) => {
+    setSelection(AGENT)
+    if (section) setReveal({ section, nonce: Date.now() })
+  }
+
+  const discardChanges = async () => {
+    const ok = await ask({
+      kind: 'confirm',
+      title: 'Discard unsaved changes?',
+      body: <>Reverts <strong>{config.name || agentId}</strong> to the last saved version. Your edits since then are lost.</>,
+      confirmLabel: 'Discard changes',
+      danger: true,
+    })
+    if (!ok) return
+    const saved = JSON.parse(savedSnapshot)
+    setConfig(saved)
+    // Positions are saved as soon as a node is moved; reload them so renamed steps get theirs back.
+    const layout = await request(`/api/agents/${agentId}/layout`).catch(() => null)
+    if (layout) setPositions(layout.positions || {})
+    setServerErrors([])
+    setSelection((current) => {
+      const kept = current.kind !== 'agent' && saved.nodes.find((item) => item.name === current.name)
+      if (!kept) return AGENT
+      return current.kind === 'edge' && !kept.edges[current.index] ? { kind: 'node', name: kept.name } : current
+    })
+    setMessage({ kind: 'info', text: 'Changes discarded. Showing the last saved version.' })
+  }
+
   // ---- Inspector ------------------------------------------------------------
   const nodeIndex = config && selection.kind !== 'agent' ? config.nodes.findIndex((item) => item.name === selection.name) : -1
   const node = nodeIndex >= 0 ? config.nodes[nodeIndex] : null
@@ -563,6 +597,7 @@ export default function App() {
       onPatch={(patch) => patchNode(node.name, { edges: node.edges.map((item, i) => i === selection.index ? { ...item, ...patch } : item) })}
       onDelete={() => deleteEdge(node.name, selection.index)}
       onOpenNode={() => setSelection({ kind: 'node', name: node.name })}
+      onOpenAgent={openAgent}
     />
   } else if (config && node && selection.kind === 'node') {
     inspector = <NodeInspector
@@ -574,9 +609,12 @@ export default function App() {
       onDelete={() => deleteNode(node.name)}
       onOpenEdge={(index) => setSelection({ kind: 'edge', name: node.name, index })}
       onAddEdge={() => addEdge(node.name, config.nodes[0].name)}
+      onOpenAgent={openAgent}
+      reveal={reveal?.section.startsWith('node.') ? reveal : null}
     />
   } else if (config) {
-    inspector = <AgentInspector config={config} errors={validation.agent} onPatch={patchConfig} />
+    inspector = <AgentInspector config={config} errors={validation.agent} onPatch={patchConfig}
+      reveal={reveal?.section.startsWith('agent.') ? reveal : null} />
   }
 
   const activeAgent = agents.find((agent) => agent.id === agentId)
@@ -592,7 +630,8 @@ export default function App() {
         </>}
       </div>
       <div className="toolbar">
-        <button type="button" className="btn btn-ghost" onClick={addNode} disabled={!config || locked}><PlusIcon size={15} />Add node</button>
+        <button type="button" className="btn btn-ghost" onClick={addNode} disabled={!config || locked}><PlusIcon size={15} />Add step</button>
+        {dirty && <button type="button" className="btn btn-ghost" onClick={discardChanges} disabled={locked}>Discard changes</button>}
         <ActionButton onClick={save} disabled={!config || locked} loading={busy === 'save'}>Save</ActionButton>
         <ActionButton className="btn-primary" onClick={testCall} disabled={!config || locked} loading={busy === 'call'}><PhoneIcon size={15} />Test call</ActionButton>
       </div>
@@ -601,6 +640,7 @@ export default function App() {
       <span className="status-dot" aria-hidden="true" />
       <span>{message.text}</span>
       {serverErrors.length > 1 && <ul>{serverErrors.slice(1).map((error, index) => <li key={index}>{error}</li>)}</ul>}
+      {dirty && <span className="status-hint">Changes stay in this browser until you save. Test call saves first.</span>}
     </div>
     <main>
       <aside className="agents-panel" aria-label="Agents">
@@ -621,7 +661,7 @@ export default function App() {
           >
             <span className="agent-item__name">{agent.name}{agent.id === agentId && dirty ? <span className="dirty-dot" title="Unsaved changes" /> : null}</span>
             <span className="agent-item__meta">
-              <span>{agent.nodes} node{agent.nodes === 1 ? '' : 's'}</span>
+              <span>{agent.nodes} step{agent.nodes === 1 ? '' : 's'}</span>
               {agent.active && <span className="next-call">Next call</span>}
             </span>
           </button>)}

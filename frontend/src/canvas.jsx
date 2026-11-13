@@ -36,7 +36,7 @@ function NodeTitle({ name, onRename }) {
 }
 
 function AgentNode({ data }) {
-  const { node, active, hasError, onRename } = data
+  const { node, active, hasError, onRename, onOpenTools } = data
   const preview = node.task_messages?.find((message) => message.content?.trim())?.content.trim()
   const tools = node.functions?.length || 0
   return <div className={`flow-node${active ? ' is-active' : ''}${hasError ? ' has-error' : ''}`}>
@@ -49,23 +49,29 @@ function AgentNode({ data }) {
       <p className={`flow-node__preview${preview ? '' : ' is-empty'}`}>{preview || 'No task message yet.'}</p>
     </div>
     {tools > 0 && <div className="flow-node__footer">
-      <span className="tool-badge" title={`Tools: ${node.functions.join(', ')}`}>
+      <button
+        type="button"
+        className="tool-badge nodrag"
+        title={`Actions: ${node.functions.join(', ')}`}
+        aria-label={`${tools} action${tools === 1 ? '' : 's'}: ${node.functions.join(', ')}. Open in the inspector.`}
+        onClick={(event) => { event.stopPropagation(); onOpenTools() }}
+      >
         <WrenchIcon size={14} /><span>{tools}</span>
-      </span>
+      </button>
     </div>}
     <Handle type="source" position={Position.Bottom} />
   </div>
 }
 
 function StartNode() {
-  return <div className="flow-pill" title="Calls start at the initial node. Change it in the agent settings.">
+  return <div className="flow-pill" title="Calls start here. Change the first step in the agent settings.">
     <FlagIcon size={18} /><span>Start</span>
     <Handle type="source" position={Position.Bottom} isConnectable={false} />
   </div>
 }
 
 function EndNode() {
-  return <div className="flow-pill" title="Terminal nodes lead here.">
+  return <div className="flow-pill" title="Steps that end the call lead here.">
     <Handle type="target" position={Position.Top} isConnectable={false} />
     <PhoneOffIcon size={18} /><span>End</span>
   </div>

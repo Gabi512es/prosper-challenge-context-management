@@ -82,6 +82,24 @@ def save_agent(agent_id: str, config: dict):
         raise _error(error) from error
 
 
+@app.get("/api/agents/{agent_id}/layout")
+def get_layout(agent_id: str):
+    try:
+        if not store.path(agent_id).exists():
+            raise AgentStoreError(f"Unknown agent: {agent_id}")
+        return {"id": agent_id, "positions": store.load_layout(agent_id)}
+    except AgentStoreError as error:
+        raise _error(error, 404) from error
+
+
+@app.put("/api/agents/{agent_id}/layout")
+def save_layout(agent_id: str, layout: dict):
+    try:
+        return {"id": agent_id, "positions": store.save_layout(agent_id, layout.get("positions", {}))}
+    except AgentStoreError as error:
+        raise _error(error) from error
+
+
 @app.post("/api/agents/{agent_id}/test-call")
 def test_call(agent_id: str):
     try:

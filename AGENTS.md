@@ -4,7 +4,7 @@ Read this first. It is the working context for any coding agent in this repo. Te
 
 ## 1. The task
 
-Brief: Prosper builds voice AI for healthcare phone calls. Challenge has two phases, budget about 16 hours total.
+Brief: Prosper builds voice AI for healthcare phone calls. Challenge has two phases. The brief suggests 8 to 12 hours; I planned about 16 and measured about 10 hours of active time as of 2026-11-12 (see docs/decisions.md). About 10 hours of active time: 9h51 recorded by timer, plus roughly 30 minutes not timed (a few short voice calls and review). Agent compute time in the background is not counted.
 
 - Phase 1: a UI to create and edit voice agents (graph of nodes and edges) and place a test call.
 - Phase 2 (the heart of it): a context-management approach so a scheduling agent reliably and cheaply navigates a large catalog of locations, doctors and appointment types under booking policies.

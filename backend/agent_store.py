@@ -103,7 +103,55 @@ class AgentStore:
         if self.path(target_id).exists():
             raise AgentStoreError(f"Agent already exists: {target_id}")
         data["name"] = f"{data.get('name', source_id)} Copy"
-        return self.save(target_id, data)
+        saved = self.save(target_id, data)
+        layout = self.load_layout(source_id)
+        if layout:
+            self.save_layout(target_id, layout)
+        return saved
+
+    # Editor node positions live in a separate file per agent, never inside the
+    # agent JSON, so moving a node never changes the agent revision hash.
+    def layout_path(self, agent_id: str) -> Path:
+        self.path(agent_id)  # same id validation as the agent file
+        return self.agents_dir / "layouts" / f"{agent_id}.layout.json"
+
+    def load_layout(self, agent_id: str) -> dict:
+        path = self.layout_path(agent_id)
+        if not path.exists():
+            return {}
+        try:
+            data = json.loads(path.read_text())
+        except (OSError, json.JSONDecodeError):
+            return {}
+        try:
+            return self._valid_positions(data.get("positions", {}))
+        except AgentStoreError:
+            return {}
+
+    def save_layout(self, agent_id: str, positions: dict) -> dict:
+        if not self.path(agent_id).exists():
+            raise AgentStoreError(f"Unknown agent: {agent_id}")
+        clean = self._valid_positions(positions)
+        path = self.layout_path(agent_id)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        temporary = path.with_name(f".{path.name}.{uuid4().hex}.tmp")
+        temporary.write_text(json.dumps({"positions": clean}, indent=2, sort_keys=True) + "\n")
+        temporary.replace(path)
+        return clean
+
+    @staticmethod
+    def _valid_positions(positions) -> dict:
+        if not isinstance(positions, dict):
+            raise AgentStoreError("Layout positions must be an object keyed by node name.")
+        clean = {}
+        for name, point in positions.items():
+            if not isinstance(name, str) or not isinstance(point, dict):
+                raise AgentStoreError("Each layout position must be {x, y} keyed by node name.")
+            x, y = point.get("x"), point.get("y")
+            if not all(isinstance(v, (int, float)) and not isinstance(v, bool) for v in (x, y)):
+                raise AgentStoreError(f"Layout position for {name!r} needs numeric x and y.")
+            clean[name] = {"x": float(x), "y": float(y)}
+        return clean
 
     def delete(self, agent_id: str) -> None:
         path = self.path(agent_id)
@@ -111,6 +159,9 @@ class AgentStore:
             raise AgentStoreError(f"Unknown agent: {agent_id}")
         was_active = self.active_id() == agent_id
         path.unlink()
+        layout = self.layout_path(agent_id)
+        if layout.exists():
+            layout.unlink()
         if was_active:
             remaining = self.list()
             if remaining:

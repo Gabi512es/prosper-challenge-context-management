@@ -2151,3 +2151,10 @@ Total active time: 9h51 as of 2026-11-12 (author's timer), to be updated before
 submission; agent compute time not counted. The challenge brief suggests 8 to
 12 hours (author's reading of the brief). This supersedes the "4h44 so far"
 figure in the Time spent section above, which covered work through November 8.
+
+## 2026-11-12: time statement for submission
+
+About 10 hours of active time: 9h51 recorded by timer, plus roughly 30 minutes not timed (a few short voice calls and review). Agent compute time in the background is not counted.
+
+The 9h51 timer entry above remains the recorded figure; the roughly 30 untimed
+minutes are the author's estimate.

@@ -427,10 +427,9 @@ adjudicated the review disagreements, re-checked the 7 passes and proposed
 HO-016 against the full transcripts. Since 2026-11-09, every paid run needed a
 written cost estimate and my explicit go before it started.
 
-**Time.** Total active time: 9h51 as of 2026-11-12, measured with my timer,
-to be updated before submission. The brief suggests 8 to 12 hours. Coding
-agents also ran in the background between sessions; that agent compute time is
-not counted in the active time and is not measured.
+**Time.** About 10 hours of active time: 9h51 recorded by timer, plus roughly
+30 minutes not timed (a few short voice calls and review). Agent compute time
+in the background is not counted. The brief suggests 8 to 12 hours.
 
 **Frozen evaluation files.** Both evaluation sets stayed outside the
 repository until the final run. Their SHA-256 hashes were recorded on
@@ -473,7 +472,7 @@ criteria were read only after the frozen final run, for the semantic review.
 | Failure families | 4 | docs/semantic-review.md (S1 to S4) |
 | Voice fix implementation details | (qualitative) | docs/decisions.md (2026-11-08 to 2026-11-12 voice entries) |
 | ENT, nearest, primary care bugs | (qualitative) | docs/decisions.md (2026-11-09 entries) |
-| Active time; brief's suggested range | 9h51 as of 2026-11-12; 8 to 12 hours | docs/decisions.md (2026-11-12, active time update) |
+| Active time; brief's suggested range | about 10 hours (9h51 timed plus roughly 30 minutes not timed); 8 to 12 hours | docs/decisions.md (2026-11-12, active time update; time statement for submission) |
 | Summary ratios "about twice", "about a third" | rounded from $2.2780400 / $1.0954425 and $0.689215 / $2.348205 | docs/comparison-evaluator-v5.md; docs/scaling-v3-results.md (inputs) |
 | Driver limitations 11 held-out = 8 flagged + 3 unflagged (HO-004, HO-006, HO-014 proposed) | 11; 8; 3 | docs/semantic-review.md (label rows and Notes) |
 | HO-016, HO-011, HO-007 state and guard observations | (qualitative) | docs/semantic-review.md |

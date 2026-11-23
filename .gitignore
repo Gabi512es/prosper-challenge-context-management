@@ -24,6 +24,7 @@ node_modules/
 .next/
 dist/
 *.log
+/backend/logs/
 
 # ---- OS / editor ----
 .DS_Store

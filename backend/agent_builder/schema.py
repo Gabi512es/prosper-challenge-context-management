@@ -1,10 +1,10 @@
 #
-# Agent schema — the declarative contract the Phase 2 Composer reads and writes.
+# Agent schema — the declarative contract the Phase 2 Copilot reads and writes.
 #
 # Design rule: stay as close to Pipecat Flows' own vocabulary as possible. A node
 # carries Pipecat's native fields (`role_message`, `task_messages`, `pre/post_actions`)
 # verbatim. The ONLY thing we add is `edges`: transitions expressed as DATA (a string
-# `target`) rather than as Python closures — because a Composer can emit a string, not
+# `target`) rather than as Python closures — because a Copilot can emit a string, not
 # a callable. `AgentBuilder` turns these strings back into the closures Pipecat wants.
 #
 
@@ -45,9 +45,11 @@ class Node:
     task_messages: list = field(default_factory=list)   # this node's objectives
     role_message: Optional[str] = None                  # overrides the global persona
     edges: list = field(default_factory=list)           # list[Edge]; transitions out
+    functions: list = field(default_factory=list)       # registry names; stay in node
     pre_actions: list = field(default_factory=list)
     post_actions: list = field(default_factory=list)
     end: bool = False                                   # terminal -> ends the call
+    auto_end: bool = True                               # emit end_conversation action
 
     @classmethod
     def from_dict(cls, d: dict) -> "Node":
@@ -56,9 +58,11 @@ class Node:
             task_messages=d.get("task_messages", []),
             role_message=d.get("role_message"),
             edges=[Edge.from_dict(e) for e in d.get("edges", [])],
+            functions=d.get("functions", []),
             pre_actions=d.get("pre_actions", []),
             post_actions=d.get("post_actions", []),
             end=d.get("end", False),
+            auto_end=d.get("auto_end", True),
         )
 
 

@@ -1,0 +1,826 @@
+{
+  "source_run": "v4-m0-20261119-165009",
+  "snapshot": "gpt-4o-2024-08-06",
+  "schema_sha256": "8e153f710d55843532bb1895c67c2d15e3ee0cfc574574e3d9dc9178bf0b946a",
+  "results_sha256": "84463ad56096a676de61fd07d5deb8d4214f8caae76b451aa6361a289e553072",
+  "cases": [
+    {
+      "label": "01-yes",
+      "caller_text": "Yes.",
+      "context": {
+        "clock": {
+          "clinic_today": "2026-11-19",
+          "clinic_timezone": "America/Los_Angeles"
+        },
+        "known": {
+          "service": {
+            "id": "appt_002",
+            "name": "Annual Physical"
+          },
+          "provider": {
+            "id": "prov_003",
+            "name": "Dr. Maria Garcia",
+            "specialty": "Family Medicine"
+          },
+          "provider_specialty": "Family Medicine",
+          "location": {
+            "id": "loc_005",
+            "name": "Midtown Medical Group"
+          },
+          "identity": {
+            "name": "Alex Morgan",
+            "date_of_birth": "1990-04-12",
+            "confirmed": true
+          },
+          "new_patient": true,
+          "any_provider": false,
+          "any_location": false
+        },
+        "question": {
+          "id": "q-book",
+          "kind": "booking_consent",
+          "expected": [
+            "booking_consent"
+          ]
+        },
+        "presentations": [],
+        "last_message": {
+          "id": "message-book",
+          "text": "I'll book an Annual Physical with Dr. Maria Garcia at Midtown Medical Group, Friday November 20 at 10:00 AM. Shall I book it?",
+          "delivered": true
+        },
+        "proposal": {
+          "id": "proposal-book",
+          "kind": "booking",
+          "delivered_before_reply": true,
+          "slot_id": "synthetic-probe-slot",
+          "service_id": "appt_002",
+          "provider_id": "prov_003",
+          "location_id": "loc_005",
+          "appointment_date": "2026-11-20"
+        },
+        "prior_acts": []
+      },
+      "raw_output": "{\"acts\":[{\"kind\":\"affirm\",\"target\":{\"type\":\"proposal\",\"id\":\"proposal-book\"},\"quote\":\"Yes.\"}]}"
+    },
+    {
+      "label": "02-deny",
+      "caller_text": "No, don't book it.",
+      "context": {
+        "clock": {
+          "clinic_today": "2026-11-19",
+          "clinic_timezone": "America/Los_Angeles"
+        },
+        "known": {
+          "service": {
+            "id": "appt_002",
+            "name": "Annual Physical"
+          },
+          "provider": {
+            "id": "prov_003",
+            "name": "Dr. Maria Garcia",
+            "specialty": "Family Medicine"
+          },
+          "provider_specialty": "Family Medicine",
+          "location": {
+            "id": "loc_005",
+            "name": "Midtown Medical Group"
+          },
+          "identity": {
+            "name": "Alex Morgan",
+            "date_of_birth": "1990-04-12",
+            "confirmed": true
+          },
+          "new_patient": true,
+          "any_provider": false,
+          "any_location": false
+        },
+        "question": {
+          "id": "q-book",
+          "kind": "booking_consent",
+          "expected": [
+            "booking_consent"
+          ]
+        },
+        "presentations": [],
+        "last_message": {
+          "id": "message-book",
+          "text": "I'll book an Annual Physical with Dr. Maria Garcia at Midtown Medical Group, Friday November 20 at 10:00 AM. Shall I book it?",
+          "delivered": true
+        },
+        "proposal": {
+          "id": "proposal-book",
+          "kind": "booking",
+          "delivered_before_reply": true,
+          "slot_id": "synthetic-probe-slot",
+          "service_id": "appt_002",
+          "provider_id": "prov_003",
+          "location_id": "loc_005",
+          "appointment_date": "2026-11-20"
+        },
+        "prior_acts": []
+      },
+      "raw_output": "{\"acts\":[{\"kind\":\"deny\",\"target\":{\"type\":\"proposal\",\"id\":\"proposal-book\"},\"quote\":\"No, don't book it.\"}]}"
+    },
+    {
+      "label": "03-correction-yes",
+      "caller_text": "Actually, Richmond instead of Midtown. Yes, please book it.",
+      "context": {
+        "clock": {
+          "clinic_today": "2026-11-19",
+          "clinic_timezone": "America/Los_Angeles"
+        },
+        "known": {
+          "service": {
+            "id": "appt_002",
+            "name": "Annual Physical"
+          },
+          "provider": {
+            "id": "prov_003",
+            "name": "Dr. Maria Garcia",
+            "specialty": "Family Medicine"
+          },
+          "provider_specialty": "Family Medicine",
+          "location": {
+            "id": "loc_005",
+            "name": "Midtown Medical Group"
+          },
+          "identity": {
+            "name": "Alex Morgan",
+            "date_of_birth": "1990-04-12",
+            "confirmed": true
+          },
+          "new_patient": true,
+          "any_provider": false,
+          "any_location": false
+        },
+        "question": {
+          "id": "q-book",
+          "kind": "booking_consent",
+          "expected": [
+            "booking_consent"
+          ]
+        },
+        "presentations": [],
+        "last_message": {
+          "id": "message-book",
+          "text": "I'll book an Annual Physical with Dr. Maria Garcia at Midtown Medical Group, Friday November 20 at 10:00 AM. Shall I book it?",
+          "delivered": true
+        },
+        "proposal": {
+          "id": "proposal-book",
+          "kind": "booking",
+          "delivered_before_reply": true,
+          "slot_id": "synthetic-probe-slot",
+          "service_id": "appt_002",
+          "provider_id": "prov_003",
+          "location_id": "loc_005",
+          "appointment_date": "2026-11-20"
+        },
+        "prior_acts": []
+      },
+      "raw_output": "{\"acts\":[{\"kind\":\"correct\",\"delta\":{\"field\":\"location\",\"value\":\"Richmond\"},\"quote\":\"Richmond instead of Midtown\"},{\"kind\":\"affirm\",\"target\":{\"type\":\"proposal\",\"id\":\"proposal-book\"},\"quote\":\"Yes, please book it.\"}]}"
+    },
+    {
+      "label": "04-ordinal",
+      "caller_text": "The first one.",
+      "context": {
+        "clock": {
+          "clinic_today": "2026-11-19",
+          "clinic_timezone": "America/Los_Angeles"
+        },
+        "known": {
+          "service": {
+            "id": "appt_002",
+            "name": "Annual Physical"
+          },
+          "provider": null,
+          "provider_specialty": "Family Medicine",
+          "location": null,
+          "identity": {
+            "name": "Alex Morgan",
+            "date_of_birth": "1990-04-12",
+            "confirmed": true
+          },
+          "new_patient": true,
+          "any_provider": false,
+          "any_location": false
+        },
+        "question": {
+          "id": "q-provider",
+          "kind": "provider_choice",
+          "expected": [
+            "provider"
+          ]
+        },
+        "presentations": [
+          {
+            "id": "presentation-providers",
+            "entity": "provider",
+            "delivered": true,
+            "options": [
+              {
+                "option_id": "prov_002",
+                "ordinal": 1,
+                "name": "Dr. Maria Garcia",
+                "specialty": "Pediatrics",
+                "title": "MD"
+              },
+              {
+                "option_id": "prov_003",
+                "ordinal": 2,
+                "name": "Dr. Maria Garcia",
+                "specialty": "Family Medicine",
+                "title": "NP"
+              }
+            ]
+          }
+        ],
+        "last_message": {
+          "id": "message-providers",
+          "delivered": true,
+          "text": "Which provider did you mean: Dr. Maria Garcia, Pediatrics (MD); Dr. Maria Garcia, Family Medicine (NP)?"
+        },
+        "proposal": null,
+        "prior_acts": []
+      },
+      "raw_output": "{\"acts\":[{\"kind\":\"select_option\",\"presentation_id\":\"presentation-providers\",\"selector\":{\"by\":\"ordinal\",\"ordinal\":1},\"quote\":\"The first one.\"}]}"
+    },
+    {
+      "label": "05-info-update",
+      "caller_text": "What is the phone number of Mission District? For my booking, Richmond instead, please.",
+      "context": {
+        "clock": {
+          "clinic_today": "2026-11-19",
+          "clinic_timezone": "America/Los_Angeles"
+        },
+        "known": {
+          "service": {
+            "id": "appt_002",
+            "name": "Annual Physical"
+          },
+          "provider": {
+            "id": "prov_003",
+            "name": "Dr. Maria Garcia",
+            "specialty": "Family Medicine"
+          },
+          "provider_specialty": "Family Medicine",
+          "location": {
+            "id": "loc_005",
+            "name": "Midtown Medical Group"
+          },
+          "identity": {
+            "name": "Alex Morgan",
+            "date_of_birth": "1990-04-12",
+            "confirmed": true
+          },
+          "new_patient": true,
+          "any_provider": false,
+          "any_location": false
+        },
+        "question": {
+          "id": "q-book",
+          "kind": "booking_consent",
+          "expected": [
+            "booking_consent"
+          ]
+        },
+        "presentations": [],
+        "last_message": {
+          "id": "message-book",
+          "text": "I'll book an Annual Physical with Dr. Maria Garcia at Midtown Medical Group, Friday November 20 at 10:00 AM. Shall I book it?",
+          "delivered": true
+        },
+        "proposal": {
+          "id": "proposal-book",
+          "kind": "booking",
+          "delivered_before_reply": true,
+          "slot_id": "synthetic-probe-slot",
+          "service_id": "appt_002",
+          "provider_id": "prov_003",
+          "location_id": "loc_005",
+          "appointment_date": "2026-11-20"
+        },
+        "prior_acts": []
+      },
+      "raw_output": "{\"acts\":[{\"kind\":\"information_question\",\"entity\":\"location\",\"name\":\"Mission District\",\"reference_id\":null,\"attribute\":\"phone\",\"quote\":\"What is the phone number of Mission District?\"},{\"kind\":\"correct\",\"delta\":{\"field\":\"location\",\"value\":\"Richmond\"},\"quote\":\"Richmond instead, please.\"}]}"
+    },
+    {
+      "label": "06a-birth-year",
+      "caller_text": "1991.",
+      "context": {
+        "clock": {
+          "clinic_today": "2026-11-19",
+          "clinic_timezone": "America/Los_Angeles"
+        },
+        "known": {
+          "service": {
+            "id": "appt_002",
+            "name": "Annual Physical"
+          },
+          "provider": {
+            "id": "prov_003",
+            "name": "Dr. Maria Garcia",
+            "specialty": "Family Medicine"
+          },
+          "provider_specialty": "Family Medicine",
+          "location": {
+            "id": "loc_005",
+            "name": "Midtown Medical Group"
+          },
+          "identity": {
+            "name": "Alex Morgan",
+            "date_of_birth": null,
+            "partial_date_of_birth": {
+              "month": 4,
+              "day": 12
+            },
+            "confirmed": false
+          },
+          "new_patient": true,
+          "any_provider": false,
+          "any_location": false
+        },
+        "question": {
+          "id": "q-birth-year",
+          "kind": "identity",
+          "expected": [
+            "date_of_birth.year"
+          ]
+        },
+        "presentations": [],
+        "last_message": {
+          "id": "message-year",
+          "text": "What year were you born?",
+          "delivered": true
+        },
+        "proposal": null,
+        "prior_acts": []
+      },
+      "raw_output": "{\"acts\":[{\"kind\":\"set_field\",\"delta\":{\"field\":\"date_of_birth\",\"value\":{\"year\":1991,\"month\":4,\"day\":12}},\"quote\":\"1991.\"}]}"
+    },
+    {
+      "label": "06b-appointment-date",
+      "caller_text": "I want Friday, November 20.",
+      "context": {
+        "clock": {
+          "clinic_today": "2026-11-19",
+          "clinic_timezone": "America/Los_Angeles"
+        },
+        "known": {
+          "service": {
+            "id": "appt_002",
+            "name": "Annual Physical"
+          },
+          "provider": {
+            "id": "prov_003",
+            "name": "Dr. Maria Garcia",
+            "specialty": "Family Medicine"
+          },
+          "provider_specialty": "Family Medicine",
+          "location": {
+            "id": "loc_005",
+            "name": "Midtown Medical Group"
+          },
+          "identity": {
+            "name": "Alex Morgan",
+            "date_of_birth": "1990-04-12",
+            "confirmed": true
+          },
+          "new_patient": true,
+          "any_provider": false,
+          "any_location": false
+        },
+        "question": {
+          "id": "q-slot",
+          "kind": "slot_choice",
+          "expected": [
+            "slot"
+          ]
+        },
+        "presentations": [
+          {
+            "id": "presentation-slots",
+            "entity": "slot",
+            "delivered": true,
+            "options": [
+              {
+                "option_id": "probe-thursday",
+                "ordinal": 1,
+                "date": "2026-11-19",
+                "time": "10:00",
+                "site": "Midtown Medical Group"
+              },
+              {
+                "option_id": "probe-friday",
+                "ordinal": 2,
+                "date": "2026-11-20",
+                "time": "10:00",
+                "site": "Midtown Medical Group"
+              }
+            ]
+          }
+        ],
+        "last_message": {
+          "id": "message-slots",
+          "text": "At Midtown I have Thursday November 19 at 10 AM or Friday November 20 at 10 AM. Which works for you?",
+          "delivered": true
+        },
+        "proposal": null,
+        "prior_acts": []
+      },
+      "raw_output": "{\"acts\":[{\"kind\":\"select_option\",\"presentation_id\":\"presentation-slots\",\"selector\":{\"by\":\"ordinal\",\"ordinal\":2},\"quote\":\"Friday, November 20\"}]}"
+    },
+    {
+      "label": "07a-split-yes",
+      "caller_text": "Yes.",
+      "context": {
+        "clock": {
+          "clinic_today": "2026-11-19",
+          "clinic_timezone": "America/Los_Angeles"
+        },
+        "known": {
+          "service": {
+            "id": "appt_002",
+            "name": "Annual Physical"
+          },
+          "provider": {
+            "id": "prov_003",
+            "name": "Dr. Maria Garcia",
+            "specialty": "Family Medicine"
+          },
+          "provider_specialty": "Family Medicine",
+          "location": {
+            "id": "loc_005",
+            "name": "Midtown Medical Group"
+          },
+          "identity": {
+            "name": "Alex Morgan",
+            "date_of_birth": "1990-04-12",
+            "confirmed": true
+          },
+          "new_patient": true,
+          "any_provider": false,
+          "any_location": false
+        },
+        "question": {
+          "id": "q-book",
+          "kind": "booking_consent",
+          "expected": [
+            "booking_consent"
+          ]
+        },
+        "presentations": [],
+        "last_message": {
+          "id": "message-book",
+          "text": "I'll book an Annual Physical with Dr. Maria Garcia at Midtown Medical Group, Friday November 20 at 10:00 AM. Shall I book it?",
+          "delivered": true
+        },
+        "proposal": {
+          "id": "proposal-book",
+          "kind": "booking",
+          "delivered_before_reply": true,
+          "slot_id": "synthetic-probe-slot",
+          "service_id": "appt_002",
+          "provider_id": "prov_003",
+          "location_id": "loc_005",
+          "appointment_date": "2026-11-20"
+        },
+        "prior_acts": []
+      },
+      "raw_output": "{\"acts\":[{\"kind\":\"affirm\",\"target\":{\"type\":\"proposal\",\"id\":\"proposal-book\"},\"quote\":\"Yes.\"}]}"
+    },
+    {
+      "label": "07b-split-please",
+      "caller_text": "Please.",
+      "context": {
+        "clock": {
+          "clinic_today": "2026-11-19",
+          "clinic_timezone": "America/Los_Angeles"
+        },
+        "known": {
+          "service": {
+            "id": "appt_002",
+            "name": "Annual Physical"
+          },
+          "provider": {
+            "id": "prov_003",
+            "name": "Dr. Maria Garcia",
+            "specialty": "Family Medicine"
+          },
+          "provider_specialty": "Family Medicine",
+          "location": {
+            "id": "loc_005",
+            "name": "Midtown Medical Group"
+          },
+          "identity": {
+            "name": "Alex Morgan",
+            "date_of_birth": "1990-04-12",
+            "confirmed": true
+          },
+          "new_patient": true,
+          "any_provider": false,
+          "any_location": false
+        },
+        "question": {
+          "id": "q-book",
+          "kind": "booking_consent",
+          "expected": [
+            "booking_consent"
+          ]
+        },
+        "presentations": [],
+        "last_message": {
+          "id": "message-book",
+          "text": "I'll book an Annual Physical with Dr. Maria Garcia at Midtown Medical Group, Friday November 20 at 10:00 AM. Shall I book it?",
+          "delivered": true
+        },
+        "proposal": {
+          "id": "proposal-book",
+          "kind": "booking",
+          "delivered_before_reply": true,
+          "slot_id": "synthetic-probe-slot",
+          "service_id": "appt_002",
+          "provider_id": "prov_003",
+          "location_id": "loc_005",
+          "appointment_date": "2026-11-20"
+        },
+        "prior_acts": []
+      },
+      "raw_output": "{\"acts\":[{\"kind\":\"affirm\",\"target\":{\"type\":\"proposal\",\"id\":\"proposal-book\"},\"quote\":\"Please.\"}]}"
+    },
+    {
+      "label": "08-thanks",
+      "caller_text": "Thanks.",
+      "context": {
+        "clock": {
+          "clinic_today": "2026-11-19",
+          "clinic_timezone": "America/Los_Angeles"
+        },
+        "known": {
+          "service": {
+            "id": "appt_002",
+            "name": "Annual Physical"
+          },
+          "provider": {
+            "id": "prov_003",
+            "name": "Dr. Maria Garcia",
+            "specialty": "Family Medicine"
+          },
+          "provider_specialty": "Family Medicine",
+          "location": {
+            "id": "loc_005",
+            "name": "Midtown Medical Group"
+          },
+          "identity": {
+            "name": "Alex Morgan",
+            "date_of_birth": "1990-04-12",
+            "confirmed": true
+          },
+          "new_patient": true,
+          "any_provider": false,
+          "any_location": false
+        },
+        "question": {
+          "id": "q-book",
+          "kind": "booking_consent",
+          "expected": [
+            "booking_consent"
+          ]
+        },
+        "presentations": [],
+        "last_message": {
+          "id": "message-book",
+          "text": "I'll book an Annual Physical with Dr. Maria Garcia at Midtown Medical Group, Friday November 20 at 10:00 AM. Shall I book it?",
+          "delivered": true
+        },
+        "proposal": {
+          "id": "proposal-book",
+          "kind": "booking",
+          "delivered_before_reply": true,
+          "slot_id": "synthetic-probe-slot",
+          "service_id": "appt_002",
+          "provider_id": "prov_003",
+          "location_id": "loc_005",
+          "appointment_date": "2026-11-20"
+        },
+        "prior_acts": []
+      },
+      "raw_output": "{\"acts\":[{\"kind\":\"acknowledge\",\"quote\":\"Thanks.\"}]}"
+    },
+    {
+      "label": "09-pause",
+      "caller_text": "Wait, let me check.",
+      "context": {
+        "clock": {
+          "clinic_today": "2026-11-19",
+          "clinic_timezone": "America/Los_Angeles"
+        },
+        "known": {
+          "service": {
+            "id": "appt_002",
+            "name": "Annual Physical"
+          },
+          "provider": {
+            "id": "prov_003",
+            "name": "Dr. Maria Garcia",
+            "specialty": "Family Medicine"
+          },
+          "provider_specialty": "Family Medicine",
+          "location": {
+            "id": "loc_005",
+            "name": "Midtown Medical Group"
+          },
+          "identity": {
+            "name": "Alex Morgan",
+            "date_of_birth": "1990-04-12",
+            "confirmed": true
+          },
+          "new_patient": true,
+          "any_provider": false,
+          "any_location": false
+        },
+        "question": {
+          "id": "q-book",
+          "kind": "booking_consent",
+          "expected": [
+            "booking_consent"
+          ]
+        },
+        "presentations": [],
+        "last_message": {
+          "id": "message-book",
+          "text": "I'll book an Annual Physical with Dr. Maria Garcia at Midtown Medical Group, Friday November 20 at 10:00 AM. Shall I book it?",
+          "delivered": true
+        },
+        "proposal": {
+          "id": "proposal-book",
+          "kind": "booking",
+          "delivered_before_reply": true,
+          "slot_id": "synthetic-probe-slot",
+          "service_id": "appt_002",
+          "provider_id": "prov_003",
+          "location_id": "loc_005",
+          "appointment_date": "2026-11-20"
+        },
+        "prior_acts": []
+      },
+      "raw_output": "{\"acts\":[{\"kind\":\"pause\",\"quote\":\"Wait, let me check.\"}]}"
+    },
+    {
+      "label": "10-repeat",
+      "caller_text": "Sorry, what time did you say?",
+      "context": {
+        "clock": {
+          "clinic_today": "2026-11-19",
+          "clinic_timezone": "America/Los_Angeles"
+        },
+        "known": {
+          "service": {
+            "id": "appt_002",
+            "name": "Annual Physical"
+          },
+          "provider": {
+            "id": "prov_003",
+            "name": "Dr. Maria Garcia",
+            "specialty": "Family Medicine"
+          },
+          "provider_specialty": "Family Medicine",
+          "location": {
+            "id": "loc_005",
+            "name": "Midtown Medical Group"
+          },
+          "identity": {
+            "name": "Alex Morgan",
+            "date_of_birth": "1990-04-12",
+            "confirmed": true
+          },
+          "new_patient": true,
+          "any_provider": false,
+          "any_location": false
+        },
+        "question": {
+          "id": "q-book",
+          "kind": "booking_consent",
+          "expected": [
+            "booking_consent"
+          ]
+        },
+        "presentations": [],
+        "last_message": {
+          "id": "message-book",
+          "text": "I'll book an Annual Physical with Dr. Maria Garcia at Midtown Medical Group, Friday November 20 at 10:00 AM. Shall I book it?",
+          "delivered": true
+        },
+        "proposal": {
+          "id": "proposal-book",
+          "kind": "booking",
+          "delivered_before_reply": true,
+          "slot_id": "synthetic-probe-slot",
+          "service_id": "appt_002",
+          "provider_id": "prov_003",
+          "location_id": "loc_005",
+          "appointment_date": "2026-11-20"
+        },
+        "prior_acts": []
+      },
+      "raw_output": "{\"acts\":[{\"kind\":\"repeat_request\",\"message_id\":\"message-book\",\"part\":\"time\",\"quote\":\"what time did you say\"}]}"
+    },
+    {
+      "label": "11-unknown-provider",
+      "caller_text": "I want an annual physical with Dr. Nobody Exists. I am a new patient. My name is Alex Morgan and I was born April 12, 1990.",
+      "context": {
+        "clock": {
+          "clinic_today": "2026-11-19",
+          "clinic_timezone": "America/Los_Angeles"
+        },
+        "known": {},
+        "question": {
+          "id": "q-request",
+          "kind": "service",
+          "expected": [
+            "booking_request"
+          ]
+        },
+        "presentations": [],
+        "last_message": {
+          "id": "message-greeting",
+          "text": "How can I help you with scheduling?",
+          "delivered": true
+        },
+        "proposal": null,
+        "prior_acts": []
+      },
+      "raw_output": "{\"acts\":[{\"kind\":\"set_field\",\"delta\":{\"field\":\"service\",\"value\":\"annual physical\"},\"quote\":\"annual physical\"},{\"kind\":\"set_field\",\"delta\":{\"field\":\"provider\",\"value\":\"Dr. Nobody Exists\"},\"quote\":\"Dr. Nobody Exists\"},{\"kind\":\"set_field\",\"delta\":{\"field\":\"new_patient\",\"value\":true},\"quote\":\"I am a new patient\"},{\"kind\":\"set_field\",\"delta\":{\"field\":\"name\",\"value\":\"Alex Morgan\"},\"quote\":\"My name is Alex Morgan\"},{\"kind\":\"set_field\",\"delta\":{\"field\":\"date_of_birth\",\"value\":{\"year\":1990,\"month\":4,\"day\":12}},\"quote\":\"born April 12, 1990\"}]}"
+    },
+    {
+      "label": "12-specialty-change",
+      "caller_text": "I'd rather see the family medicine one.",
+      "context": {
+        "clock": {
+          "clinic_today": "2026-11-19",
+          "clinic_timezone": "America/Los_Angeles"
+        },
+        "known": {
+          "service": {
+            "id": "appt_002",
+            "name": "Annual Physical"
+          },
+          "provider": {
+            "id": "prov_002",
+            "name": "Dr. Maria Garcia",
+            "specialty": "Pediatrics"
+          },
+          "provider_specialty": "Pediatrics",
+          "location": null,
+          "identity": {
+            "name": "Alex Morgan",
+            "date_of_birth": "1990-04-12",
+            "confirmed": true
+          },
+          "new_patient": true,
+          "any_provider": false,
+          "any_location": false
+        },
+        "question": {
+          "id": "q-provider",
+          "kind": "provider_choice",
+          "expected": [
+            "provider"
+          ]
+        },
+        "presentations": [
+          {
+            "id": "presentation-providers",
+            "entity": "provider",
+            "delivered": true,
+            "options": [
+              {
+                "option_id": "prov_002",
+                "ordinal": 1,
+                "name": "Dr. Maria Garcia",
+                "specialty": "Pediatrics",
+                "title": "MD"
+              },
+              {
+                "option_id": "prov_003",
+                "ordinal": 2,
+                "name": "Dr. Maria Garcia",
+                "specialty": "Family Medicine",
+                "title": "NP"
+              }
+            ]
+          }
+        ],
+        "last_message": {
+          "id": "message-providers",
+          "delivered": true,
+          "text": "Which provider did you mean: Dr. Maria Garcia, Pediatrics (MD); Dr. Maria Garcia, Family Medicine (NP)?"
+        },
+        "proposal": null,
+        "prior_acts": []
+      },
+      "raw_output": "{\"acts\":[{\"kind\":\"select_option\",\"presentation_id\":\"presentation-providers\",\"selector\":{\"by\":\"ordinal\",\"ordinal\":2},\"quote\":\"the family medicine one\"},{\"kind\":\"correct\",\"delta\":{\"field\":\"provider_specialty\",\"value\":\"Family Medicine\"},\"quote\":\"the family medicine one\"}]}"
+    }
+  ]
+}

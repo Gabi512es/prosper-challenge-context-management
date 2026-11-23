@@ -1,0 +1,205 @@
+{
+  "description": "Curated aggregate excerpts; no rescoring or new API measurements. Local paths, budget configuration and individual transcripts omitted.",
+  "source_commit": "b04091b6c07e8104443e243aaeedeab42b48c90c",
+  "original_artifact_sha256": {
+    "docs/results/x1-summary.json": "cc75f21da81452118bfc9bfee0ab782d996d2874988f0146c848a52214b61d7c",
+    "docs/results/scaling-v3-analysis.json": "29c2846ac8034a9383d33cb34ae3dd607458858609f3fc6f8e8ec917069816a6",
+    "docs/results/agent-identities.json": "61036bfbefd0e83559ce11b95e498cf3889e7c1be737551e7fe5a84bf6972a5f"
+  },
+  "evaluator_version": "dev-eval-v5-recovery",
+  "evaluator_sha256": "97117348b6d00263d60c0561381841e3fc50e843873a53b60e827a8c7415a996",
+  "proposed_source_tag": "proposed-v2",
+  "proposed_source_commit": "a5b124f7aa3ffa9d7ebcd32a7f76c837c95486c8",
+  "identities": {
+    "proposed": {
+      "agent_id": "catalog_scheduler",
+      "agent_revision": "40db1b587b5790ab2c92bc642edbc55e67f0d44ebd8d4f1267de29e1e86ebdc5",
+      "configured_model": "gpt-4o"
+    },
+    "baseline": {
+      "agent_id": "full_catalog_baseline",
+      "agent_revision": "68d02acb9a89a72c279c3410001e2b184438abce7f7c714ce39a0e87ddf4f623",
+      "configured_model": "gpt-4o"
+    }
+  },
+  "original_catalog": {
+    "proposed-v2": {
+      "run_id": "comparison-proposed-v2-20261109-180827-8752c3",
+      "summary": {
+        "runs": 36,
+        "passed": 29,
+        "failed": 7,
+        "model_calls": 219,
+        "prompt_tokens": null,
+        "cached_tokens": null,
+        "uncached_prompt_tokens": null,
+        "completion_tokens": null,
+        "known_token_subtotals": {
+          "prompt_tokens": 711025,
+          "cached_tokens": 598272,
+          "uncached_prompt_tokens": 112753,
+          "completion_tokens": 6572
+        },
+        "known_cost_usd": 1.0954425,
+        "cost_usd": null,
+        "unreported_model_calls": 1,
+        "maximum_cost_exposure_usd": 1.4205625,
+        "successful_bookings": 10,
+        "invalid_booking_attempts": 0,
+        "unnecessary_questions": 9,
+        "completed_patient_turns": 93,
+        "incomplete_patient_turns": 1,
+        "patient_turn_latency_ms_p50": 2618.59,
+        "patient_turn_latency_ms_p95": 3208.479,
+        "severity": {
+          "infrastructure_timeout": 1,
+          "unnecessary_question": 2,
+          "false_patient_statement": 1,
+          "missing_explanation_or_next_step": 2,
+          "evaluator_false_failure": 1
+        }
+      }
+    },
+    "baseline": {
+      "run_id": "comparison-baseline-20261109-182321-c4ee5f",
+      "summary": {
+        "runs": 36,
+        "passed": 30,
+        "failed": 6,
+        "model_calls": 203,
+        "prompt_tokens": 1625524,
+        "cached_tokens": 1482240,
+        "uncached_prompt_tokens": 143284,
+        "completion_tokens": 6703,
+        "known_token_subtotals": {
+          "prompt_tokens": 1625524,
+          "cached_tokens": 1482240,
+          "uncached_prompt_tokens": 143284,
+          "completion_tokens": 6703
+        },
+        "known_cost_usd": 2.27804,
+        "cost_usd": 2.27804,
+        "unreported_model_calls": 0,
+        "maximum_cost_exposure_usd": 2.27804,
+        "successful_bookings": 11,
+        "invalid_booking_attempts": 0,
+        "unnecessary_questions": 5,
+        "completed_patient_turns": 91,
+        "incomplete_patient_turns": 0,
+        "patient_turn_latency_ms_p50": 2633.902,
+        "patient_turn_latency_ms_p95": 3420.048,
+        "severity": {
+          "unnecessary_question": 1,
+          "missing_explanation_or_next_step": 3,
+          "evaluator_false_failure": 1,
+          "internal_tool_resolution_error": 1
+        }
+      }
+    }
+  },
+  "expanded_catalog": [
+    {
+      "arm": "proposed-indexed",
+      "factor": 5,
+      "run_id": "scaling-v3-20261110-092924-e2cde6-proposed-indexed-x05",
+      "summary": {
+        "runs": 8,
+        "passed": 6,
+        "failed": 2,
+        "model_calls": 60,
+        "prompt_tokens": 500482,
+        "cached_tokens": 462976,
+        "uncached_prompt_tokens": 37506,
+        "completion_tokens": 1673,
+        "known_token_subtotals": {
+          "prompt_tokens": 500482,
+          "cached_tokens": 462976,
+          "uncached_prompt_tokens": 37506,
+          "completion_tokens": 1673
+        },
+        "known_cost_usd": 0.689215,
+        "cost_usd": 0.689215,
+        "unreported_model_calls": 0,
+        "maximum_cost_exposure_usd": 0.689215,
+        "successful_bookings": 4,
+        "invalid_booking_attempts": 0,
+        "unnecessary_questions": 4,
+        "completed_patient_turns": 28,
+        "incomplete_patient_turns": 0,
+        "patient_turn_latency_ms_p50": 2592.516,
+        "patient_turn_latency_ms_p95": 3223.865,
+        "severity": {
+          "unnecessary question": 2
+        }
+      },
+      "cache_accounting": {
+        "actual_cached_tokens": 462976,
+        "actual_cached_input_cost_usd": 0.57872,
+        "actual_uncached_input_cost_usd": 0.093765,
+        "cache_write_tokens": null,
+        "cache_write_input_cost_usd": null,
+        "cache_write_surcharge_usd": 0,
+        "write_accounting": "Not separately reported by GPT-4o Chat Completions; included in uncached input, no extra write fee."
+      }
+    },
+    {
+      "arm": "baseline",
+      "factor": 5,
+      "run_id": "scaling-v3-20261110-092924-e2cde6-baseline-x05",
+      "summary": {
+        "runs": 8,
+        "passed": 5,
+        "failed": 3,
+        "model_calls": 56,
+        "prompt_tokens": 1775158,
+        "cached_tokens": 1685376,
+        "uncached_prompt_tokens": 89782,
+        "completion_tokens": 1703,
+        "known_token_subtotals": {
+          "prompt_tokens": 1775158,
+          "cached_tokens": 1685376,
+          "uncached_prompt_tokens": 89782,
+          "completion_tokens": 1703
+        },
+        "known_cost_usd": 2.348205,
+        "cost_usd": 2.348205,
+        "unreported_model_calls": 0,
+        "maximum_cost_exposure_usd": 2.348205,
+        "successful_bookings": 3,
+        "invalid_booking_attempts": 0,
+        "unnecessary_questions": 4,
+        "completed_patient_turns": 27,
+        "incomplete_patient_turns": 0,
+        "patient_turn_latency_ms_p50": 2871.117,
+        "patient_turn_latency_ms_p95": 5593.088,
+        "severity": {
+          "unnecessary question": 2,
+          "false statement to patient": 1
+        }
+      },
+      "cache_accounting": {
+        "actual_cached_tokens": 1685376,
+        "actual_cached_input_cost_usd": 2.10672,
+        "actual_uncached_input_cost_usd": 0.224455,
+        "cache_write_tokens": null,
+        "cache_write_input_cost_usd": null,
+        "cache_write_surcharge_usd": 0,
+        "write_accounting": "Not separately reported by GPT-4o Chat Completions; included in uncached input, no extra write fee."
+      }
+    }
+  ],
+  "scaling": {
+    "expander": "catalog-disjoint-v1",
+    "seed": 20261109,
+    "index_format": "id+name",
+    "cases": [
+      "DEV-002",
+      "DEV-003",
+      "DEV-009",
+      "DEV-012"
+    ],
+    "repetitions": 2,
+    "availability": "unchanged closed-world fixtures",
+    "synthetic_records": "disconnected distractors; original entities and policy preserved"
+  }
+}

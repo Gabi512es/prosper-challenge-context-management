@@ -1,0 +1,136 @@
+{
+  "description": "Token-only aggregate record; not an end-to-end scheduling evaluation.",
+  "run_id": "v4-probe-20261123-092503-a6d7a2",
+  "source_commit": "b04091b6c07e8104443e243aaeedeab42b48c90c",
+  "model": "gpt-4o-2024-08-06",
+  "probe_version": "v4-probe-v4",
+  "cases_sha256": "6ec3e4f0bd2fc067a47b8abc2fe0562b7e6dc8c3e6817b656572fe83eb053928",
+  "runner_sha256": "149dbb4d7560717197111a27e1086a346516b9046151c806b0ebd3c73cb2f078",
+  "instructions_sha256": {
+    "v1.10": "1bfdb9b6a1f4c206fa5e48b30c032e30069318cb78cd9ca8199f756276238682",
+    "v1.12": "64e9412b02f845968d4730504d9b206a2935a4ac856dea7cbd3019dfdacd8651"
+  },
+  "schema_sha256": {
+    "v1.10": "548f10a139c6fb3f14e4af5386e7049bd8e97eed303e365d194aeaca9b935477",
+    "v1.12": "93de3dce9ae07aa00590b342d0fbc37de0fd9b3697fbbd734d2241475f095bc1"
+  },
+  "summary": {
+    "v1.10": {
+      "passed": 39,
+      "requests": 48,
+      "invalid": 0,
+      "errors": 0,
+      "families": {
+        "block-reason": "0/2",
+        "capability": "1/1",
+        "choice": "2/2",
+        "closing": "3/3",
+        "consent": "3/4",
+        "date": "2/6",
+        "emergency": "2/2",
+        "flow": "1/1",
+        "fragments": "1/1",
+        "handoff": "2/2",
+        "identity": "5/5",
+        "information-control": "2/2",
+        "new-patient": "2/3",
+        "other-question": "1/1",
+        "provider": "9/9",
+        "service": "0/1",
+        "site": "1/1",
+        "spelled": "2/2"
+      },
+      "failed": [
+        "f02-why",
+        "f02-why-that-clinic",
+        "f06-earlier",
+        "f06-sooner",
+        "h08-gi-consultation",
+        "h10-next-week-instead",
+        "h10-week-after-at-identity",
+        "n10-actually-new",
+        "n33-uh-yeah"
+      ],
+      "usage": {
+        "prompt": 192755,
+        "cached": 129536,
+        "completion": 1607,
+        "unknown_requests": 0
+      },
+      "latency_ms_median": 906.1
+    },
+    "v1.12": {
+      "passed": 43,
+      "requests": 48,
+      "invalid": 0,
+      "errors": 0,
+      "families": {
+        "block-reason": "2/2",
+        "capability": "1/1",
+        "choice": "2/2",
+        "closing": "3/3",
+        "consent": "3/4",
+        "date": "4/6",
+        "emergency": "2/2",
+        "flow": "1/1",
+        "fragments": "1/1",
+        "handoff": "2/2",
+        "identity": "5/5",
+        "information-control": "2/2",
+        "new-patient": "2/3",
+        "other-question": "1/1",
+        "provider": "8/9",
+        "service": "1/1",
+        "site": "1/1",
+        "spelled": "2/2"
+      },
+      "failed": [
+        "h10-next-week-instead",
+        "h10-week-after-at-identity",
+        "live-dont-know-again",
+        "n10-actually-new",
+        "n33-uh-yeah"
+      ],
+      "usage": {
+        "prompt": 197651,
+        "cached": 130048,
+        "completion": 1622,
+        "unknown_requests": 0
+      },
+      "latency_ms_median": 929.8,
+      "fixed_vs_v1.10": [
+        "f02-why",
+        "f02-why-that-clinic",
+        "f06-earlier",
+        "f06-sooner",
+        "h08-gi-consultation"
+      ],
+      "regressed_vs_v1.10": [
+        "live-dont-know-again"
+      ]
+    }
+  },
+  "stopped": null,
+  "unattempted": [],
+  "adoption": {
+    "automatic_criteria_met": false,
+    "reasons": [
+      "category_regressed:provider",
+      "consent_failure"
+    ],
+    "manual_review_required": true,
+    "candidate_regressions": [
+      "live-dont-know-again"
+    ]
+  },
+  "recorded_decision": "Do not adopt v1.12. Keep v1.10 active. Context mismatches limit semantic interpretation; no rescoring.",
+  "hash_representations": {
+    "instructions_sha256": "SHA-256 of the UTF-8 instruction file bytes.",
+    "schema_sha256": "SHA-256 of json.dumps(parsed_schema, ensure_ascii=False, separators=(',', ':'), allow_nan=False).encode('utf-8'); preserves property order without key sorting. This hashes compact schema JSON, not raw file bytes.",
+    "schema_file_sha256": "SHA-256 of the raw shipped acts.<version>.schema.json file bytes, including whitespace and final newline; matches interpreter.py runtime pins."
+  },
+  "schema_file_sha256": {
+    "v1.10": "81869e96db1bae14e3246f49f64ef374b767486a1774a95a97068b3e5a6bb277",
+    "v1.12": "646971790fc28e5650b06a5b2f1e00b68676ba855f3106c2379d4513eac589cd"
+  }
+}

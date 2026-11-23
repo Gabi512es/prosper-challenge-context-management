@@ -1,0 +1,32 @@
+{
+  "positions": {
+    "booked": {
+      "x": 0.0,
+      "y": 1062.0
+    },
+    "choose_slot": {
+      "x": 0.0,
+      "y": 614.0
+    },
+    "collect_request": {
+      "x": 0.0,
+      "y": 166.0
+    },
+    "confirm_booking": {
+      "x": 0.0,
+      "y": 838.0
+    },
+    "emergency": {
+      "x": 428.0,
+      "y": 330.0
+    },
+    "human_handoff": {
+      "x": 428.0,
+      "y": 166.0
+    },
+    "identity": {
+      "x": 0.0,
+      "y": 390.0
+    }
+  }
+}

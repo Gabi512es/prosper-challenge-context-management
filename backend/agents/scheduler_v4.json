@@ -1,0 +1,160 @@
+{
+  "name": "Scheduler v4",
+  "runtime": "v4",
+  "initial_node": "collect_request",
+  "model": "gpt-4o-2024-08-06",
+  "persona": "",
+  "voice_id": "21m00Tcm4TlvDq8ikWAM",
+  "v4": {
+    "greeting": "Hello, this is the Prosper demo clinic.",
+    "handoff_lead": "",
+    "emergency_lead": ""
+  },
+  "nodes": [
+    {
+      "name": "collect_request",
+      "description": "Find the service, provider and site; answer clinic questions on the way.",
+      "role_message": null,
+      "edges": [
+        {
+          "function": "request_complete",
+          "description": "Service, provider and site are resolved.",
+          "target": "identity",
+          "properties": {},
+          "required": []
+        }
+      ],
+      "functions": [],
+      "pre_actions": [],
+      "post_actions": [],
+      "end": false,
+      "auto_end": true,
+      "task_messages": []
+    },
+    {
+      "name": "identity",
+      "description": "Collect the name and date of birth, then read them back.",
+      "role_message": null,
+      "edges": [
+        {
+          "function": "identity_confirmed",
+          "description": "The caller confirms the name and date of birth.",
+          "target": "choose_slot",
+          "properties": {},
+          "required": []
+        },
+        {
+          "function": "cancel_request",
+          "description": "The caller cancels: the request starts over, the call goes on.",
+          "target": "collect_request",
+          "properties": {},
+          "required": []
+        }
+      ],
+      "functions": [],
+      "pre_actions": [],
+      "post_actions": [],
+      "end": false,
+      "auto_end": true,
+      "task_messages": []
+    },
+    {
+      "name": "choose_slot",
+      "description": "Offer up to three times; the caller picks one.",
+      "role_message": null,
+      "edges": [
+        {
+          "function": "slot_chosen",
+          "description": "The caller picks one of the offered times.",
+          "target": "confirm_booking",
+          "properties": {},
+          "required": []
+        },
+        {
+          "function": "change_request",
+          "description": "The caller changes the service, provider, site or date.",
+          "target": "collect_request",
+          "properties": {},
+          "required": []
+        }
+      ],
+      "functions": [],
+      "pre_actions": [],
+      "post_actions": [],
+      "end": false,
+      "auto_end": true,
+      "task_messages": []
+    },
+    {
+      "name": "confirm_booking",
+      "description": "Read the booking back; book only after an explicit yes.",
+      "role_message": null,
+      "edges": [
+        {
+          "function": "caller_accepts",
+          "description": "The caller explicitly says yes to the read-back; the booking is written.",
+          "target": "booked",
+          "properties": {},
+          "required": []
+        },
+        {
+          "function": "caller_changes",
+          "description": "A change, a no or a question retires the read-back.",
+          "target": "choose_slot",
+          "properties": {},
+          "required": []
+        }
+      ],
+      "functions": [],
+      "pre_actions": [],
+      "post_actions": [],
+      "end": false,
+      "auto_end": true,
+      "task_messages": []
+    },
+    {
+      "name": "booked",
+      "description": "Confirm the booking, then ask if anything else is needed.",
+      "role_message": null,
+      "edges": [
+        {
+          "function": "another_request",
+          "description": "The caller asks for something else.",
+          "target": "collect_request",
+          "properties": {},
+          "required": []
+        }
+      ],
+      "functions": [],
+      "pre_actions": [],
+      "post_actions": [],
+      "end": true,
+      "auto_end": true,
+      "task_messages": []
+    },
+    {
+      "name": "human_handoff",
+      "description": "Any time the caller asks for a person: no transfer; give the clinic phone.",
+      "role_message": null,
+      "edges": [],
+      "functions": [],
+      "pre_actions": [],
+      "post_actions": [],
+      "end": true,
+      "auto_end": true,
+      "task_messages": []
+    },
+    {
+      "name": "emergency",
+      "description": "Any time emergency symptoms are described: tell the caller to call emergency services.",
+      "role_message": null,
+      "edges": [],
+      "functions": [],
+      "pre_actions": [],
+      "post_actions": [],
+      "end": true,
+      "auto_end": true,
+      "task_messages": []
+    }
+  ]
+}

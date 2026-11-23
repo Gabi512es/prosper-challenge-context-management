@@ -1,0 +1,929 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "acts": {
+      "type": "array",
+      "items": {
+        "anyOf": [
+          {
+            "$ref": "#/$defs/SelectOption"
+          },
+          {
+            "$ref": "#/$defs/SetField"
+          },
+          {
+            "$ref": "#/$defs/Correct"
+          },
+          {
+            "$ref": "#/$defs/Affirm"
+          },
+          {
+            "$ref": "#/$defs/Deny"
+          },
+          {
+            "$ref": "#/$defs/Information"
+          },
+          {
+            "$ref": "#/$defs/Repeat"
+          },
+          {
+            "$ref": "#/$defs/Cancel"
+          },
+          {
+            "$ref": "#/$defs/Human"
+          },
+          {
+            "$ref": "#/$defs/Unclear"
+          },
+          {
+            "$ref": "#/$defs/Emergency"
+          },
+          {
+            "$ref": "#/$defs/Acknowledge"
+          },
+          {
+            "$ref": "#/$defs/Pause"
+          },
+          {
+            "$ref": "#/$defs/Unsupported"
+          },
+          {
+            "$ref": "#/$defs/RequestNextStep"
+          },
+          {
+            "$ref": "#/$defs/Restatement"
+          }
+        ]
+      }
+    }
+  },
+  "required": [
+    "acts"
+  ],
+  "$defs": {
+    "Target": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "proposal",
+            "question"
+          ]
+        },
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "id"
+      ],
+      "description": "The exact current proposal or pending question this answer refers to, by its ID from context."
+    },
+    "Ordinal": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "by": {
+          "type": "string",
+          "enum": [
+            "ordinal"
+          ]
+        },
+        "ordinal": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "by",
+        "ordinal"
+      ]
+    },
+    "NamedOption": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "by": {
+          "type": "string",
+          "enum": [
+            "name"
+          ]
+        },
+        "words": {
+          "type": "string"
+        },
+        "option_id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "by",
+        "words",
+        "option_id"
+      ]
+    },
+    "DateParts": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "year": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "month": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "day": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "year",
+        "month",
+        "day"
+      ]
+    },
+    "TextDelta": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "field": {
+          "type": "string",
+          "enum": [
+            "service",
+            "provider",
+            "provider_specialty",
+            "location",
+            "name"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "field",
+        "value"
+      ]
+    },
+    "BirthDelta": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "field": {
+          "type": "string",
+          "enum": [
+            "date_of_birth"
+          ]
+        },
+        "value": {
+          "$ref": "#/$defs/DateParts"
+        }
+      },
+      "required": [
+        "field",
+        "value"
+      ]
+    },
+    "BoolDelta": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "field": {
+          "type": "string",
+          "enum": [
+            "new_patient",
+            "referral",
+            "any_provider",
+            "any_location"
+          ]
+        },
+        "value": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "field",
+        "value"
+      ],
+      "description": "Yes/no facts. any_provider: the caller leaves the provider open ('anyone', 'I don't know', soonest with no provider named); any_location: the caller explicitly accepts any site."
+    },
+    "ProximityDelta": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "field": {
+          "type": "string",
+          "enum": [
+            "location_preference"
+          ]
+        },
+        "value": {
+          "type": "string",
+          "enum": [
+            "time",
+            "place",
+            "unclear"
+          ]
+        }
+      },
+      "required": [
+        "field",
+        "value"
+      ]
+    },
+    "HardDelta": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "field": {
+          "type": "string",
+          "enum": [
+            "hard_constraint"
+          ]
+        },
+        "value": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "field": {
+              "type": "string",
+              "enum": [
+                "provider",
+                "provider_specialty",
+                "location",
+                "appointment_date"
+              ]
+            },
+            "enabled": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "field",
+            "enabled"
+          ]
+        }
+      },
+      "required": [
+        "field",
+        "value"
+      ]
+    },
+    "RetractDelta": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "field": {
+          "type": "string",
+          "enum": [
+            "service",
+            "provider",
+            "provider_specialty",
+            "location",
+            "name",
+            "date_of_birth",
+            "new_patient",
+            "referral",
+            "appointment_date"
+          ]
+        },
+        "value": {
+          "type": "null"
+        }
+      },
+      "required": [
+        "field",
+        "value"
+      ]
+    },
+    "Delta": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/TextDelta"
+        },
+        {
+          "$ref": "#/$defs/BirthDelta"
+        },
+        {
+          "$ref": "#/$defs/BoolDelta"
+        },
+        {
+          "$ref": "#/$defs/AppointmentDateDelta"
+        },
+        {
+          "$ref": "#/$defs/ProximityDelta"
+        },
+        {
+          "$ref": "#/$defs/HardDelta"
+        },
+        {
+          "$ref": "#/$defs/DateShiftDelta"
+        }
+      ]
+    },
+    "Correction": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/TextDelta"
+        },
+        {
+          "$ref": "#/$defs/BirthDelta"
+        },
+        {
+          "$ref": "#/$defs/BoolDelta"
+        },
+        {
+          "$ref": "#/$defs/AppointmentDateDelta"
+        },
+        {
+          "$ref": "#/$defs/ProximityDelta"
+        },
+        {
+          "$ref": "#/$defs/HardDelta"
+        },
+        {
+          "$ref": "#/$defs/RetractDelta"
+        },
+        {
+          "$ref": "#/$defs/DateShiftDelta"
+        }
+      ]
+    },
+    "SelectOption": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "select_option"
+          ]
+        },
+        "presentation_id": {
+          "type": "string"
+        },
+        "selector": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Ordinal"
+            },
+            {
+              "$ref": "#/$defs/NamedOption"
+            }
+          ]
+        },
+        "quote": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "A short exact substring of caller_text, or null."
+        }
+      },
+      "required": [
+        "kind",
+        "quote",
+        "presentation_id",
+        "selector"
+      ],
+      "description": "Choose an option from a presentation actually supplied in context, by its one-based order or its option ID."
+    },
+    "SetField": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "set_field"
+          ]
+        },
+        "delta": {
+          "$ref": "#/$defs/Delta"
+        },
+        "quote": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "A short exact substring of caller_text, or null."
+        }
+      },
+      "required": [
+        "kind",
+        "quote",
+        "delta"
+      ],
+      "description": "A newly supplied booking or identity fact (absent fields stay unchanged)."
+    },
+    "Correct": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "correct"
+          ]
+        },
+        "delta": {
+          "$ref": "#/$defs/Correction"
+        },
+        "quote": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "A short exact substring of caller_text, or null."
+        }
+      },
+      "required": [
+        "kind",
+        "quote",
+        "delta"
+      ],
+      "description": "Replace or retract a fact already known or stated, including a name not yet resolved."
+    },
+    "Affirm": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "affirm"
+          ]
+        },
+        "target": {
+          "$ref": "#/$defs/Target"
+        },
+        "quote": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "A short exact substring of caller_text, or null."
+        }
+      },
+      "required": [
+        "kind",
+        "quote",
+        "target"
+      ],
+      "description": "Yes to the current proposal or pending yes/no question named in target."
+    },
+    "Deny": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "deny"
+          ]
+        },
+        "target": {
+          "$ref": "#/$defs/Target"
+        },
+        "quote": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "A short exact substring of caller_text, or null."
+        }
+      },
+      "required": [
+        "kind",
+        "quote",
+        "target"
+      ],
+      "description": "No to the current proposal or pending yes/no question named in target."
+    },
+    "Information": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "information_question"
+          ]
+        },
+        "entity": {
+          "type": "string",
+          "enum": [
+            "location",
+            "provider",
+            "service",
+            "appointment",
+            "assistant"
+          ]
+        },
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "reference_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "attribute": {
+          "type": "string",
+          "enum": [
+            "hours",
+            "phone",
+            "address",
+            "services",
+            "locations",
+            "specialty",
+            "referral",
+            "new_patient_policy",
+            "date",
+            "time",
+            "identity"
+          ]
+        },
+        "quote": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "A short exact substring of caller_text, or null."
+        }
+      },
+      "required": [
+        "kind",
+        "quote",
+        "entity",
+        "name",
+        "reference_id",
+        "attribute"
+      ],
+      "description": "A question about a site, provider, service, appointment or the assistant; it selects nothing."
+    },
+    "Repeat": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "repeat_request"
+          ]
+        },
+        "message_id": {
+          "type": "string"
+        },
+        "part": {
+          "type": "string",
+          "enum": [
+            "all",
+            "date",
+            "time",
+            "location",
+            "provider",
+            "identity"
+          ]
+        },
+        "quote": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "A short exact substring of caller_text, or null."
+        }
+      },
+      "required": [
+        "kind",
+        "quote",
+        "message_id",
+        "part"
+      ],
+      "description": "A request to hear the last message (or a part of it) again."
+    },
+    "Cancel": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "cancel"
+          ]
+        },
+        "scope": {
+          "type": "string",
+          "enum": [
+            "pending_request",
+            "recorded_booking"
+          ],
+          "description": "pending_request: a request not yet booked; recorded_booking: a booking already made."
+        },
+        "quote": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "A short exact substring of caller_text, or null."
+        }
+      },
+      "required": [
+        "kind",
+        "quote",
+        "scope"
+      ],
+      "description": "Stop a request: pending_request before booking, recorded_booking after it."
+    },
+    "Human": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "human_request"
+          ]
+        },
+        "action": {
+          "type": "string",
+          "enum": [
+            "request"
+          ]
+        },
+        "quote": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "A short exact substring of caller_text, or null."
+        }
+      },
+      "required": [
+        "kind",
+        "quote",
+        "action"
+      ],
+      "description": "An actual request to speak with a person."
+    },
+    "Unclear": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "unclear"
+          ]
+        },
+        "subject": {
+          "type": "string",
+          "enum": [
+            "meaning",
+            "reference",
+            "date_role",
+            "date_value",
+            "scope",
+            "consent",
+            "noise",
+            "unsupported"
+          ]
+        },
+        "quote": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "A short exact substring of caller_text, or null."
+        }
+      },
+      "required": [
+        "kind",
+        "quote",
+        "subject"
+      ],
+      "description": "The meaning cannot be determined; no rule gives this turn a defined reading."
+    },
+    "Emergency": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "urgent_escalation"
+          ]
+        },
+        "quote": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "A short exact substring of caller_text, or null."
+        }
+      },
+      "required": [
+        "kind",
+        "quote"
+      ],
+      "description": "Possible emergency symptoms; nothing else that could book."
+    },
+    "AppointmentDateDelta": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "field": {
+          "type": "string",
+          "enum": [
+            "appointment_date"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "field",
+        "value"
+      ]
+    },
+    "Acknowledge": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "acknowledge"
+          ]
+        },
+        "quote": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "A short exact substring of caller_text, or null."
+        }
+      },
+      "required": [
+        "kind",
+        "quote"
+      ],
+      "description": "Thanks or understood; changes nothing."
+    },
+    "Pause": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "pause"
+          ]
+        },
+        "quote": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "A short exact substring of caller_text, or null."
+        }
+      },
+      "required": [
+        "kind",
+        "quote"
+      ],
+      "description": "An explicit request to wait; holds the pending question."
+    },
+    "Unsupported": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "unsupported"
+          ]
+        },
+        "quote": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "A short exact substring of caller_text, or null."
+        },
+        "topic": {
+          "type": "string",
+          "enum": [
+            "clock_time",
+            "geographic_ranking",
+            "timezone_conversion",
+            "recorded_booking_change",
+            "live_transfer",
+            "callback",
+            "same_call_continuation",
+            "other"
+          ]
+        }
+      },
+      "required": [
+        "kind",
+        "quote",
+        "topic"
+      ],
+      "description": "An understood operation this system cannot do."
+    },
+    "RequestNextStep": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "request_next_step"
+          ]
+        },
+        "quote": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "A short exact substring of caller_text, or null."
+        }
+      },
+      "required": [
+        "kind",
+        "quote"
+      ],
+      "description": "A request to move on or look for appointments."
+    },
+    "Restatement": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "restatement"
+          ]
+        },
+        "target": {
+          "$ref": "#/$defs/Target"
+        },
+        "quote": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "A short exact substring of caller_text, or null."
+        }
+      },
+      "required": [
+        "kind",
+        "quote",
+        "target"
+      ],
+      "description": "Repeats details of a read-back without accepting it."
+    },
+    "DateShiftDelta": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "field": {
+          "type": "string",
+          "enum": [
+            "date_shift"
+          ]
+        },
+        "value": {
+          "type": "string",
+          "enum": [
+            "later",
+            "week_later"
+          ]
+        }
+      },
+      "required": [
+        "field",
+        "value"
+      ],
+      "description": "A relative date: later = after the times offered; week_later = a week after them ('the week after', 'next week')."
+    }
+  }
+}
